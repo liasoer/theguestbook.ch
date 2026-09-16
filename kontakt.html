@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kontakt — The Guestbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="index.html"><span>the</span><span class="logo-accent">GUEST</span><span>book</span></a>
+    <ul>
+      <li><a class="navlink" href="index.html">Hochzeiten</a></li>
+      <li><a class="navlink" href="events.html">Events</a></li>
+      <li><a class="navlink" href="about.html">Über uns</a></li>
+      <li><a class="navlink active" href="kontakt.html">Kontakt</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="page-header wrap">
+  <div class="hero-label">Kontakt</div>
+  <h1 class="hero-title">Erzählt uns von eurem Tag.</h1>
+  <p class="hero-sub">Ob Hochzeit oder eigener Anlass: Schreibt uns kurz, worum es geht, dann melden wir uns mit einem passenden Vorschlag.</p>
+</header>
+
+<section id="kontaktformular">
+  <div class="wrap kontakt-form-single">
+    <form class="kontakt-form" id="kontakt-form" action="https://formsubmit.co/info@liasoertig.ch" method="POST">
+      <input type="hidden" name="_subject" value="Neue Anfrage über theguestbook.ch">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://theguestbook.ch/kontakt.html?gesendet=1">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+      <div class="form-split-row">
+        <div class="form-row">
+          <label for="vorname">Vorname</label>
+          <input type="text" id="vorname" name="Vorname" required>
+        </div>
+        <div class="form-row">
+          <label for="nachname">Nachname</label>
+          <input type="text" id="nachname" name="Nachname" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label for="email">E-Mail</label>
+        <input type="email" id="email" name="E-Mail" required>
+      </div>
+
+      <div class="form-row">
+        <label for="telefon">Telefon</label>
+        <input type="tel" id="telefon" name="Telefon">
+      </div>
+
+      <div class="form-row">
+        <label for="datum">Hochzeits-/Event-Datum</label>
+        <input type="date" id="datum" name="Datum">
+      </div>
+
+      <div class="form-row">
+        <label for="paket">Gewünschtes Paket</label>
+        <select id="paket" name="Gewünschtes Paket">
+          <option value="" selected disabled>Bitte auswählen</option>
+          <optgroup label="Hochzeit">
+            <option>Die Interviews</option>
+            <option>Der Moment davor</option>
+            <option>Abend Interviews</option>
+            <option>Highlights</option>
+          </optgroup>
+          <optgroup label="Event">
+            <option>Privates Event</option>
+            <option>Firmen Event</option>
+            <option>Highlights</option>
+          </optgroup>
+          <option>Weiss ich noch nicht</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="nachricht">Gibt es sonst noch etwas, das wir wissen sollten?</label>
+        <textarea id="nachricht" name="Nachricht" rows="5" placeholder="Ort, ungefähre Gästezahl, Wünsche ..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Anfrage senden</button>
+      <p class="form-note" id="form-success">Danke für eure Nachricht! Wir melden uns in Kürze.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 The Guestbook</span>
+    <span><a href="https://liasoertig.ch" target="_blank" rel="noopener">a liasoertig production</a></span>
+  </div>
+</footer>
+
+<script>
+if(new URLSearchParams(window.location.search).get('gesendet') === '1'){
+  var note = document.getElementById('form-success');
+  var form = document.getElementById('kontakt-form');
+  if(note) note.classList.add('is-visible');
+  if(form){
+    Array.prototype.forEach.call(form.querySelectorAll('.form-row, .form-split-row, button[type="submit"]'), function(el){
+      el.style.display = 'none';
+    });
+  }
+}
+</script>
+
+</body>
+</html>

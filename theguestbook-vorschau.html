@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Guestbook — Vorschau</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'FormaDJRBanner'; src:url('fonts/FormaDJRBanner-Bold.woff2') format('woff2'), url('fonts/FormaDJRBanner-Bold.woff') format('woff'); font-weight:700; font-style:normal; font-display:swap;}
+@font-face{font-family:'FormaDJRDisplay'; src:url('fonts/FormaDJRDisplay-Bold.woff2') format('woff2'), url('fonts/FormaDJRDisplay-Bold.woff') format('woff'); font-weight:700; font-style:normal; font-display:swap;}
+@font-face{font-family:'FormaDJRText'; src:url('fonts/FormaDJRText-Bold.woff2') format('woff2'), url('fonts/FormaDJRText-Bold.woff') format('woff'); font-weight:700; font-style:normal; font-display:swap;}
+:root{
+  --bg:#FFFFFF; --bg-2:#FFFFFF; --paper:#000000; --muted:#000000;
+  --gold:#000000; --gold-dark:#2B2B2B; --line: rgba(34,31,27,0.14);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg); color:var(--paper); font-family:'Inter', sans-serif; font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:'FormaDJRDisplay', serif; font-weight:700; letter-spacing:-0.01em;}
+.hero-title{font-family:'FormaDJRBanner', serif;}
+a{color:inherit; cursor:pointer;}
+.wrap{max-width:1080px; margin:0 auto; padding:0 32px;}
+nav{position:sticky; top:0; z-index:20; background:rgba(250,247,242,0.9); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+nav .wrap{display:flex; align-items:center; justify-content:space-between; height:72px;}
+.logo{font-family:'FormaDJRDisplay', serif; font-size:1.25rem; font-weight:700; text-decoration:none; color:var(--paper);}
+.logo-accent{font-style:italic; color:var(--gold); margin-left:-0.05em;}
+nav ul{list-style:none; display:flex; gap:36px;}
+nav a.navlink{text-decoration:none; font-size:0.95rem; color:var(--paper); opacity:0.6; transition:opacity 0.2s; padding-bottom:4px; border-bottom:2px solid transparent;}
+nav a.navlink:hover{opacity:1;}
+nav a.navlink.active{opacity:1; border-bottom-color:var(--gold);}
+.nav-cta{background:var(--gold); color:var(--bg) !important; opacity:1 !important; padding:10px 20px; border-radius:2px; font-size:0.9rem; text-decoration:none; font-weight:500;}
+.nav-cta:hover{background:var(--gold-dark);}
+@media (max-width:760px){nav ul{display:none;}}
+.preview-bar{background:#F1ECE3; color:#766F60; font-size:0.8rem; text-align:center; padding:8px 12px; border-bottom:1px solid var(--line);}
+.page{display:none;}
+.page.active{display:block;}
+.hero, .page-header{
+  text-align:center;
+  background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(34,31,27,0.05), transparent 70%), var(--bg);
+}
+.hero{padding:110px 0 90px;}
+.page-header{padding:80px 0 66px;}
+.hero-label{font-size:0.85rem; letter-spacing:0.03em; color:var(--gold); margin-bottom:24px;}
+.hero-title{font-weight:500; font-size:clamp(2.2rem, 5.5vw, 3.9rem); line-height:1.12; max-width:820px; margin:0 auto; color:var(--paper);}
+header.hero.wrap{max-width:1320px;}
+.hero:not(.page-header) .hero-title{max-width:1180px; font-size:clamp(2.4rem, 6.2vw, 5.1rem);}
+.page-header .hero-title{font-size:clamp(1.9rem, 4.4vw, 3rem);}
+.hero-sub{max-width:540px; margin:30px auto 0; font-size:1.05rem; color:var(--muted);}
+.hero-actions{margin-top:34px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;}
+.hero-quote{margin:64px auto 0; max-width:480px; padding-top:28px; border-top:1px solid var(--line);}
+.hero-quote p{font-family:'FormaDJRDisplay', serif; font-style:italic; font-size:1.1rem; color:var(--paper); line-height:1.5;}
+.hero-quote span{display:block; margin-top:12px; font-size:0.85rem; color:var(--muted);}
+.hero.hero-split{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; text-align:left; padding:90px 0;}
+.hero-split .hero-title{margin:0; max-width:none; font-size:clamp(2rem, 3.8vw, 2.9rem);}
+.hero-split .hero-sub{margin:20px 0 0; max-width:440px;}
+.hero-emphasis{margin:16px auto 0; max-width:500px; text-align:center; font-size:1.02rem; font-weight:500; color:var(--paper);}
+.hero-split .hero-actions{justify-content:flex-start; margin-top:30px;}
+.hero-photo{width:100%; aspect-ratio:4/5; border-radius:2px; overflow:hidden; background:linear-gradient(160deg, var(--bg-2), var(--bg)); display:flex; align-items:center; justify-content:center; border:1px solid var(--line);}
+.hero-photo img{width:100%; height:100%; object-fit:cover; display:block;}
+.hero-photo-placeholder{font-family:'FormaDJRDisplay', serif; font-style:italic; font-size:0.92rem; color:var(--muted);}
+.founder-photos{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:28px;}
+@media (max-width:600px){.founder-photos{grid-template-columns:1fr;}}
+.hero.hero-bgphoto{position:relative; overflow:hidden; padding:130px 0 110px; background:var(--bg);}
+.hero.hero-bgphoto::before{content:""; position:absolute; inset:0; background-size:cover; background-position:center 38%; filter:grayscale(100%) contrast(1.05);}
+.hero.hero-bgphoto.bg-wedding::before{background-image:url('images/hero-hochzeit.jpg');}
+.hero.hero-bgphoto.bg-events::before{background-image:url('images/hero-events.jpg'); filter:contrast(1.05);}
+.hero.hero-bgphoto::after{content:""; position:absolute; inset:0; background:rgba(250,247,242,0.12);}
+.hero.hero-bgphoto .wrap{position:relative; z-index:1; max-width:1320px;}
+.hero.hero-bgphoto .hero-content{background:rgba(255,255,255,0.22); backdrop-filter:blur(22px) saturate(160%); -webkit-backdrop-filter:blur(22px) saturate(160%); border:1px solid rgba(255,255,255,0.4); border-radius:32px; padding:64px 56px; box-shadow:0 24px 70px rgba(20,18,15,0.15), inset 0 1px 0 rgba(255,255,255,0.4);}
+@media (max-width:700px){.hero.hero-bgphoto{padding:96px 0 76px;} .hero.hero-bgphoto .hero-content{padding:34px 22px; border-radius:20px;}}
+@media (max-width:860px){.hero.hero-split{grid-template-columns:1fr; text-align:center; padding:70px 0;} .hero-split .hero-sub, .hero-emphasis{margin-left:auto; margin-right:auto;} .hero-split .hero-actions{justify-content:center;} .hero-photo{order:-1; max-width:380px; margin:0 auto 36px; aspect-ratio:4/3;}}
+.btn{display:inline-block; padding:14px 28px; border-radius:2px; text-decoration:none; font-size:0.95rem; font-weight:500; border:1px solid var(--gold); transition:all 0.2s; color:var(--gold);}
+.btn-primary{background:var(--gold); border-color:var(--gold); color:var(--bg);}
+.btn-primary:hover{background:var(--gold-dark);}
+.btn-ghost{background:transparent;}
+.btn-ghost:hover{background:rgba(34,31,27,0.06);}
+section{padding:84px 0; border-top:1px solid var(--line);}
+.alt{background:var(--bg-2);}
+.section-head{max-width:640px; margin-bottom:48px;}
+.section-head h2{font-size:clamp(1.6rem, 3vw, 2.2rem); margin-bottom:16px; color:var(--paper); text-transform:uppercase; letter-spacing:0.03em;}
+.section-head p{color:var(--muted); font-size:1.03rem;}
+.konzept-grid{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start;}
+.konzept-grid p{margin-bottom:16px; color:var(--paper); opacity:0.88;}
+.konzept-not{font-size:1.03rem; color:var(--muted);}
+.konzept-not strong{color:var(--gold); font-weight:600;}
+@media (max-width:760px){.konzept-grid{grid-template-columns:1fr;}}
+.pakete-layout{display:grid; grid-template-columns:1fr 1.3fr; gap:64px; align-items:start;}
+.pakete-intro p{color:var(--muted); margin-bottom:18px; max-width:420px;}
+.pakete-list{border-top:1px solid var(--line);}
+.pakete-item{border-bottom:1px solid var(--line);}
+.pakete-toggle{width:100%; display:flex; align-items:baseline; justify-content:space-between; gap:20px; background:none; border:none; padding:28px 0; cursor:pointer; text-align:left; font-family:'FormaDJRDisplay', serif; font-size:1.3rem; font-weight:500; color:var(--paper);}
+.pakete-toggle .pakete-price{font-family:'Inter', sans-serif; font-size:0.9rem; font-weight:400; color:var(--muted); margin-left:12px;}
+.pakete-icon{font-family:'Inter', sans-serif; font-size:1.4rem; line-height:1; color:var(--gold); flex-shrink:0;}
+.pakete-body{display:none;}
+.pakete-item.is-open .pakete-body{display:block; min-height:240px; padding-bottom:28px;}
+.pakete-body p{color:var(--muted); max-width:560px; margin-bottom:16px;}
+.pakete-body p:last-child{margin-bottom:0;}
+.pakete-cta{grid-column:1 / -1; margin-top:44px; text-align:center;}
+.pakete-intro .pakete-cta{grid-column:auto; margin-top:32px; text-align:left;}
+@media (max-width:800px){.pakete-layout{grid-template-columns:1fr; gap:36px;}}
+.warum-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:40px;}
+.warum-item h3{font-size:1.1rem; margin-bottom:10px; min-height:3.3em; color:var(--paper);}
+.warum-item p{color:var(--muted); font-size:0.96rem;}
+@media (max-width:760px){.warum-grid{grid-template-columns:1fr; gap:32px;}}
+.warum-split{display:grid; grid-template-columns:1fr 1.3fr; gap:64px; align-items:start;}
+.warum-split-title h2{font-family:'FormaDJRDisplay', serif; font-weight:500; font-size:clamp(1.6rem, 3vw, 2.2rem); line-height:1.3; letter-spacing:0.05em; text-transform:uppercase; color:var(--paper);}
+.warum-split-list{display:flex; flex-direction:column; gap:32px;}
+.warum-split-item h3{font-size:1.15rem; margin-bottom:8px; color:var(--paper);}
+.warum-split-item p{color:var(--muted); max-width:600px;}
+@media (max-width:800px){.warum-split{grid-template-columns:1fr; gap:30px;}}
+.faq-list{max-width:720px; border-top:1px solid var(--line);}
+.faq-item{border-bottom:1px solid var(--line);}
+.faq-toggle{width:100%; display:flex; align-items:baseline; justify-content:space-between; gap:20px; background:none; border:none; padding:22px 0; cursor:pointer; text-align:left; font-family:'FormaDJRDisplay', serif; font-size:1.08rem; font-weight:500; color:var(--paper);}
+.faq-icon{font-family:'Inter', sans-serif; font-size:1.25rem; line-height:1; color:var(--gold); flex-shrink:0;}
+.faq-body{display:none;}
+.faq-item.is-open .faq-body{display:block; padding-bottom:22px;}
+.faq-body p{color:var(--muted); max-width:640px;}
+.kontakt{background:var(--paper); color:var(--bg);}
+.kontakt h2{color:var(--bg); font-size:clamp(1.7rem, 3.4vw, 2.4rem); max-width:600px; margin-bottom:20px;}
+.kontakt p{color:#EDE8DE; max-width:480px; margin-bottom:32px;}
+.kontakt-details{display:flex; gap:44px; flex-wrap:wrap; margin-top:44px; padding-top:28px; border-top:1px solid rgba(250,247,242,0.2);}
+.kontakt-details div span{display:block; font-size:0.85rem; color:#C9C2B3; margin-bottom:6px;}
+.kontakt-details div a{text-decoration:none; color:var(--bg); font-size:1.02rem; font-weight:500;}
+.kontakt .btn-primary{background:var(--bg); border-color:var(--bg); color:var(--paper);}
+.kontakt .btn-primary:hover{background:#EAE3D5; border-color:#EAE3D5;}
+.kontakt-form-layout{display:grid; grid-template-columns:1fr 1.3fr; gap:64px; align-items:start;}
+.kontakt-form-single{max-width:640px; margin:0 auto;}
+.kontakt-form-intro p{color:var(--muted); margin-bottom:18px; max-width:420px;}
+.kontakt-form-intro .kontakt-details{margin-top:36px; padding-top:28px; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:20px;}
+.kontakt-form-intro .kontakt-details div span{display:block; font-size:0.85rem; color:var(--muted); margin-bottom:4px;}
+.kontakt-form-intro .kontakt-details div a{text-decoration:none; color:var(--paper); font-size:1.05rem; font-weight:500;}
+.kontakt-form{display:flex; flex-direction:column; gap:24px;}
+.form-row{display:flex; flex-direction:column; gap:8px;}
+.form-split-row{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+.kontakt-form label{font-size:0.85rem; color:var(--muted);}
+.kontakt-form input, .kontakt-form select, .kontakt-form textarea{font-family:'Inter', sans-serif; font-size:1rem; color:var(--paper); background:transparent; border:none; border-bottom:1px solid var(--line); padding:10px 0; outline:none; transition:border-color 0.2s;}
+.kontakt-form input:focus, .kontakt-form select:focus, .kontakt-form textarea:focus{border-color:var(--gold);}
+.kontakt-form textarea{resize:vertical; min-height:120px;}
+.kontakt-form button[type="submit"]{align-self:flex-start; margin-top:8px; border:none; cursor:pointer;}
+@media (max-width:800px){.kontakt-form-layout{grid-template-columns:1fr; gap:36px;} .form-split-row{grid-template-columns:1fr;}}
+footer{background:var(--bg); color:#766F60; font-size:0.85rem; padding:26px 0; border-top:1px solid var(--line);}
+footer a{color:inherit; text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;}
+</style>
+</head>
+<body>
+
+<div class="preview-bar">Vorschau · so würden index.html / events.html / about.html im Zusammenspiel wirken</div>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" data-page="hochzeiten"><span>the</span><span class="logo-accent">GUEST</span><span>book</span></a>
+    <ul>
+      <li><a class="navlink" data-page="hochzeiten">Hochzeiten</a></li>
+      <li><a class="navlink" data-page="events">Events</a></li>
+      <li><a class="navlink" data-page="about">Über uns</a></li>
+      <li><a class="navlink" data-page="kontakt">Kontakt</a></li>
+    </ul>
+
+  </div>
+</nav>
+
+<!-- HOCHZEITEN (jetzt Startseite) -->
+<div class="page active" id="page-hochzeiten">
+  <header class="hero hero-bgphoto bg-wedding">
+    <div class="wrap">
+      <div class="hero-content">
+        <h1 class="hero-title">Der Hochzeitsfilm<br>mit euren Liebsten<br>und den <em>gemeinsamen</em> Geschichten.</h1>
+        <p class="hero-emphasis">Nicht der klassische Hochzeitsfilm. Sondern der Film voller Lieblingsmenschen, die euch Dinge sagen, die ihr für immer hören wollt.</p>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap konzept-grid">
+      <div><div class="section-head" style="margin-bottom:0;"><h2>Unsere Services</h2></div></div>
+      <div>
+        <p>Unser Kernangebot ist einfach: Wir interviewen die Menschen, die euch am besten kennen, und machen aus ihren Geschichten, Witzen und Ratschlägen einen Film, den ihr sonst nie bekommen würdet.</p>
+        <p>Der Einstieg sind Interviews am Apéro, ergänzt durch das, was ihr für euren Tag zusätzlich wünscht: Gedanken vor der Zeremonie oder Interviews am Abend, wenn die Party läuft.</p>
+        <p class="konzept-not">Es ist Film, Content und Gästeunterhaltung in einem. <strong>Kein Ersatz</strong> für eure klassische Hochzeitsvideografie/Fotografie, sondern das Zusatzstück dazu.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="pakete-hochzeiten">
+    <div class="wrap pakete-layout">
+      <div class="pakete-intro">
+        <div class="section-head" style="margin-bottom:0;">
+          <h2>Pakete für Hochzeiten</h2>
+        </div>
+        <div class="pakete-cta">
+          <a class="btn btn-primary" data-page="kontakt">Termin anfragen</a>
+        </div>
+      </div>
+      <div class="pakete-list">
+        <div class="pakete-item is-open">
+          <button class="pakete-toggle" aria-expanded="true"><span>Die Interviews <span class="pakete-price">CHF 1'900</span></span><span class="pakete-icon">–</span></button>
+          <div class="pakete-body"><p>Unser Signature-Film: Wir sind mit einem zweiköpfigen Videoteam beim Apéro oder Empfang dabei und interviewen eure Gäste über den Nachmittag oder Abend hinweg. So entstehen Geschichten, Erinnerungen, Witze, Ratschläge und Botschaften, die sonst mit dem Tag verloren gehen.</p>
+          <p>Wir sind schon zur Ankunft der Gäste vor Ort und sprechen während des Apéros mit so vielen wie möglich. Enthalten sind bis zu 4 Stunden vor Ort, professionelle Kamera- und Tontechnik sowie der fertig geschnittene Interviewfilm, meist 30 bis 45 Minuten lang.</p></div>
+        </div>
+        <div class="pakete-item">
+          <button class="pakete-toggle" aria-expanded="false"><span>Abend Interviews <span class="pakete-price">CHF 1'900</span></span><span class="pakete-icon">+</span></button>
+          <div class="pakete-body"><p>Die lockere, ehrliche Seite des Hochzeitsfilms: gleiches Prinzip wie tagsüber, einfach später am Abend, wenn die offiziellen Programmpunkte vorbei sind und das Tanzbein geschwungen wird. Gäste sind jetzt entspannter und eher bereit für lustige, chaotische oder herzliche Antworten.</p>
+          <p>Ideal, um die Energie der Nacht festzuhalten: Freunde nach dem einen oder anderen Drink, Familie mit Rückblick auf den Tag, späte Ratschläge und Momente, die tagsüber nie passieren würden. Enthalten ist die Coverage am Abend ab ca. 21 Uhr, professionelle Kamera- und Tontechnik sowie der geschnittene Film von 45 bis 60 Minuten, abhängig von Verfügbarkeit, Location und Lautstärke vor Ort.</p></div>
+        </div>
+        <div class="pakete-item">
+          <button class="pakete-toggle" aria-expanded="false"><span>Der Moment davor <span class="pakete-price">+ CHF 600</span></span><span class="pakete-icon">+</span></button>
+          <div class="pakete-body"><p>Gedanken, Nervosität und Vorfreude, bevor der Tag richtig losgeht. Wir sind schon vor der Zeremonie da und interviewen Braut und Bräutigam, je nach Zeitplan getrennt oder gemeinsam, und wenn die Zeit reicht auch Trauzeugen, Eltern oder die engste Familie.</p>
+          <p>So entstehen private Worte, ehrliche Gefühle und Ratschläge der Menschen, die euch am nächsten stehen, kurz bevor alles losgeht. Enthalten sind bis zu 1 Stunde Coverage, professionelle Kamera- und Tontechnik sowie die geschnittenen Interviews dieses Pakets als Teil eures Films, abhängig von Location, Zeitplan und Verfügbarkeit am Morgen.</p></div>
+        </div>
+        <div class="pakete-item">
+          <button class="pakete-toggle" aria-expanded="false"><span>Highlights <span class="pakete-price">+ CHF 300</span></span><span class="pakete-icon">+</span></button>
+          <div class="pakete-body"><p>Kurzformat-Content aus euren Gästeinterviews, fertig zum Teilen: eine Auswahl der besten, lustigsten oder herzlichsten Momente als kurze, vertikale Clips für Instagram Reels, TikTok, Stories oder zum direkten Versand an Freunde und Familie.</p>
+          <p>Enthalten sind 5 geschnittene Clips mit dezenten Untertiteln, bereit zum Teilen. Die Highlights lassen sich zu jedem Gästeinterview-Paket dazubuchen.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap warum-split">
+      <div class="warum-split-title"><h2>Warum es<br>Paare<br>lieben.</h2></div>
+      <div class="warum-split-list">
+        <div class="warum-split-item"><h3>Hört, was ihr verpasst habt</h3><p>Ihr könnt nicht überall gleichzeitig sein. Das hier fängt ein, was eure Gäste sagen, während ihr mit dem Tag beschäftigt seid.</p></div>
+        <div class="warum-split-item"><h3>Lustig, ehrlich und ganz persönlich</h3><p>Von emotionalen Ratschlägen bis zu Geschichten, die ihr noch nie gehört habt: Der Film dreht sich um eure Menschen.</p></div>
+        <div class="warum-split-item"><h3>Ein einzigartiges Andenken</h3><p>Blumen, Location und Deko sind an dem Tag wichtig, aber die Stimmen der Menschen, die ihr liebt, sind das, was ihr in Jahren wieder hören wollt.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="section-head"><h2>Häufige Fragen</h2></div>
+        <div class="faq-list">
+          <div class="faq-item is-open"><button class="faq-toggle" aria-expanded="true"><span>Ist das dasselbe wie eine normale Hochzeitsvideografie?</span><span class="faq-icon">–</span></button><div class="faq-body"><p>Nein. The Guestbook ist ein moderiertes Gästeinterview-Format. Im Zentrum stehen die Gäste, ihre Geschichten, Ratschläge und Botschaften, nicht die Zeremonie.</p></div></div>
+          <div class="faq-item"><button class="faq-toggle" aria-expanded="false"><span>Filmt ihr auch die Zeremonie?</span><span class="faq-icon">+</span></button><div class="faq-body"><p>Unser Kerngeschäft sind die Gästeinterviews am Apéro und am Abend. Der Moment davor lässt sich dazubuchen.</p></div></div>
+          <div class="faq-item"><button class="faq-toggle" aria-expanded="false"><span>Wie lange ist der fertige Film?</span><span class="faq-icon">+</span></button><div class="faq-body"><p>Meistens zwischen 30 und 60 Minuten, je nach Anzahl Gäste und gebuchten Paketen.</p></div></div>
+          <div class="faq-item"><button class="faq-toggle" aria-expanded="false"><span>Müssen sich die Gäste vorbereiten?</span><span class="faq-icon">+</span></button><div class="faq-body"><p>Nein. Wir führen die Gespräche mit einfachen Fragen und lassen sie natürlich entstehen.</p></div></div>
+          <div class="faq-item"><button class="faq-toggle" aria-expanded="false"><span>Reist ihr auch ausserhalb der Ostschweiz an?</span><span class="faq-icon">+</span></button><div class="faq-body"><p>Ja. Die ersten 50 km ab Frauenfeld sind inklusive, danach verrechnen wir eine Kilometerpauschale.</p></div></div>
+        </div>
+    </div>
+  </section>
+
+  <footer><div class="wrap"><span>© 2026 The Guestbook</span><span><a href="https://liasoertig.ch" target="_blank" rel="noopener">a liasoertig production</a></span></div></footer>
+</div>
+
+<!-- EVENTS (self-contained) -->
+<div class="page" id="page-events">
+  <header class="hero hero-bgphoto bg-events">
+    <div class="wrap">
+      <div class="hero-content">
+        <h1 class="hero-title">Macht euren Event<br>unvergesslich.</h1>
+        <p class="hero-sub">Wir kommen zu eurem Event, führen Interviews mit euren Gästen und machen aus den besten Momenten einen Film, der persönlich, lustig, emotional und absolut einzigartig für die Anwesenden ist.</p>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap konzept-grid">
+      <div><div class="section-head" style="margin-bottom:0;"><h2>Unsere Services</h2></div></div>
+      <div>
+        <p>Unser Kernangebot ist einfach: Wir interviewen die Menschen, die euch am besten kennen, und verwandeln ihre Geschichten, Witze, Ratschläge und Botschaften in einen Event-Film, den man so normalerweise nie bekommt.</p>
+        <p>Egal ob Rote Teppiche, Roaming im Publikum oder Rückblicke am Ende des Abends – wir filmen alles und kreieren etwas wirklich Unvergessliches.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="pakete-events">
+    <div class="wrap pakete-layout">
+      <div class="pakete-intro">
+        <div class="section-head" style="margin-bottom:0;">
+          <h2>Pakete für Events</h2>
+        </div>
+        <div class="pakete-cta">
+          <a class="btn btn-primary" data-page="kontakt">Anfrage stellen</a>
+        </div>
+      </div>
+      <div class="pakete-list">
+        <div class="pakete-item is-open">
+          <button class="pakete-toggle" aria-expanded="true"><span>Privates Event <span class="pakete-price">CHF 1'900</span></span><span class="pakete-icon">–</span></button>
+          <div class="pakete-body"><p>Für Geburtstage, Jubiläen, Verlobungsfeiern oder private Dinner. Zweiköpfiges Team, ein vereinbartes Zeitfenster am Anlass, professionelle Kamera- und Tonausrüstung, geschnittener Gästefilm.</p></div>
+        </div>
+        <div class="pakete-item">
+          <button class="pakete-toggle" aria-expanded="false"><span>Firmen Event <span class="pakete-price">CHF 1'900</span></span><span class="pakete-icon">+</span></button>
+          <div class="pakete-body"><p>Für Produktlaunches, Firmenfeiern und PR-Anlässe. Interviews mit Gästen, Kundinnen, Mitarbeitenden oder Gründern: echte Reaktionen und Stimmung statt eines gewöhnlichen Eventrecaps. Inklusive Nutzungsrecht für eure Kanäle.</p></div>
+        </div>
+        <div class="pakete-item">
+          <button class="pakete-toggle" aria-expanded="false"><span>Highlights <span class="pakete-price">+ CHF 300</span></span><span class="pakete-icon">+</span></button>
+          <div class="pakete-body"><p>5 geschnittene, vertikale Clips aus den stärksten Reaktionen und Statements, aufbereitet für Instagram, TikTok, LinkedIn oder interne Kommunikation.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap warum-split">
+      <div class="warum-split-title"><h2>Warum die<br>Leute es<br>lieben.</h2></div>
+      <div class="warum-split-list">
+        <div class="warum-split-item"><h3>Hautnah dabei – auch wenn man nicht überall gleichzeitig sein kann</h3><p>Du kannst nicht an jedem Tisch und in jeder Ecke sein. Dieser Film fängt die Gespräche, Reaktionen, Storys und Momente ein, die währenddessen passieren, während du voll und ganz mit dem Feiern oder Gastgeben beschäftigt bist.</p></div>
+        <div class="warum-split-item"><h3>Lustig, tiefgründig und absolut persönlich</h3><p>Von lieben Botschaften und gemeinsamen Erinnerungen bis hin zu unerwarteten Anekdoten und echten Reaktionen: Das Video dreht sich komplett um die Menschen, die das Event erst zu dem gemacht haben, was es war.</p></div>
+        <div class="warum-split-item"><h3>Mehr als nur ein normales Recap-Video</h3><p>Die Location, die Dekoration und die Stimmung sind wichtig – aber erst die Stimmen der Gäste hauchen dem Event noch lange nach dem Ende echtes Leben ein.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="section-head"><h2>Häufige Fragen</h2></div>
+        <div class="faq-list">
+          <div class="faq-item is-open"><button class="faq-toggle" aria-expanded="true"><span>Was genau ist The Guestbook?</span><span class="faq-icon">–</span></button><div class="faq-body"><p>Ein Schweizer Studio, das Gäste an Anlässen interviewt und daraus einen kurzen Film schneidet. Ursprünglich für Hochzeiten entwickelt, heute auch für private Feiern und Firmenanlässe buchbar.</p></div></div>
+          <div class="faq-item"><button class="faq-toggle" aria-expanded="false"><span>Ist das eine klassische Eventvideografie?</span><span class="faq-icon">+</span></button><div class="faq-body"><p>Nein. Wir liefern kein reines Programmrecap, sondern ein moderiertes Interviewformat. Im Zentrum stehen die Menschen im Raum, nicht der Ablauf des Anlasses.</p></div></div>
+          <div class="faq-item"><button class="faq-toggle" aria-expanded="false"><span>Für wie viele Gäste eignet sich das?</span><span class="faq-icon">+</span></button><div class="faq-body"><p>Ab kleinen privaten Runden bis zu grösseren Firmenanlässen. Bei sehr grossen Events sprechen wir Team-Grösse und Ablauf gerne im Voraus mit euch ab.</p></div></div>
+          <div class="faq-item"><button class="faq-toggle" aria-expanded="false"><span>Wie lange ist der fertige Film?</span><span class="faq-icon">+</span></button><div class="faq-body"><p>Je nach Paket und Anzahl Interviews zwischen 15 und 40 Minuten, plus die optionalen Highlights als kurze Social-Clips.</p></div></div>
+          <div class="faq-item"><button class="faq-toggle" aria-expanded="false"><span>Reist ihr auch ausserhalb der Ostschweiz an?</span><span class="faq-icon">+</span></button><div class="faq-body"><p>Ja. Die ersten 50 km ab Frauenfeld sind inklusive, danach verrechnen wir eine Kilometerpauschale. Destination Events auf Anfrage.</p></div></div>
+        </div>
+    </div>
+  </section>
+
+  <footer><div class="wrap"><span>© 2026 The Guestbook</span><span><a href="https://liasoertig.ch" target="_blank" rel="noopener">a liasoertig production</a></span></div></footer>
+</div>
+
+<!-- ÜBER UNS -->
+<div class="page" id="page-about">
+  <header class="page-header wrap">
+    <div class="hero-label">Über The Guestbook</div>
+    <h1 class="hero-title">Der Gedanke hinter<br>The Guestbook.</h1>
+  </header>
+
+  <section>
+    <div class="wrap konzept-grid">
+      <div><div class="section-head" style="margin-bottom:0;"><h2>Warum The Guestbook existiert</h2></div></div>
+      <div>
+        <p>Der klassische Hochzeitsfilm zeigt die Zeremonie, die Reden und die schönsten Einstellungen des Tages. Was dabei oft fehlt, sind die Stimmen der Menschen, die den Tag zu dem gemacht haben, was er war: Freunde, Geschwister, Grosseltern, Trauzeugen.</p>
+        <p>The Guestbook setzt genau dort an. Wir interviewen eure Gäste während des Anlasses, mit einfachen, ehrlichen Fragen, und schneiden daraus einen Film voller Geschichten, Witze, Ratschläge und Botschaften ans Brautpaar.</p>
+        <p class="konzept-not">Entstanden aus der Foto- und Videobranche in der Ostschweiz, mit dem Anspruch, <strong>etwas Neues</strong> anzubieten, das es in dieser Form in der Schweiz noch nicht gab.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap konzept-grid">
+      <div>
+        <div class="section-head" style="margin-bottom:0;"><h2>Wer wir sind</h2></div>
+        <div class="founder-photos">
+          <div class="hero-photo"><img src="images/team-1.jpg" alt="Einer der beiden Gründer von The Guestbook"></div>
+          <div class="hero-photo"><span class="hero-photo-placeholder">Foto folgt</span></div>
+        </div>
+      </div>
+      <div>
+        <p>The Guestbook ist die Idee von uns zwei, zwei Freunden aus der Ostschweiz, die schon lange gemeinsam fotografieren und filmen. Wir waren an genug Hochzeiten dabei, um zu merken: Die schönsten Sätze des Tages fallen selten vor der Zeremonie oder auf der Tanzfläche. Sie fallen am Katzentisch, beim Anstossen mit dem Brautpaar oder auf dem Weg zur Bar, und sind am nächsten Tag meistens schon wieder vergessen.</p>
+        <p>Also haben wir angefangen, genau diese Momente festzuhalten: kurze Interviews mit den Menschen, die eine Hochzeit eigentlich ausmachen. Aus der Schnapsidee für die Hochzeit eines Freundes wurde The Guestbook, ein Studio, das mittlerweile durch die ganze Schweiz reist, weil wir überzeugt sind, dass eine gute Hochzeit vor allem aus guten Geschichten besteht.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="section-head"><h2>Wie wir arbeiten</h2></div>
+      <div class="warum-grid">
+        <div class="warum-item"><h3>Diskret und professionell</h3><p>Ein eingespieltes Zweierteam mit professioneller Kamera- und Tontechnik, das sich nie in den Vordergrund drängt.</p></div>
+        <div class="warum-item"><h3>Ehrliche Fragen, echte Antworten</h3><p>Keine einstudierten Statements. Wir stellen einfache Fragen und lassen die Antworten natürlich entstehen.</p></div>
+        <div class="warum-item"><h3>Sorgfältiger Schnitt</h3><p>Jeder Film wird von Hand geschnitten, mit Blick für die Momente, die in Erinnerung bleiben, statt für ein starres Schema.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap konzept-grid">
+      <div><div class="section-head" style="margin-bottom:0;"><h2>Zuhause in der Ostschweiz, unterwegs in der ganzen Schweiz</h2></div></div>
+      <div>
+        <p>The Guestbook ist in Frauenfeld zuhause und reist für Hochzeiten und Events in der ganzen Schweiz an. Die ersten 50 km ab Frauenfeld sind immer inklusive, danach verrechnen wir eine Kilometerpauschale.</p>
+        <p class="konzept-not">Destination Weddings und mehrtägige Anlässe sind auf Anfrage ebenfalls möglich.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer><div class="wrap"><span>© 2026 The Guestbook</span><span><a href="https://liasoertig.ch" target="_blank" rel="noopener">a liasoertig production</a></span></div></footer>
+</div>
+
+<!-- KONTAKT -->
+<div class="page" id="page-kontakt">
+  <header class="page-header wrap">
+    <div class="hero-label">Kontakt</div>
+    <h1 class="hero-title">Erzählt uns von eurem Tag.</h1>
+    <p class="hero-sub">Ob Hochzeit oder eigener Anlass: Schreibt uns kurz, worum es geht, dann melden wir uns mit einem passenden Vorschlag.</p>
+  </header>
+
+  <section id="kontaktformular">
+    <div class="wrap kontakt-form-single">
+      <form class="kontakt-form" action="https://formsubmit.co/info@liasoertig.ch" method="POST">
+        <input type="hidden" name="_subject" value="Neue Anfrage über theguestbook.ch">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="form-split-row">
+          <div class="form-row"><label for="v-vorname">Vorname</label><input type="text" id="v-vorname" name="Vorname" required></div>
+          <div class="form-row"><label for="v-nachname">Nachname</label><input type="text" id="v-nachname" name="Nachname" required></div>
+        </div>
+        <div class="form-row"><label for="v-email">E-Mail</label><input type="email" id="v-email" name="E-Mail" required></div>
+        <div class="form-row"><label for="v-telefon">Telefon</label><input type="tel" id="v-telefon" name="Telefon"></div>
+        <div class="form-row"><label for="v-datum">Hochzeits-/Event-Datum</label><input type="date" id="v-datum" name="Datum"></div>
+        <div class="form-row"><label for="v-paket">Gewünschtes Paket</label>
+          <select id="v-paket" name="Gewünschtes Paket">
+            <option value="" selected disabled>Bitte auswählen</option>
+            <optgroup label="Hochzeit">
+              <option>Die Interviews</option>
+              <option>Der Moment davor</option>
+              <option>Abend Interviews</option>
+              <option>Highlights</option>
+            </optgroup>
+            <optgroup label="Event">
+              <option>Privates Event</option>
+              <option>Firmen Event</option>
+              <option>Highlights</option>
+            </optgroup>
+            <option>Weiss ich noch nicht</option>
+          </select>
+        </div>
+        <div class="form-row"><label for="v-nachricht">Gibt es sonst noch etwas, das wir wissen sollten?</label><textarea id="v-nachricht" name="Nachricht" rows="5" placeholder="Ort, ungefähre Gästezahl, Wünsche ..."></textarea></div>
+        <button type="submit" class="btn btn-primary">Anfrage senden</button>
+      </form>
+    </div>
+  </section>
+
+  <footer><div class="wrap"><span>© 2026 The Guestbook</span><span><a href="https://liasoertig.ch" target="_blank" rel="noopener">a liasoertig production</a></span></div></footer>
+</div>
+
+<script>
+  function showPage(id){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    var target = document.getElementById('page-' + id) || document.getElementById('page-hochzeiten');
+    target.classList.add('active');
+    document.querySelectorAll('.navlink').forEach(n => n.classList.remove('active'));
+    var navMatch = document.querySelector('.navlink[data-page="' + id + '"]');
+    if(navMatch) navMatch.classList.add('active');
+    else document.querySelector('.navlink[data-page="hochzeiten"]').classList.add('active');
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+  document.querySelectorAll('[data-page]').forEach(el => {
+    el.addEventListener('click', function(e){
+      showPage(this.getAttribute('data-page'));
+    });
+  });
+  document.querySelector('.navlink[data-page="hochzeiten"]').classList.add('active');
+
+  document.querySelectorAll('.pakete-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.pakete-item');
+      if(item.classList.contains('is-open')) return; // immer bleibt eins offen
+      var group = item.closest('.pakete-list');
+      group.querySelectorAll('.pakete-item').forEach(function(i){
+        i.classList.remove('is-open');
+        i.querySelector('.pakete-toggle').setAttribute('aria-expanded','false');
+        i.querySelector('.pakete-icon').textContent = '+';
+      });
+      item.classList.add('is-open');
+      btn.setAttribute('aria-expanded','true');
+      item.querySelector('.pakete-icon').textContent = '\u2013';
+    });
+  });
+
+  document.querySelectorAll('.faq-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.faq-item');
+      var group = item.closest('.faq-list');
+      var wasOpen = item.classList.contains('is-open');
+      group.querySelectorAll('.faq-item').forEach(function(i){
+        i.classList.remove('is-open');
+        i.querySelector('.faq-toggle').setAttribute('aria-expanded','false');
+        i.querySelector('.faq-icon').textContent = '+';
+      });
+      if(!wasOpen){
+        item.classList.add('is-open');
+        btn.setAttribute('aria-expanded','true');
+        item.querySelector('.faq-icon').textContent = '\u2013';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
