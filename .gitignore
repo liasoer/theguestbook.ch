@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# editor / OS junk
+Thumbs.db
+.vscode/
+
+# Claude chat deliverables (not site source)
+Claude outputs/
