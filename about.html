@@ -14,6 +14,9 @@
 <nav>
   <div class="wrap">
     <a class="logo" href="index.html"><span>the</span><span class="logo-accent">GUEST</span><span>book</span></a>
+    <button class="nav-toggle" aria-label="Menü öffnen" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <ul>
       <li><a class="navlink" href="index.html">Hochzeiten</a></li>
       <li><a class="navlink" href="events.html">Events</a></li>
@@ -55,7 +58,7 @@
       </div>
     </div>
     <div>
-      <p>The Guestbook ist die Idee von uns zwei, zwei Freunden aus der Ostschweiz, die schon lange gemeinsam fotografieren und filmen. Wir waren an genug Hochzeiten dabei, um zu merken: Die schönsten Sätze des Tages fallen selten vor der Zeremonie oder auf der Tanzfläche. Sie fallen am Katzentisch, beim Anstossen mit dem Brautpaar oder auf dem Weg zur Bar, und sind am nächsten Tag meistens schon wieder vergessen.</p>
+      <p>The Guestbook ist die Idee von uns zwei, zwei Freunden aus der Ostschweiz. Wir waren an genug Hochzeiten dabei, um zu merken: Die schönsten Sätze des Tages fallen selten vor der Zeremonie oder auf der Tanzfläche. Sie fallen am Katzentisch, beim Anstossen mit dem Brautpaar oder auf dem Weg zur Bar, und sind am nächsten Tag meistens schon wieder vergessen.</p>
       <p>Also haben wir angefangen, genau diese Momente festzuhalten: kurze Interviews mit den Menschen, die eine Hochzeit eigentlich ausmachen. Aus der Schnapsidee für die Hochzeit eines Freundes wurde The Guestbook, ein Studio, das mittlerweile durch die ganze Schweiz reist, weil wir überzeugt sind, dass eine gute Hochzeit vor allem aus guten Geschichten besteht.</p>
     </div>
   </div>
@@ -103,6 +106,26 @@
     <span><a href="https://liasoertig.ch" target="_blank" rel="noopener">a liasoertig production</a></span>
   </div>
 </footer>
+
+<script>
+(function(){
+  var navToggle = document.querySelector('.nav-toggle');
+  var navList = document.querySelector('nav ul');
+  if(!navToggle || !navList) return;
+  navToggle.addEventListener('click', function(){
+    var isOpen = navList.classList.toggle('is-open');
+    navToggle.classList.toggle('is-open', isOpen);
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  navList.querySelectorAll('a').forEach(function(link){
+    link.addEventListener('click', function(){
+      navList.classList.remove('is-open');
+      navToggle.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded','false');
+    });
+  });
+})();
+</script>
 
 </body>
 </html>

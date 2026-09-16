@@ -16,8 +16,9 @@
   --gold:#000000; --gold-dark:#2B2B2B; --line: rgba(34,31,27,0.14);
 }
 *{box-sizing:border-box; margin:0; padding:0;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg); color:var(--paper); font-family:'Inter', sans-serif; font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased;}
+html{scroll-behavior:smooth; overflow-x:hidden;}
+body{background:var(--bg); color:var(--paper); font-family:'Inter', sans-serif; font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-wrap:break-word;}
+img,svg{max-width:100%; height:auto; display:block;}
 h1,h2,h3{font-family:'FormaDJRDisplay', serif; font-weight:700; letter-spacing:-0.01em;}
 .hero-title{font-family:'FormaDJRBanner', serif;}
 a{color:inherit; cursor:pointer;}
@@ -32,7 +33,18 @@ nav a.navlink:hover{opacity:1;}
 nav a.navlink.active{opacity:1; border-bottom-color:var(--gold);}
 .nav-cta{background:var(--gold); color:var(--bg) !important; opacity:1 !important; padding:10px 20px; border-radius:2px; font-size:0.9rem; text-decoration:none; font-weight:500;}
 .nav-cta:hover{background:var(--gold-dark);}
-@media (max-width:760px){nav ul{display:none;}}
+.nav-toggle{display:none; flex-direction:column; justify-content:center; gap:5px; width:36px; height:36px; background:none; border:none; padding:0; cursor:pointer;}
+.nav-toggle span{display:block; width:100%; height:2px; background:var(--paper); transition:transform 0.2s ease, opacity 0.2s ease;}
+.nav-toggle.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-toggle.is-open span:nth-child(2){opacity:0;}
+.nav-toggle.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+@media (max-width:760px){
+  .nav-toggle{display:flex;}
+  nav ul{display:none; position:absolute; top:72px; left:0; right:0; flex-direction:column; gap:0; background:var(--bg); border-bottom:1px solid var(--line); padding:8px 32px 24px; max-height:calc(100vh - 72px); overflow-y:auto;}
+  nav ul.is-open{display:flex;}
+  nav a.navlink{display:block; padding:16px 0; border-bottom:1px solid var(--line); opacity:0.85; font-size:1rem;}
+  nav li:last-child a.navlink{border-bottom:none;}
+}
 .preview-bar{background:#F1ECE3; color:#766F60; font-size:0.8rem; text-align:center; padding:8px 12px; border-bottom:1px solid var(--line);}
 .page{display:none;}
 .page.active{display:block;}
@@ -70,6 +82,9 @@ header.hero.wrap{max-width:1320px;}
 .hero.hero-bgphoto .wrap{position:relative; z-index:1; max-width:1320px;}
 .hero.hero-bgphoto .hero-content{background:rgba(255,255,255,0.22); backdrop-filter:blur(22px) saturate(160%); -webkit-backdrop-filter:blur(22px) saturate(160%); border:1px solid rgba(255,255,255,0.4); border-radius:32px; padding:64px 56px; box-shadow:0 24px 70px rgba(20,18,15,0.15), inset 0 1px 0 rgba(255,255,255,0.4);}
 @media (max-width:700px){.hero.hero-bgphoto{padding:96px 0 76px;} .hero.hero-bgphoto .hero-content{padding:34px 22px; border-radius:20px;}}
+@media (max-width:480px){.hero.hero-bgphoto{padding:88px 0 64px;} .hero.hero-bgphoto .hero-content{padding:26px 18px; border-radius:16px;}}
+@media (max-width:600px){section{padding:64px 0;} .hero{padding:80px 0 60px;} .page-header{padding:64px 0 48px;}}
+@media (max-width:420px){.wrap{padding:0 20px;}}
 @media (max-width:860px){.hero.hero-split{grid-template-columns:1fr; text-align:center; padding:70px 0;} .hero-split .hero-sub, .hero-emphasis{margin-left:auto; margin-right:auto;} .hero-split .hero-actions{justify-content:center;} .hero-photo{order:-1; max-width:380px; margin:0 auto 36px; aspect-ratio:4/3;}}
 .btn{display:inline-block; padding:14px 28px; border-radius:2px; text-decoration:none; font-size:0.95rem; font-weight:500; border:1px solid var(--gold); transition:all 0.2s; color:var(--gold);}
 .btn-primary{background:var(--gold); border-color:var(--gold); color:var(--bg);}
@@ -99,7 +114,8 @@ section{padding:84px 0; border-top:1px solid var(--line);}
 .pakete-body p:last-child{margin-bottom:0;}
 .pakete-cta{grid-column:1 / -1; margin-top:44px; text-align:center;}
 .pakete-intro .pakete-cta{grid-column:auto; margin-top:32px; text-align:left;}
-@media (max-width:800px){.pakete-layout{grid-template-columns:1fr; gap:36px;}}
+@media (max-width:800px){.pakete-layout{grid-template-columns:1fr; gap:36px;} .pakete-item.is-open .pakete-body{min-height:auto;}}
+@media (max-width:480px){.pakete-toggle{font-size:1.15rem;} .faq-toggle{font-size:1.02rem;}}
 .warum-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:40px;}
 .warum-item h3{font-size:1.1rem; margin-bottom:10px; min-height:3.3em; color:var(--paper);}
 .warum-item p{color:var(--muted); font-size:0.96rem;}
@@ -153,6 +169,9 @@ footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12
 <nav>
   <div class="wrap">
     <a class="logo" data-page="hochzeiten"><span>the</span><span class="logo-accent">GUEST</span><span>book</span></a>
+    <button class="nav-toggle" aria-label="Menü öffnen" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <ul>
       <li><a class="navlink" data-page="hochzeiten">Hochzeiten</a></li>
       <li><a class="navlink" data-page="events">Events</a></li>
@@ -350,7 +369,7 @@ footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12
         </div>
       </div>
       <div>
-        <p>The Guestbook ist die Idee von uns zwei, zwei Freunden aus der Ostschweiz, die schon lange gemeinsam fotografieren und filmen. Wir waren an genug Hochzeiten dabei, um zu merken: Die schönsten Sätze des Tages fallen selten vor der Zeremonie oder auf der Tanzfläche. Sie fallen am Katzentisch, beim Anstossen mit dem Brautpaar oder auf dem Weg zur Bar, und sind am nächsten Tag meistens schon wieder vergessen.</p>
+        <p>The Guestbook ist die Idee von uns zwei, zwei Freunden aus der Ostschweiz. Wir waren an genug Hochzeiten dabei, um zu merken: Die schönsten Sätze des Tages fallen selten vor der Zeremonie oder auf der Tanzfläche. Sie fallen am Katzentisch, beim Anstossen mit dem Brautpaar oder auf dem Weg zur Bar, und sind am nächsten Tag meistens schon wieder vergessen.</p>
         <p>Also haben wir angefangen, genau diese Momente festzuhalten: kurze Interviews mit den Menschen, die eine Hochzeit eigentlich ausmachen. Aus der Schnapsidee für die Hochzeit eines Freundes wurde The Guestbook, ein Studio, das mittlerweile durch die ganze Schweiz reist, weil wir überzeugt sind, dass eine gute Hochzeit vor allem aus guten Geschichten besteht.</p>
       </div>
     </div>
@@ -445,6 +464,23 @@ footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12
     });
   });
   document.querySelector('.navlink[data-page="hochzeiten"]').classList.add('active');
+
+  var navToggle = document.querySelector('.nav-toggle');
+  var navList = document.querySelector('nav ul');
+  if(navToggle && navList){
+    navToggle.addEventListener('click', function(){
+      var isOpen = navList.classList.toggle('is-open');
+      navToggle.classList.toggle('is-open', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    navList.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', function(){
+        navList.classList.remove('is-open');
+        navToggle.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded','false');
+      });
+    });
+  }
 
   document.querySelectorAll('.pakete-toggle').forEach(function(btn){
     btn.addEventListener('click', function(){
