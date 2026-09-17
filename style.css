@@ -24,12 +24,12 @@
 }
 
 :root{
-  --bg:#FFFFFF;
-  --bg-2:#FFFFFF;
+  --bg:#F7EFC7;
+  --bg-2:#F1E7B8;
   --paper:#000000;
   --muted:#000000;
-  --gold:#000000;
-  --gold-dark:#2B2B2B;
+  --gold:#4B5D3F;
+  --gold-dark:#37432D;
   --rust:#55503F;
   --line: rgba(34,31,27,0.14);
 }
@@ -64,7 +64,7 @@ a{color:inherit;}
 /* NAV */
 nav{
   position:sticky; top:0; z-index:20;
-  background:rgba(250,247,242,0.86);
+  background:rgba(247,239,199,0.86);
   backdrop-filter:blur(6px);
   border-bottom:1px solid var(--line);
 }
@@ -304,7 +304,7 @@ header.hero.wrap{
   content:"";
   position:absolute;
   inset:0;
-  background:rgba(250,247,242,0.12);
+  background:rgba(247,239,199,0.18);
 }
 .hero.hero-bgphoto .wrap{
   position:relative;
