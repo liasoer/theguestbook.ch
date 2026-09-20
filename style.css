@@ -24,8 +24,8 @@
 }
 
 :root{
-  --bg:#F7EFC7;
-  --bg-2:#F1E7B8;
+  --bg:#F8F1CF;
+  --bg-2:#F3EBC3;
   --paper:#000000;
   --muted:#000000;
   --gold:#4B5D3F;
@@ -64,7 +64,7 @@ a{color:inherit;}
 /* NAV */
 nav{
   position:sticky; top:0; z-index:20;
-  background:rgba(247,239,199,0.86);
+  background:rgba(248,241,207,0.86);
   backdrop-filter:blur(6px);
   border-bottom:1px solid var(--line);
 }
@@ -173,6 +173,9 @@ nav a.navlink:hover, nav a.navlink.active{opacity:1;}
   max-width:840px;
   margin:0 auto;
   color:var(--paper);
+}
+.hero-title em{
+  color:var(--gold);
 }
 header.hero.wrap{
   max-width:1320px;
@@ -304,7 +307,7 @@ header.hero.wrap{
   content:"";
   position:absolute;
   inset:0;
-  background:rgba(247,239,199,0.18);
+  background:rgba(248,241,207,0.18);
 }
 .hero.hero-bgphoto .wrap{
   position:relative;
