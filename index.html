@@ -298,6 +298,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
    Bordeaux hinter der Statusleiste: Safari (iOS 26) prüft 8 px unter dem oberen Rand, welches Element getroffen wird, und nimmt die Hintergrundfarbe des ersten fixierten Elements darüber.
    Darum ist der Streifen selbst fixiert und diese Fläche antippbar (pointer-events), sonst wird sie übersprungen. Erscheint erst, wenn das Band oben ist */
 #kopf-tint{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top,0px) + 64px);background-color:var(--bordeaux);z-index:39;cursor:pointer}
+@media (min-width:1000px){#kopf-tint{display:none}}/* Balken nur auf Handy und Tablet */
 /* Bordeaux hinter der Statusleiste, von Anfang an: Safari zeigt dort den Bereich oberhalb der Seite. Diese Fläche liegt genau dort (und in der Safe Area, falls vorhanden) */
 #statusleiste{position:fixed;top:-160px;left:0;right:0;height:calc(160px + env(safe-area-inset-top,0px));background-color:var(--bordeaux);z-index:41;pointer-events:none}
 .band-oben #spur{visibility:visible}
