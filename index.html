@@ -43,10 +43,12 @@
 :root[data-theme="dark"]{ --papier:#E8DFCD; --papier-tief:#DACDB5; }
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);
-  background:linear-gradient(to bottom,var(--papier) 0 50%,var(--abspann) 50% 100%)}
-body{margin:0;background:var(--papier);color:var(--tinte);
+  background:linear-gradient(to bottom,var(--bordeaux) 0 50%,var(--abspann) 50% 100%)}
+/* Grundfarbe Bordeaux: Safari färbt damit die Statusleiste ein, auch ganz oben. Der Inhalt selbst liegt auf Papier */
+body{margin:0;background:var(--bordeaux);color:var(--tinte);
   font-family:var(--f-text);font-size:18px;line-height:1.65;font-optical-sizing:auto;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+main{background:var(--papier)}
 img{max-width:100%;display:block}
 a{color:inherit}
 p{margin:0 0 var(--s2)}
@@ -292,10 +294,10 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
 #spur{position:fixed;right:0;top:calc(env(safe-area-inset-top,0px) + 96px);bottom:calc(env(safe-area-inset-bottom,0px) + 36px);width:30px;z-index:39;
   pointer-events:none;visibility:hidden;--tab-bg:var(--bordeaux);--tab-fg:var(--papier)}
 #spur.auf-dunkel{--tab-bg:var(--papier);--tab-fg:var(--bordeaux)}
-/* Bordeaux hinter der Statusleiste: Safari (iOS 26) prüft 8 px unter dem oberen Rand, welches Element getroffen wird, und nimmt die Hintergrundfarbe des ersten fixierten Elements darüber.
+/* Balken oben, von Anfang an sichtbar: das Band fährt beim Scrollen hinein und bleibt dort.
+   Bordeaux hinter der Statusleiste: Safari (iOS 26) prüft 8 px unter dem oberen Rand, welches Element getroffen wird, und nimmt die Hintergrundfarbe des ersten fixierten Elements darüber.
    Darum ist der Streifen selbst fixiert und diese Fläche antippbar (pointer-events), sonst wird sie übersprungen. Erscheint erst, wenn das Band oben ist */
-#kopf-tint{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top,0px) + 64px);background-color:var(--bordeaux);z-index:39;visibility:hidden;cursor:pointer}
-.band-oben #kopf-tint{visibility:visible}
+#kopf-tint{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top,0px) + 64px);background-color:var(--bordeaux);z-index:39;cursor:pointer}
 /* Bordeaux hinter der Statusleiste, von Anfang an: Safari zeigt dort den Bereich oberhalb der Seite. Diese Fläche liegt genau dort (und in der Safe Area, falls vorhanden) */
 #statusleiste{position:fixed;top:-160px;left:0;right:0;height:calc(160px + env(safe-area-inset-top,0px));background-color:var(--bordeaux);z-index:41;pointer-events:none}
 .band-oben #spur{visibility:visible}
