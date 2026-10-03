@@ -275,7 +275,7 @@ details[open] summary .plus::after{transform:rotate(0)}
 /* Filmband: wächst beim Scrollen aus dem Header-Logo. Nur transform, clip-path und opacity, damit es flüssig läuft */
 #band{position:fixed;inset:0;z-index:40;pointer-events:none;visibility:hidden;overflow:hidden}
 #band .kappe{position:absolute;left:0;top:0;width:100vw;height:env(safe-area-inset-top,0px);background:var(--bordeaux);opacity:0;transform-origin:50% 0;will-change:transform,opacity}
-#band .streifen{position:absolute;left:0;top:0;width:100vw;height:64px;background-color:var(--bordeaux);pointer-events:auto;cursor:pointer;
+#band .streifen{position:fixed;left:0;top:0;width:100vw;height:64px;background-color:var(--bordeaux);pointer-events:auto;cursor:pointer;
   overflow:hidden;transform-origin:50% 50%;will-change:transform}
 #band .innen{position:absolute;inset:0;transform-origin:50% 50%;will-change:transform}
 #band .loecher{position:absolute;top:0;bottom:0;left:-13.17px;right:-13.17px;will-change:transform;
@@ -292,8 +292,9 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
 #spur{position:fixed;right:0;top:calc(env(safe-area-inset-top,0px) + 96px);bottom:calc(env(safe-area-inset-bottom,0px) + 36px);width:30px;z-index:39;
   pointer-events:none;visibility:hidden;--tab-bg:var(--bordeaux);--tab-fg:var(--papier)}
 #spur.auf-dunkel{--tab-bg:var(--papier);--tab-fg:var(--bordeaux)}
-/* Bordeaux hinter der Statusleiste: iOS 26 färbt den oberen Rand mit der Hintergrundfarbe eines fixierten Elements ein. Liegt unter dem Band und erscheint erst, wenn es oben ist */
-#kopf-tint{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top,0px) + 64px);background-color:var(--bordeaux);z-index:39;pointer-events:none;visibility:hidden}
+/* Bordeaux hinter der Statusleiste: Safari (iOS 26) prüft 8 px unter dem oberen Rand, welches Element getroffen wird, und nimmt die Hintergrundfarbe des ersten fixierten Elements darüber.
+   Darum ist der Streifen selbst fixiert und diese Fläche antippbar (pointer-events), sonst wird sie übersprungen. Erscheint erst, wenn das Band oben ist */
+#kopf-tint{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top,0px) + 64px);background-color:var(--bordeaux);z-index:39;visibility:hidden;cursor:pointer}
 .band-oben #kopf-tint{visibility:visible}
 .band-oben #spur{visibility:visible}
 .spur-rand{position:absolute;right:0;top:-40px;bottom:-20px;width:18px;touch-action:none;cursor:grab}
@@ -787,6 +788,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
   /* Seitenhöhe ändert sich (z. B. aufgeklappte Fragen): Animation neu berechnen */
   if(window.ResizeObserver)new ResizeObserver(spaeter).observe(document.body);
   str.addEventListener('click',function(){window.scrollTo({top:0,behavior:ruhig?'auto':'smooth'});});
+  var tint=document.getElementById('kopf-tint');if(tint)tint.addEventListener('click',function(){window.scrollTo({top:0,behavior:ruhig?'auto':'smooth'});});
   function neu(){messNoetig=true;tick();}
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(neu);
   window.addEventListener('load',neu);neu();
