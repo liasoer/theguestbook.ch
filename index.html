@@ -738,6 +738,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
   /* Masse nur bei Laden und Grössenänderung lesen, nicht bei jedem Scroll-Schritt */
   function messen(){
     safe=document.getElementById('safe-probe').offsetHeight||0;
+    var kt=document.getElementById('kopf-tint');if(kt)kt.style.height=(safe+Z)+'px';/* Balken exakt so hoch wie das Band am Ende */
     var y=window.scrollY,r=logo.getBoundingClientRect();
     top0=r.top+y;w0=r.width;h0=r.height;dist=Math.max(1,top0+h0*1.4+60);
     vw=document.documentElement.clientWidth;messNoetig=false;
