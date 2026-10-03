@@ -48,7 +48,8 @@ p{margin:0 0 6px}
 .wahl li.an .box::after{content:"";position:absolute;inset:2px;background:var(--bordeaux)}
 .unterschrift{display:grid;grid-template-columns:1fr 1fr;gap:12mm;margin-top:8mm}
 .unterschrift div span{display:block;font-size:11px;font-style:italic;color:var(--muted)}
-.unterschrift .linie{border-bottom:1px solid var(--tinte);height:16mm;margin:3mm 0 2mm}
+.unterschrift .linie{border-bottom:1px solid var(--tinte);height:16mm;margin:3mm 0 2mm;position:relative}
+.unterschrift .sig{position:absolute;left:3mm;bottom:-1mm;height:20mm;width:auto;pointer-events:none;user-select:none}
 .fuss{margin-top:9mm;display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);border-top:1px solid var(--hair);padding-top:5px}
 [contenteditable]{outline:none;border-radius:2px;transition:background .15s}
 [contenteditable]:hover,[contenteditable]:focus{background:rgba(122,31,40,.07)}
@@ -190,7 +191,7 @@ p{margin:0 0 6px}
     <li>Es gilt Schweizer Recht. Gerichtsstand ist Frauenfeld.</li>
   </ol>
   <div class="unterschrift">
-    <div><span>Für The Guestbook</span><div class="linie"></div>Frauenfeld, <span contenteditable="true" id="v-heute" style="display:inline;font-style:normal;color:var(--tinte);font-size:inherit"></span><br>Lias Oertig</div>
+    <div><span>Für The Guestbook</span><div class="linie"><img class="sig" src="/unterschrift-lias.png" alt="Unterschrift Lias Oertig" draggable="false"></div>Frauenfeld, <span contenteditable="true" id="v-heute" style="display:inline;font-style:normal;color:var(--tinte);font-size:inherit"></span><br>Lias Oertig</div>
     <div><span>Für die Auftraggeber</span><div class="linie"></div>Ort, Datum<br><span contenteditable="true" id="v-kunde2" style="display:inline;font-style:normal;color:var(--tinte);font-size:inherit"></span></div>
   </div>
   </section>
