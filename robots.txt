@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /offerte.html
+Disallow: /vertrag.html
+
+Sitemap: https://theguestbook.ch/sitemap.xml

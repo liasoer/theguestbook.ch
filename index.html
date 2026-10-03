@@ -1,251 +1,828 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de-CH">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Guestbook — Der Hochzeitsfilm mit euren Liebsten und den gemeinsamen Geschichten</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Guestbook | Der Hochzeitsfilm mit euren Liebsten und den gemeinsamen Geschichten</title>
+<meta name="description" content="Nicht der klassische Hochzeitsfilm. Sondern der Film voller Lieblingsmenschen, die euch Dinge sagen, die ihr für immer hören wollt. Gästeinterviews an Hochzeiten und Events aus Frauenfeld.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#4A0F14">
+<link rel="canonical" href="https://theguestbook.ch/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "ProfessionalService", "name": "The Guestbook", "description": "Gästeinterview-Filme für Hochzeiten und Events in der ganzen Schweiz.", "url": "https://theguestbook.ch/", "logo": "https://theguestbook.ch/logo-filmstreifen.svg", "image": "https://theguestbook.ch/og-image.png", "email": "info@liasoertig.ch", "telephone": "+41 79 932 95 26", "address": {"@type": "PostalAddress", "streetAddress": "Hanfäckerstrasse 10", "postalCode": "8500", "addressLocality": "Frauenfeld", "addressRegion": "TG", "addressCountry": "CH"}, "areaServed": {"@type": "Country", "name": "Schweiz"}, "priceRange": "CHF 300 bis 1'900", "founder": {"@type": "Person", "name": "Lias Oertig"}, "makesOffer": [{"@type": "Offer", "name": "Die Interviews", "price": "1900", "priceCurrency": "CHF"}, {"@type": "Offer", "name": "Abend Interviews", "price": "1900", "priceCurrency": "CHF"}, {"@type": "Offer", "name": "Der Moment davor", "price": "600", "priceCurrency": "CHF"}, {"@type": "Offer", "name": "Privates Event", "price": "1900", "priceCurrency": "CHF"}, {"@type": "Offer", "name": "Firmen Event", "price": "1900", "priceCurrency": "CHF"}, {"@type": "Offer", "name": "Highlights", "price": "300", "priceCurrency": "CHF"}]}</script>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://theguestbook.ch/">
+<meta property="og:title" content="The Guestbook | Der Hochzeitsfilm mit euren Liebsten">
+<meta property="og:description" content="Nicht der klassische Hochzeitsfilm. Sondern der Film voller Lieblingsmenschen, die euch Dinge sagen, die ihr für immer hören wollt.">
+<meta property="og:image" content="https://theguestbook.ch/og-image.png">
+<style>
+@font-face{font-family:"Cinzel";src:url("/fonts/cinzel.woff2") format("woff2");font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Corinthia";src:url("/fonts/corinthia-bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Newsreader";src:url("/fonts/newsreader.woff2") format("woff2");font-weight:300 700;font-style:normal;font-display:swap}
+@font-face{font-family:"Newsreader";src:url("/fonts/newsreader-italic.woff2") format("woff2");font-weight:300 700;font-style:italic;font-display:swap}
+</style>
+<style>
+:root{
+  --bordeaux:#4A0F14; --wein:#7A1F28; --papier:#EEE6D6; --papier-tief:#E2D6C0;
+  --tinte:#26140F; --muted:#6B5A50; --moos:#5E6E5C; --salbei:#94A08E; --blush:#E6CFC4;
+  --hairline:rgba(38,20,15,.22); --hairline-hell:rgba(238,230,214,.28);
+  --himmel-oben:#B9C4B3; --abspann:#1C0F0B;
+  --f-display:"Cinzel","Trajan Pro",Georgia,serif;
+  --f-script:"Corinthia","Snell Roundhand",cursive;
+  --f-text:"Newsreader",Georgia,serif;
+  --s1:8px; --s2:16px; --s3:32px; --s4:64px; --s5:128px;
+  --rand:clamp(24px,5vw,64px);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){ --papier:#E8DFCD; --papier-tief:#DACDB5; }
+}
+:root[data-theme="dark"]{ --papier:#E8DFCD; --papier-tief:#DACDB5; }
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);
+  background:linear-gradient(to bottom,var(--papier) 0 50%,var(--abspann) 50% 100%)}
+body{margin:0;background:var(--papier);color:var(--tinte);
+  font-family:var(--f-text);font-size:18px;line-height:1.65;font-optical-sizing:auto;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{max-width:100%;display:block}
+a{color:inherit}
+p{margin:0 0 var(--s2)}
+:focus-visible{outline:2px solid var(--wein);outline-offset:3px}
+.dunkel :focus-visible{outline-color:var(--blush)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+
+/* Filmkorn über der ganzen Seite */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.09;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .15 0 0 0 0 .08 0 0 0 0 .06 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@keyframes korn{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(0,0)}}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--rand)}
+.schmal{max-width:68ch}
+
+/* Titel-System: Cinzel-Zeile plus Skript-Antwort */
+.titel{margin:0 0 var(--s4);font-weight:inherit}
+.titel .caps{display:block;font-family:var(--f-display);font-weight:500;text-transform:uppercase;
+  font-size:clamp(30px,6.2vw,70px);line-height:1;letter-spacing:-.005em}
+.titel .skript{display:block;font-family:var(--f-script);font-weight:400;color:var(--wein);
+  font-size:clamp(48px,8.4vw,100px);line-height:1;margin-top:-.08em;padding-left:.9em}
+.dunkel .titel .skript{color:var(--blush)}
+.titel.mitte{text-align:center}.titel.mitte .skript{padding-left:0}
+
+.label{font-style:italic;font-size:15px;color:var(--muted);margin:0 0 var(--s1)}
+.dunkel .label{color:var(--blush)}
+.dunkel{color:var(--papier)}
+
+.btn{display:inline-flex;align-items:center;gap:var(--s1);min-height:48px;padding:12px 26px;border-radius:2px;
+  font-family:var(--f-text);font-size:16px;letter-spacing:.01em;text-decoration:none;cursor:pointer;
+  border:1px solid currentColor;background:transparent;color:var(--wein);transition:background .25s,color .25s}
+.btn:hover{background:var(--wein);color:var(--papier);border-color:var(--wein)}
+.dunkel .btn{color:var(--papier)}
+.dunkel .btn:hover{background:var(--papier);color:var(--bordeaux);border-color:var(--papier)}
+.btn.voll{background:var(--papier);color:var(--bordeaux);border-color:var(--papier)}
+.btn.voll:hover{background:var(--blush);border-color:var(--blush)}
+
+/* Navigation */
+.nav{position:absolute;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:5}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);padding-top:18px;padding-bottom:18px}
+.nav-marke{font-family:var(--f-display);font-size:17px;text-decoration:none;color:var(--tinte);white-space:nowrap}
+.nav-marke i{font-family:var(--f-script);font-style:normal;font-size:1.15em;color:var(--wein)}
+.nav ul{list-style:none;display:flex;gap:clamp(14px,3vw,36px);margin:0;padding:0;font-size:15px}
+.nav a{text-decoration:none}
+.nav ul a{color:var(--tinte);padding:6px 0;border-bottom:1px solid transparent}
+.nav ul a:hover{border-bottom-color:var(--tinte)}
+@media (max-width:560px){.nav-marke{display:none}.nav .wrap{justify-content:center}}
+
+/* Titelkarte */
+.hero{position:relative;min-height:100svh;min-height:100vh;display:grid;grid-template-rows:1fr auto 1fr;overflow:hidden;
+  background:
+   radial-gradient(120% 70% at 50% 100%,rgba(0,0,0,.45),transparent 60%),
+   linear-gradient(to bottom,var(--himmel-oben) 0%,var(--salbei) 44%,#8A9C8C 50%,#3B4230 50.2%,var(--moos) 68%,#1D2116 100%)}
+@supports (min-height:100svh){.hero{min-height:100svh}}
+.hero-himmel{align-self:end;text-align:center;padding:96px var(--rand) var(--s3)}
+.hero-himmel .prod{font-style:italic;font-size:15px;color:#3F4A3E;margin:0 0 var(--s2)}
+.hero h1{margin:0 auto;max-width:18ch;font-family:var(--f-display);font-weight:500;font-size:clamp(21px,3.6vw,40px);letter-spacing:.01em;
+  line-height:1.08;color:var(--tinte)}
+.hero-mitte{display:flex;flex-direction:column;align-items:center;padding:clamp(40px,7vh,72px) var(--rand) 0}
+.lockup{position:relative;display:inline-block;font-size:clamp(50px,15vw,150px);line-height:1;color:var(--papier);margin:0}
+.lockup .l-guest{font-family:var(--f-display);font-weight:500;letter-spacing:.015em;display:block}
+.lockup .l-the{position:absolute;left:-.08em;top:-.42em;font-family:var(--f-script);font-size:.52em;color:var(--blush)}
+.lockup .l-book{position:absolute;right:-.12em;bottom:-.5em;font-family:var(--f-script);font-size:.74em;color:var(--blush)}
+.signatur{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;width:min(100%,560px);
+  margin-top:clamp(38px,6vw,64px);font-size:14px;color:rgba(238,230,214,.82);font-style:italic}
+.signatur span.linie{height:1px;background:var(--hairline-hell)}
+.hero-unten{align-self:end;text-align:center;padding:var(--s4) var(--rand) clamp(40px,8vh,80px)}
+.untertitel{font-style:italic;color:var(--papier);font-size:clamp(17px,2.1vw,22px);line-height:1.45;max-width:40ch;margin:0 auto var(--s3);
+  text-shadow:0 1px 12px rgba(0,0,0,.5)}
+/* Die eine inszenierte Bewegung: Aufblende wie ein Filmanfang */
+.auf{opacity:0;animation:aufblende 1.8s cubic-bezier(.2,.6,.2,1) forwards}
+.auf.a2{animation-delay:.6s}.auf.a3{animation-delay:1.3s}.auf.a4{animation-delay:1.9s}
+@keyframes aufblende{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:blur(0)}}
+.hero::before{content:"";position:absolute;inset:0;background:#000;pointer-events:none;animation:schwarz 1.4s ease-out forwards}
+@keyframes schwarz{from{opacity:1}to{opacity:0}}
+@media (prefers-reduced-motion:reduce){.auf{opacity:1}.hero::before{display:none}}
+
+/* Kapitel */
+.kapitel{padding:clamp(80px,12vw,var(--s5)) 0}
+.bordeaux{background:var(--bordeaux)}
+.moos{background:var(--moos)}
+
+.intro-raster{display:grid;gap:var(--s3) var(--s4);grid-template-columns:1fr}
+@media (min-width:860px){.intro-raster{grid-template-columns:1fr 1fr}}
+.gross{font-family:var(--f-text);font-size:clamp(23px,2.8vw,32px);line-height:1.3;font-weight:400;margin:0 0 var(--s3)}
+.hinweis{margin-top:var(--s3);padding:var(--s2) 0;border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);font-size:16px;color:var(--muted)}
+.hinweis strong{color:var(--tinte);font-weight:600}
+
+/* Filmstill mit Untertiteln */
+.still{position:relative;min-height:min(92vh,760px);display:flex;align-items:flex-end;justify-content:center;overflow:hidden;
+  background:
+   radial-gradient(90% 60% at 50% 110%,rgba(0,0,0,.55),transparent 70%),
+   linear-gradient(to bottom,#E2E6DA 0%,#B9C4B0 38%,#94A08E 46%,#56634F 46.3%,#3A4637 62%,#1F2720 100%)}
+.still .rahmen{position:absolute;left:0;right:0;height:clamp(28px,6vw,64px);background:#0F0A08}
+.still .rahmen.o{top:0}.still .rahmen.u{bottom:0}
+.still .figuren{position:absolute;left:50%;top:46%;transform:translate(-50%,-100%);width:min(34vw,220px);opacity:.9}
+.still .text{position:relative;text-align:center;padding:0 var(--rand) calc(clamp(28px,6vw,64px) + 34px);max-width:900px}
+.still .text p{font-style:italic;color:var(--papier);font-size:clamp(18px,2.4vw,26px);line-height:1.4;margin:0 0 6px;text-shadow:0 1px 10px rgba(0,0,0,.55)}
+.still .quelle{margin-top:var(--s2)!important;font-size:14px!important;color:rgba(238,230,214,.75)!important;font-style:normal!important}
+
+/* Pakete */
+.pakete-kopf{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s4)}
+.pakete-kopf .titel{margin:0}
+.paket{display:grid;grid-template-columns:1fr auto;gap:0 var(--s3);padding:var(--s3) 0 var(--s3);border-top:1px solid var(--hairline-hell)}
+.paket:last-child{border-bottom:1px solid var(--hairline-hell)}
+.paket .label{grid-column:1/-1}
+.paket h3{margin:0;font-family:var(--f-display);font-weight:500;font-size:clamp(24px,4vw,44px);line-height:1.1}
+.paket .preis{margin:0;align-self:end;font-family:var(--f-display);font-size:clamp(18px,2.2vw,24px);color:var(--blush);white-space:nowrap}
+.paket .kern{grid-column:1/-1;margin:var(--s2) 0 0;max-width:62ch;color:rgba(238,230,214,.9)}
+.paket details{grid-column:1/-1;margin-top:var(--s1)}
+summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:10px;font-style:italic;font-size:16px;padding:8px 0;min-height:44px}
+summary::-webkit-details-marker{display:none}
+summary .plus{position:relative;width:14px;height:14px;flex:none}
+summary .plus::before,summary .plus::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:currentColor;transition:transform .3s}
+summary .plus::after{transform:rotate(90deg)}
+details[open] summary .plus::after{transform:rotate(0)}
+.paket details p{max-width:62ch;color:rgba(238,230,214,.82);font-size:17px;margin:var(--s1) 0 0}
+.paket-cta{margin-top:var(--s4)}
+
+/* Drei Gründe */
+.gruende{display:grid;gap:0;grid-template-columns:1fr;border-top:1px solid var(--hairline)}
+@media (min-width:860px){.gruende{grid-template-columns:repeat(3,1fr);border-top:0}}
+.grund{padding:var(--s3) 0;border-bottom:1px solid var(--hairline)}
+@media (min-width:860px){.grund{padding:var(--s3) var(--s3) var(--s3) 0;border-bottom:0;border-top:1px solid var(--hairline)}
+  .grund+.grund{padding-left:var(--s3);border-left:1px solid var(--hairline)}}
+.grund h3{margin:0 0 var(--s2);font-family:var(--f-display);font-weight:500;font-size:clamp(22px,2.4vw,27px);line-height:1.18}
+.grund p{font-size:17px;margin:0}
+.dunkel .gruende,.dunkel .grund,.dunkel .grund+.grund{border-color:var(--hairline-hell)}
+.dunkel .grund p{color:rgba(238,230,214,.85)}
+.abschnitt-luft{margin-top:clamp(72px,10vw,120px)}
+
+/* Über uns */
+.ueber-raster{display:grid;gap:var(--s4);grid-template-columns:1fr}
+@media (min-width:900px){.ueber-raster{grid-template-columns:5fr 6fr;align-items:start}}
+.ueber h3{font-family:var(--f-display);font-weight:500;font-size:clamp(24px,2.8vw,32px);line-height:1.15;margin:0 0 var(--s2)}
+.bildfeld{margin:0}
+.bildfeld .bild{aspect-ratio:4/5;background:
+  radial-gradient(80% 50% at 50% 100%,rgba(0,0,0,.35),transparent 70%),
+  linear-gradient(to bottom,#E2E6DA,#B2BEA9 52%,#56634F 52.3%,#232B22);
+  display:grid;place-items:center;color:rgba(238,230,214,.9);font-style:italic;font-size:15px;border:10px solid var(--tinte)}
+.bildfeld figcaption{font-style:italic;font-size:14px;color:var(--muted);margin-top:10px}
+.oval{display:inline-block;padding:4px 16px;border:1px solid var(--wein);border-radius:999px;color:var(--wein);font-style:italic;font-size:15px}
+
+/* Fragen */
+.fragen-raster{display:grid;gap:var(--s4);grid-template-columns:1fr}
+@media (min-width:900px){.fragen-raster{grid-template-columns:1fr 1fr}}
+.fragen h3{font-family:var(--f-script);font-weight:400;font-size:46px;line-height:1.05;color:var(--wein);margin:0 0 var(--s2)}
+.frage{border-top:1px solid var(--hairline)}
+.frage:last-child{border-bottom:1px solid var(--hairline)}
+.frage summary{display:flex;justify-content:space-between;gap:var(--s2);width:100%;font-style:normal;font-size:18px;padding:14px 0;font-family:var(--f-text);font-weight:500}
+.frage summary .plus{margin-top:6px}
+.frage p{margin:0 0 var(--s2);font-size:17px;color:var(--muted);max-width:60ch}
+
+/* Kontakt */
+.formular{display:grid;gap:var(--s2) var(--s3);grid-template-columns:1fr;max-width:820px}
+@media (min-width:700px){.formular{grid-template-columns:1fr 1fr}.formular .breit{grid-column:1/-1}}
+.feld label{display:block;font-style:italic;font-size:15px;color:var(--blush);margin-bottom:6px}
+.feld input,.feld select,.feld textarea{width:100%;font:inherit;font-size:17px;color:var(--papier);background:rgba(238,230,214,.06);
+  border:1px solid var(--hairline-hell);border-radius:2px;padding:12px 14px;min-height:48px;-webkit-appearance:none;appearance:none}
+.feld textarea{min-height:140px;resize:vertical}
+.feld select{background-image:linear-gradient(45deg,transparent 50%,var(--blush) 50%),linear-gradient(135deg,var(--blush) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:40px}
+.feld select option,.feld select optgroup{color:var(--tinte);background:var(--papier)}
+.feld input:focus,.feld select:focus,.feld textarea:focus{outline:2px solid var(--blush);outline-offset:1px;border-color:transparent}
+.feld input[type=date]{color-scheme:dark}
+.senden{margin-top:var(--s1)}
+.danke{display:none;max-width:820px;padding:var(--s3) 0;border-top:1px solid var(--hairline-hell);border-bottom:1px solid var(--hairline-hell)}
+.danke p{font-family:var(--f-script);font-size:clamp(42px,6vw,64px);line-height:1.1;color:var(--blush);margin:0}
+.gesendet .formular{display:none}.gesendet .danke{display:block}
+
+/* Abspann */
+.abspann{background:var(--abspann);color:var(--papier);padding:clamp(80px,12vw,var(--s5)) 0 var(--s4);text-align:center}
+.credits{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;max-width:560px;margin:0 auto var(--s4);font-size:16px}
+.credits dt{text-align:right;font-style:italic;color:rgba(238,230,214,.6)}
+.credits dd{margin:0;text-align:left}
+.abspann .lockup{font-size:clamp(54px,12vw,96px);margin:var(--s3) 0 var(--s4)}
+.abspann .fuss{font-size:14px;color:rgba(238,230,214,.6)}
+.abspann .fuss a{color:var(--blush)}
+/* Corinthia nur im kräftigen Schnitt verwenden */
+.titel .skript,.lockup .l-the,.lockup .l-book,.nav-marke i,.fragen h3,.danke p{font-weight:700}
+/* Umschalter Hochzeiten / Events */
+.umschalter{display:inline-flex;border:1px solid var(--hairline-hell);border-radius:2px;margin:0 0 var(--s4)}
+.umschalter button{font:inherit;font-size:16px;color:var(--papier);background:transparent;border:0;padding:10px 22px;min-height:48px;cursor:pointer;transition:background .25s,color .25s}
+.umschalter button[aria-pressed="true"]{background:var(--papier);color:var(--bordeaux)}
+.gruppe[hidden]{display:none}
+.pakete-bereich{transition:background-color .6s ease}
+.pakete-bereich.moos{background:var(--moos)}
+.pakete-bereich.moos .umschalter button[aria-pressed="true"]{color:var(--moos)}
+.fragen-liste{max-width:820px}
+.logo-streifen{display:block;height:auto;max-width:100%}
+.logo-hero{width:min(86vw,520px)}
+.logo-fuss{width:min(72vw,360px);margin:var(--s3) auto var(--s4)}
+.logo-nav{width:96px}
+.wahlgruppe{border:0;padding:0;margin:0;min-width:0}
+.wahlgruppe legend{font-style:italic;font-size:15px;color:var(--blush);margin-bottom:10px;padding:0}
+.wahlgruppe legend small{font-size:14px;opacity:.8}
+.wahl-titel{font-size:14px;color:rgba(238,230,214,.7);margin:6px 0 8px}
+.wahlen{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:10px}
+.wahl{position:relative;display:flex;cursor:pointer}.wahl span{flex:1}
+.wahl input{position:absolute;opacity:0;width:1px;height:1px}
+.wahl span{display:flex;flex-direction:column;gap:2px;min-height:56px;justify-content:center;padding:12px 14px 12px 46px;border:1px solid var(--hairline-hell);border-radius:2px;
+  background:rgba(238,230,214,.06);color:var(--papier);font-size:17px;position:relative;transition:background .2s,color .2s,border-color .2s}
+.wahl small{font-size:14px;font-style:italic;opacity:.8}
+.wahl span::before{content:"";position:absolute;left:16px;top:50%;width:16px;height:16px;margin-top:-8px;border:1px solid var(--blush)}
+.wahl span.rund::before{border-radius:50%}
+.wahl span.eckig::before{border-radius:2px}
+.wahl input:checked+span{background:var(--papier);color:var(--bordeaux);border-color:var(--papier)}
+.wahl input:checked+span::before{background:var(--bordeaux);border-color:var(--bordeaux);box-shadow:inset 0 0 0 3px var(--papier)}
+.wahl input:focus-visible+span{outline:2px solid var(--blush);outline-offset:2px}
+.wahl.aus,.wahlgruppe.aus,.wahl[hidden],.feld[hidden]{display:none}
+.kontakt-bereich{transition:background-color .6s ease}
+.kontakt-bereich.moos{background:var(--moos)}
+.kontakt-bereich.moos .umschalter button[aria-pressed="true"]{color:var(--moos)}
+/* Header ohne Bild: Titelkarte auf Papier */
+.hero{background:var(--papier);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:104px 0 72px}
+.hero::after{content:"";position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);left:14px;right:14px;bottom:14px;border:1px solid var(--hairline);pointer-events:none}
+.hero-mitte{padding:0 var(--rand)}
+.hero-himmel{align-self:auto;padding:clamp(40px,7vh,64px) var(--rand) var(--s2)}
+.hero-unten{align-self:auto;padding:var(--s2) var(--rand) 0}
+.hero .untertitel{color:var(--muted);text-shadow:none}
+.hero .signatur{color:var(--muted)}
+.hero .signatur span.linie{background:var(--hairline)}
+.hero .lockup{color:var(--tinte)}
+.hero .lockup .l-the,.hero .lockup .l-book{color:var(--wein)}
+/* Filmband: wächst beim Scrollen aus dem Header-Logo. Nur transform, clip-path und opacity, damit es flüssig läuft */
+#band{position:fixed;inset:0;z-index:40;pointer-events:none;visibility:hidden;will-change:clip-path}
+#band .kappe{position:absolute;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:var(--bordeaux);opacity:0}
+#band .streifen{position:absolute;left:0;top:0;width:100vw;height:64px;background-color:var(--bordeaux);pointer-events:auto;cursor:pointer;
+  transform-origin:50% 50%;will-change:transform;
+  --hh:4.48px;--hw:6.272px;--pitch:13.17px;--r:4.032px;--a:3.45px;--b:9.72px;
+  background-image:linear-gradient(to right,transparent var(--a),var(--papier) var(--a),var(--papier) var(--b),transparent var(--b)),linear-gradient(to right,transparent var(--a),var(--papier) var(--a),var(--papier) var(--b),transparent var(--b));
+  background-size:var(--pitch) var(--hh),var(--pitch) var(--hh);background-repeat:repeat-x;
+  background-position:calc(50% + var(--pitch) / 2 + var(--lauf,0px)) var(--r),calc(50% + var(--pitch) / 2 + var(--lauf,0px)) calc(100% - var(--r))}
+.band-linie{position:absolute;left:0;right:0;height:.5px;background:var(--blush);opacity:.55}
+.band-linie.o{top:12.54px}.band-linie.u{bottom:12.54px}
+.band-text{position:absolute;top:0;left:50%;height:64px;width:170.67px;margin-left:-85.33px}
+#safe-probe{position:absolute;top:0;left:0;height:0;padding-top:env(safe-area-inset-top,0px);visibility:hidden}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+/* Seitennavigation: Lasche am rechten Rand, erscheint bei Kapitelwechsel oder Wischen am Rand */
+#spur{position:fixed;right:0;top:calc(env(safe-area-inset-top,0px) + 96px);bottom:calc(env(safe-area-inset-bottom,0px) + 36px);width:30px;z-index:39;
+  pointer-events:none;visibility:hidden;--tab-bg:var(--bordeaux);--tab-fg:var(--papier)}
+#spur.auf-dunkel{--tab-bg:var(--papier);--tab-fg:var(--bordeaux)}
+.band-oben #spur{visibility:visible}
+.spur-rand{position:absolute;right:0;top:-40px;bottom:-20px;width:18px;touch-action:none;cursor:grab}
+.band-oben .spur-rand{pointer-events:auto}
+.spur-marken{position:absolute;inset:0;pointer-events:none}
+.spur-tick{position:absolute;right:0;width:8px;height:1px;margin-top:-.5px;background:var(--wein);box-shadow:0 0 0 1px rgba(238,230,214,.5);opacity:0;transition:opacity .25s}
+#spur.offen .spur-tick{opacity:1}
+.spur-kader{position:absolute;right:0;top:0;width:28px;height:0;will-change:transform;outline:none;z-index:2}
+.spur-fenster{position:absolute;right:0;top:0;width:28px;display:flex;flex-direction:column;align-items:center;gap:0;padding:10px 0;
+  background:var(--tab-bg);color:var(--tab-fg);border-radius:3px 0 0 3px;cursor:grab;touch-action:none;
+  transform:translate(calc(100% - 7px),-50%);transition:transform .4s cubic-bezier(.2,.7,.2,1),background-color .35s,color .35s;pointer-events:auto}
+#spur.zeigen .spur-fenster{transform:translate(0,-50%);pointer-events:auto}
+.spur-fenster:active{cursor:grabbing}
+.spur-akt{display:none}
+.spur-titel{writing-mode:vertical-rl;font-style:italic;font-size:12px;line-height:1;white-space:nowrap;opacity:0;transition:opacity .25s}
+#spur.zeigen .spur-titel{opacity:1;transition-delay:.1s}
+.spur-akt.wechsel,.spur-titel.wechsel{animation:akt .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes akt{from{transform:translateY(40%);opacity:0}to{transform:none;opacity:1}}
+.spur-kader:focus-visible .spur-fenster{outline:2px solid var(--wein);outline-offset:2px;transform:translate(0,-50%)}
+.spur-marke{position:absolute;right:14px;white-space:nowrap;line-height:1.3;background:rgba(238,230,214,.94);color:var(--wein);border:0;border-radius:2px;
+  padding:3px 8px;font:inherit;font-style:italic;font-size:12px;line-height:1;cursor:pointer;opacity:0;pointer-events:none;transform:translate(4px,-50%);transition:opacity .25s,transform .25s}
+.spur-marke[aria-current="true"]{background:var(--papier);box-shadow:0 0 0 1px var(--wein)}
+.spur-marke:focus-visible{outline:2px solid var(--wein);outline-offset:2px}
+#spur.offen .spur-marke{opacity:1;transform:translate(-4px,-50%);pointer-events:auto}
+#spur.offen .spur-fenster{opacity:.35}
+@media (prefers-reduced-motion:reduce){.spur-marke,.spur-fenster,.spur-tick{transition:none}.spur-akt.wechsel,.spur-titel.wechsel{animation:none}}
+@media (max-width:700px){.wrap{padding-right:calc(var(--rand) + 6px)}}
+.uebertitel{margin:0 0 var(--s2);font-family:var(--f-text);font-style:italic;font-weight:400;font-size:clamp(20px,2.2vw,24px);color:var(--wein)}
+/* Desktop: zweispaltig mit stehender linker Spalte */
+.zweispaltig{display:grid;grid-template-columns:1fr}
+@media (min-width:1000px){
+  .wrap{max-width:1240px}
+  .zweispaltig{grid-template-columns:minmax(300px,4fr) 7fr;gap:clamp(56px,7vw,112px);align-items:start}
+  .spalte-links{position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px + 56px)}
+  .spalte-links .titel{margin-bottom:var(--s3)}
+  .spalte-links .titel .caps{font-size:clamp(30px,3.4vw,54px)}
+  .spalte-links .titel .skript{font-size:clamp(40px,4.4vw,70px);padding-left:.5em}
+  .spalte-links .umschalter{margin-bottom:0}
+  .spalte-links .schmal{margin-bottom:var(--s3)!important}
+  .kontakt-bereich .formular{max-width:none}
+  .fragen-liste{max-width:none}
+  .fragen .frage summary{font-size:19px;padding:18px 0}
+  .hero h1{max-width:26ch}
+  .logo-hero{width:min(60vw,600px)}
+  .paket{padding:var(--s4) 0 var(--s3)}
+  .paket:first-child{padding-top:0;border-top:0}
+  .spalte-rechts .paket-cta{margin-top:var(--s3)}
+}
+@media (min-width:1000px) and (hover:hover){
+  .spur-rand{width:24px}
+}
+/* Events auf Salbei #5E6E5C */
+.moos .label,.moos .paket .preis,.moos .titel .skript,.moos .feld label,.moos .wahlgruppe legend{color:#DCE3D2}
+/* Header: Signatur über dem Logo, breiterer Slogan */
+.hero .signatur{margin-top:0;margin-bottom:clamp(24px,5vw,44px)}
+.hero h1{max-width:min(100%,30ch)}
+.hero-himmel{padding-left:clamp(16px,4vw,64px);padding-right:clamp(16px,4vw,64px)}
+.hero h1 em{display:block;margin-top:.12em;font-family:var(--f-script);font-weight:700;font-style:normal;color:var(--wein);font-size:1.55em;line-height:1;letter-spacing:0;text-transform:none}
+.hero{justify-content:flex-start;padding-top:clamp(52px,9vh,110px);padding-bottom:clamp(64px,10vh,110px);min-height:0!important}
+/* Wie geht es weiter */
+.ablauf{margin-top:var(--s3);margin-bottom:0}
+.ablauf-titel{font-style:italic;font-size:17px;margin:0 0 var(--s2)}
+.ablauf ol{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.ablauf li{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;font-size:16px;line-height:1.5}
+.ablauf .nr{width:30px;height:30px;display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;font-family:var(--f-display);font-size:13px;opacity:.85}
+.ablauf strong{display:block;font-weight:600}
+.dunkel .ablauf li span:last-child{color:rgba(238,230,214,.88)}
+.dunkel .ablauf strong{color:var(--papier)}
+.dunkel .ablauf-titel{color:var(--blush)}
+.abspann .credits a{color:var(--blush);text-decoration:none;border-bottom:1px solid rgba(230,207,196,.4)}
+@media (min-width:1000px){.ablauf{margin-bottom:0}}
+.form-hinweis{margin:0;font-size:14px;font-style:italic;opacity:.8}.form-hinweis a{color:inherit}
+.danke-sub{display:block;font-style:italic;opacity:.85;margin-top:6px}
+.danke p.ablauf-titel{font-family:var(--f-text);font-weight:400;font-style:italic;font-size:17px;line-height:1.4;color:inherit;opacity:.85;margin-bottom:var(--s2)}
+</style>
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <a class="logo" href="index.html"><span>the</span><span class="logo-accent">GUEST</span><span>book</span></a>
-    <button class="nav-toggle" aria-label="Menü öffnen" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul>
-      <li><a class="navlink active" href="index.html">Hochzeiten</a></li>
-      <li><a class="navlink" href="events.html">Events</a></li>
-      <li><a class="navlink" href="about.html">Über uns</a></li>
-      <li><a class="navlink" href="kontakt.html">Kontakt</a></li>
-    </ul>
+<div id="band" aria-hidden="true"><div class="kappe"></div>
+  <div class="streifen" role="button" tabindex="-1" aria-label="The Guestbook, nach oben"><span class="band-linie o"></span><span class="band-linie u"></span>
+    <svg class="band-text" viewBox="0 0 320 120"><path fill="#EEE6D6" d="M45.35524058332217 50.75112751115729V69.85176195478208H42.0209899369538V50.75112751115729ZM52.17623052027602 50.64151124462286V51.685488431514514H35.199999999999946V50.64151124462286ZM52.17623052027602 51.60327623161369V54.488571192586164L51.902189853939944 54.46116712595256V54.10622558712292Q51.902189853939944 53.032877342486756 51.23958815784799 52.37288492031744Q50.576986461756036 51.71289249814812 49.508856764965145 51.685488431514514V51.60327623161369ZM52.17623052027602 50.148238045217916V50.94295597759255L48.83293439097585 50.64151124462286Q49.43582385691522 50.64151124462286 50.10722348943862 50.55929904472204Q50.77862312196201 50.477086844821216 51.35410852126778 50.367470578286785Q51.92959392057355 50.257854311752354 52.17623052027602 50.148238045217916ZM42.10320213685462 67.8512650905287V69.85176195478208H39.91087680616597V69.577721288446Q39.91087680616597 69.577721288446 40.08900323928442 69.577721288446Q40.26712967240288 69.577721288446 40.26712967240288 69.577721288446Q40.97963540487669 69.577721288446 41.48661063759844 69.07074605572424Q41.99358587032019 68.5637708230025 42.0209899369538 67.8512650905287ZM45.27302838342135 67.8512650905287H45.35524058332217Q45.38264464995578 68.5637708230025 45.88961988267753 69.07074605572424Q46.39659511539928 69.577721288446 47.10910084787309 69.577721288446Q47.10910084787309 69.577721288446 47.287227280991544 69.577721288446Q47.465353714109995 69.577721288446 47.465353714109995 69.577721288446V69.85176195478208H45.27302838342135ZM37.86737375531083 51.60327623161369V51.685488431514514Q36.78293275128049 51.71289249814812 36.12848670880825 52.37288492031744Q35.47404066633602 53.032877342486756 35.47404066633602 54.10622558712292V54.46116712595256L35.199999999999946 54.488571192586164V51.60327623161369ZM35.199999999999946 50.148238045217916Q35.47404066633602 50.257854311752354 36.03582403232499 50.367470578286785Q36.597607398313954 50.477086844821216 37.282709064154155 50.55929904472204Q37.967810729994355 50.64151124462286 38.54329612930012 50.64151124462286L35.199999999999946 50.94295597759255ZM72.32084215079246 50.66891531125647V69.85176195478208H68.98659150442407V50.66891531125647ZM59.33131456646226 50.66891531125647V69.85176195478208H55.99706392009388V50.66891531125647ZM69.23322810412655 59.8035952685312V60.84757245542285H59.05727390012618V59.8035952685312ZM56.0792761199947 67.8512650905287V69.85176195478208H53.88695078930606V69.577721288446Q53.88695078930606 69.577721288446 54.06507722242451 69.577721288446Q54.24320365554296 69.577721288446 54.24320365554296 69.577721288446Q54.95570938801677 69.577721288446 55.46268462073852 69.07074605572424Q55.96965985346027 68.5637708230025 55.99706392009388 67.8512650905287ZM56.0792761199947 52.669412175509855H55.99706392009388Q55.96965985346027 51.95690644303605 55.46268462073852 51.4499312103143Q54.95570938801677 50.94295597759255 54.24320365554296 50.94295597759255Q54.24320365554296 50.94295597759255 54.06507722242451 50.94295597759255Q53.88695078930606 50.94295597759255 53.88695078930606 50.94295597759255V50.66891531125647H56.0792761199947ZM59.24910236656144 67.8512650905287H59.33131456646226Q59.35871863309587 68.5637708230025 59.86569386581762 69.07074605572424Q60.37266909853936 69.577721288446 61.08517483101318 69.577721288446Q61.08517483101318 69.577721288446 61.24959923081482 69.577721288446Q61.41402363061647 69.577721288446 61.44142769725008 69.577721288446V69.85176195478208H59.24910236656144ZM59.24910236656144 52.669412175509855V50.66891531125647H61.44142769725008V50.94295597759255Q61.41402363061647 50.94295597759255 61.24959923081482 50.94295597759255Q61.08517483101318 50.94295597759255 61.08517483101318 50.94295597759255Q60.37266909853936 50.94295597759255 59.86569386581762 51.4499312103143Q59.35871863309587 51.95690644303605 59.33131456646226 52.669412175509855ZM69.06880370432489 67.8512650905287V69.85176195478208H66.87647837363626V69.577721288446Q66.90388244026987 69.577721288446 67.06830684007151 69.577721288446Q67.23273123987316 69.577721288446 67.23273123987316 69.577721288446Q67.94523697234698 69.577721288446 68.46591423838552 69.07074605572424Q68.98659150442407 68.5637708230025 68.98659150442407 67.8512650905287ZM69.06880370432489 52.669412175509855H68.98659150442407Q68.98659150442407 51.95690644303605 68.46591423838552 51.4499312103143Q67.94523697234698 50.94295597759255 67.23273123987316 50.94295597759255Q67.23273123987316 50.94295597759255 67.06830684007151 50.94295597759255Q66.90388244026987 50.94295597759255 66.87647837363626 50.94295597759255V50.66891531125647H69.06880370432489ZM72.23862995089164 67.8512650905287H72.32084215079246Q72.34824621742607 68.5637708230025 72.85522145014781 69.07074605572424Q73.36219668286957 69.577721288446 74.07470241534337 69.577721288446Q74.07470241534337 69.577721288446 74.25282884846183 69.577721288446Q74.43095528158028 69.577721288446 74.43095528158028 69.577721288446V69.85176195478208H72.23862995089164ZM72.23862995089164 52.669412175509855V50.66891531125647H74.43095528158028V50.94295597759255Q74.43095528158028 50.94295597759255 74.25282884846183 50.94295597759255Q74.07470241534337 50.94295597759255 74.07470241534337 50.94295597759255Q73.36219668286957 50.94295597759255 72.85522145014781 51.4499312103143Q72.34824621742607 51.95690644303605 72.32084215079246 52.669412175509855ZM82.48775087186102 50.66891531125647V69.85176195478208H79.15350022549265V50.66891531125647ZM89.77592126899349 68.78038070125682 90.21963164476031 69.85176195478208H82.4055386719602V68.78038070125682ZM88.70847399769005 59.875370372741486V60.91934755963314H82.4055386719602V59.875370372741486ZM89.99777645687689 50.66891531125647V51.74029656478173H82.4055386719602V50.66891531125647ZM91.66942452152699 64.63581000254565 90.30184384466114 69.85176195478208H85.19813081377367L86.18467721258357 68.78038070125682Q87.58162894719393 68.78038070125682 88.58840725457317 68.27274980483143Q89.5951855619524 67.76511890840605 90.28159855519988 66.82652293575902Q90.96801154844735 65.887926963112 91.39965030111175 64.63581000254565ZM88.70847399769005 60.86453942636592V63.22784579389257H88.43443333135397V62.92771238833016Q88.43443333135397 62.08012655201539 87.86774586847964 61.50528343552135Q87.30105840560532 60.93044031902731 86.45347256929055 60.91934755963314V60.86453942636592ZM88.70847399769005 57.566872138482054V59.9301785060087H86.45347256929055V59.875370372741486Q87.30105840560532 59.84796630610788 87.87329224817672 59.26757680991675Q88.44552609074813 58.68718731372562 88.43443333135397 57.839601477410866V57.566872138482054ZM89.99777645687689 51.65808436488091V54.51597525921977H89.72373579054081V54.13362965375653Q89.72373579054081 53.0765927163598 89.06928974806858 52.408444640570764Q88.41484370559635 51.74029656478173 87.33040270156602 51.71289249814812V51.65808436488091ZM89.99777645687689 50.17564211185153V50.970360044226155L86.65448032757672 50.66891531125647Q87.25736979351609 50.66891531125647 87.92876942603948 50.58670311135565Q88.60016905856288 50.50449091145482 89.17565445786866 50.39487464492039Q89.75113985717442 50.28525837838596 89.99777645687689 50.17564211185153ZM79.23571242539347 67.8512650905287V69.85176195478208H77.04338709470483V69.577721288446Q77.04338709470483 69.577721288446 77.22151352782328 69.577721288446Q77.39963996094174 69.577721288446 77.39963996094174 69.577721288446Q78.11214569341554 69.577721288446 78.6191209261373 69.07074605572424Q79.12609615885904 68.5637708230025 79.15350022549265 67.8512650905287ZM79.23571242539347 52.669412175509855H79.15350022549265Q79.14240746609848 51.95690644303605 78.62502336300507 51.4499312103143Q78.10763925991166 50.94295597759255 77.39963996094174 50.94295597759255Q77.39963996094174 50.94295597759255 77.229669181443 50.94295597759255Q77.05969840194427 50.94295597759255 77.05969840194427 50.94295597759255L77.04338709470483 50.66891531125647H79.23571242539347Z"/><path fill="#EEE6D6" d="M118.83941974817257 62.178623297371836V66.70029429191716Q118.19803345620542 67.52241629092539 116.97397622597632 68.34453828993364Q115.74991899574722 69.16666028894187 114.02410508064165 69.70103958829722Q112.29829116553606 70.23541888765259 110.12684002622849 70.23541888765259Q107.088895850336 70.21910758041315 104.79706351695165 68.99440806737232Q102.50523118356729 67.7697085543315 101.22506787355562 65.53073074399536Q99.94490456354393 63.291752933659225 99.94490456354393 60.23815311423093Q99.94490456354393 57.206738813590974 101.21397511416143 54.970698109029286Q102.48304566477894 52.734657404467605 104.80260989664873 51.50995789142678Q107.12217412851851 50.28525837838596 110.23776762017019 50.28525837838596Q111.74499128501864 50.28525837838596 113.1005224687187 50.504163079603Q114.45605365241875 50.723067780820045 115.58419664943021 51.08682063697303Q116.71233964644168 51.45057349312602 117.50705757881632 51.904694202799554L117.72235612966337 56.3233055678468H117.47571952996088Q116.99810197409175 54.54529279339664 116.02492977674684 53.451739401974955Q115.05175757940194 52.35818601055327 113.7099418099106 51.84371078791544Q112.36812604041927 51.32923556527761 110.79240558987871 51.32923556527761Q108.53483503023233 51.32923556527761 106.92518063780562 52.43583532631246Q105.31552624537893 53.542435087347314 104.4620929592991 55.55891542698832Q103.60865967321925 57.57539576662933 103.60865967321925 60.349080708172636Q103.60865967321925 63.022930815168415 104.4232683014195 65.01167925632399Q105.23787692961974 67.00042769747957 106.753242867196 68.08777904550053Q108.26860880477224 69.1751303935215 110.37088073290025 69.19144170076095Q111.45463931144312 69.19144170076095 112.44803003646545 68.8870598620168Q113.44142076148779 68.58267802327266 114.24493663029386 67.99838130664354Q115.04845249909994 67.41408459001441 115.5051691018042 66.58543271575364L115.5325731684378 62.178623297371836Q115.5325731684378 60.945440298859474 114.1349657701238 60.945440298859474H113.69650070398606V60.67139963252339H120.62068407935709V60.945440298859474H120.20962307985297Q118.78461161490536 60.945440298859474 118.83941974817257 62.178623297371836ZM127.53240984435904 50.66891531125647V62.726704630044Q127.53240984435904 64.67761190887543 128.20870019287588 66.12937177675302Q128.8849905413927 67.5811316446306 130.11719004434963 68.37258463937897Q131.34938954730654 69.16403763412734 133.00928918885882 69.16403763412734Q134.745526818763 69.16403763412734 136.0103489361988 68.41369073932938Q137.27517105363458 67.66334384453143 137.97592836301058 66.30195183017437Q138.67668567238658 64.94055981581734 138.67668567238658 63.0829574962809V50.66891531125647H140.408387179933V62.972029902339195Q140.408387179933 65.17610365612565 139.47371180861586 66.80697345267714Q138.53903643729873 68.43784324922864 136.80083181628362 69.33663106844061Q135.0626271952685 70.23541888765259 132.6765064070337 70.23541888765259Q129.9693512600716 70.23541888765259 128.0680201857702 69.34478672206032Q126.1666891114688 68.45415455646807 125.18242415472972 66.82883113961367Q124.19815919799065 65.20350772275926 124.19815919799065 62.9994339689728V50.66891531125647ZM124.28037139789147 50.66891531125647V52.31315930927295H124.19815919799065Q124.19815919799065 51.71026984333358 123.77339616516973 51.32661291046306Q123.34863313234881 50.94295597759255 122.74574366640942 50.94295597759255Q122.74574366640942 50.94295597759255 122.52651113334056 50.94295597759255Q122.3072786002717 50.94295597759255 122.3072786002717 50.94295597759255V50.66891531125647ZM129.42329044207798 50.66891531125647V50.94295597759255Q129.42329044207798 50.94295597759255 129.20405790900912 50.94295597759255Q128.98482537594026 50.94295597759255 128.98482537594026 50.94295597759255Q128.3819359100009 50.94295597759255 127.95717287717997 51.32661291046306Q127.53240984435904 51.71026984333358 127.53240984435904 52.31315930927295H127.47760171109182V50.66891531125647ZM138.7588978722874 50.66891531125647V52.31315930927295H138.67668567238658Q138.67668567238658 51.71026984333358 138.25192263956566 51.32661291046306Q137.82715960674474 50.94295597759255 137.22427014080537 50.94295597759255Q137.22427014080537 50.94295597759255 137.00503760773648 50.94295597759255Q136.78580507466762 50.94295597759255 136.78580507466762 50.94295597759255V50.66891531125647ZM142.29926777765195 50.66891531125647V50.94295597759255Q142.29926777765195 50.94295597759255 142.0800352445831 50.94295597759255Q141.8608027115142 50.94295597759255 141.8608027115142 50.94295597759255Q141.25791324557483 50.94295597759255 140.8331502127539 51.32661291046306Q140.408387179933 51.71026984333358 140.408387179933 52.31315930927295H140.35357904666577V50.66891531125647ZM150.08464535641116 50.66891531125647V69.85176195478208H146.75039471004277V50.66891531125647ZM157.37281575354362 68.78038070125682 157.81652612931043 69.85176195478208H150.00243315651034V68.78038070125682ZM156.30536848224017 59.875370372741486V60.91934755963314H150.00243315651034V59.875370372741486ZM157.594670941427 50.66891531125647V51.74029656478173H150.00243315651034V50.66891531125647ZM159.2663190060771 64.63581000254565 157.89873832921126 69.85176195478208H152.7950252983238L153.7815716971337 68.78038070125682Q155.17852343174405 68.78038070125682 156.1853017391233 68.27274980483143Q157.19208004650253 67.76511890840605 157.87849303975 66.82652293575902Q158.56490603299747 65.887926963112 158.99654478566185 64.63581000254565ZM156.30536848224017 60.86453942636592V63.22784579389257H156.0313278159041V62.92771238833016Q156.0313278159041 62.08012655201539 155.46464035302978 61.50528343552135Q154.89795289015544 60.93044031902731 154.0503670538407 60.91934755963314V60.86453942636592ZM156.30536848224017 57.566872138482054V59.9301785060087H154.0503670538407V59.875370372741486Q154.89795289015544 59.84796630610788 155.47018673272686 59.26757680991675Q156.04242057529825 58.68718731372562 156.0313278159041 57.839601477410866V57.566872138482054ZM157.594670941427 51.65808436488091V54.51597525921977H157.32063027509093V54.13362965375653Q157.32063027509093 53.0765927163598 156.66618423261872 52.408444640570764Q156.01173819014647 51.74029656478173 154.92729718611614 51.71289249814812V51.65808436488091ZM157.594670941427 50.17564211185153V50.970360044226155L154.25137481212684 50.66891531125647Q154.8542642780662 50.66891531125647 155.52566391058963 50.58670311135565Q156.19706354311302 50.50449091145482 156.77254894241878 50.39487464492039Q157.34803434172454 50.28525837838596 157.594670941427 50.17564211185153ZM146.8326069099436 67.8512650905287V69.85176195478208H144.64028157925495V69.577721288446Q144.64028157925495 69.577721288446 144.8184080123734 69.577721288446Q144.99653444549185 69.577721288446 144.99653444549185 69.577721288446Q145.70904017796568 69.577721288446 146.21601541068742 69.07074605572424Q146.72299064340916 68.5637708230025 146.75039471004277 67.8512650905287ZM146.8326069099436 52.669412175509855H146.75039471004277Q146.7393019506486 51.95690644303605 146.22191784755518 51.4499312103143Q145.70453374446177 50.94295597759255 144.99653444549185 50.94295597759255Q144.99653444549185 50.94295597759255 144.82656366599312 50.94295597759255Q144.6565928864944 50.94295597759255 144.6565928864944 50.94295597759255L144.64028157925495 50.66891531125647H146.8326069099436ZM167.48292258845024 50.28525837838596Q167.98794421095297 50.28525837838596 168.70013549246687 50.34006651165318Q169.4123267739808 50.39487464492039 170.14148502643775 50.49078887813802Q170.87064327889473 50.58670311135565 171.4399400156917 50.68261734457327Q172.00923675248865 50.7785315777909 172.2395620449517 50.88814784432533L172.01770685706828 54.373709616422644H171.75997749797165Q171.75997749797165 52.98066510225026 170.75026208481796 52.154950333763935Q169.74054667166428 51.32923556527761 168.1530510362421 51.32923556527761Q166.57927081502862 51.32923556527761 165.6253470306976 52.15265551080121Q164.6714232463666 52.97607545632481 164.6381449681841 54.13682768692324Q164.6048666900016 54.84608186266269 165.04856368487648 55.48387538515176Q165.49226067975138 56.121668907640824 166.27785284384277 56.66909457660935L171.56552637672183 60.60282256147982Q172.6760601199785 61.336858149038335 173.19414149298632 62.39127243162052Q173.71222286599416 63.4456867142027 173.6567590690233 64.74479736716026Q173.5791097532641 67.28556112320982 171.84023608765347 68.7604900054312Q170.1013624220428 70.23541888765259 167.12341816547897 70.23541888765259Q166.08856674687058 70.23541888765259 165.03708957006285 70.05402751690787Q163.9856123932551 69.87263614616315 163.11651008274754 69.5078997944547Q162.24740777224 69.14316344274626 161.7215119583562 68.61726762886245Q161.550557683302 68.07896772817718 161.57274320209035 67.28815701624055Q161.59492872087867 66.4973463043039 161.78774068286938 65.67130370396576Q161.9805526448601 64.84526110362762 162.2722159458429 64.25346439708241H162.51885254554537Q162.40401773116565 65.66216455479059 162.9749402463298 66.80335392141524Q163.54586276149394 67.94454328803987 164.66324083096305 68.58430380163983Q165.7806189004322 69.22406431523981 167.27480957655936 69.19144170076095Q168.9706101511087 69.14250777904263 169.99760698616535 68.23067359021749Q171.02460382122203 67.31883940139234 171.02460382122203 65.9186361100476Q171.02460382122203 65.09063989949045 170.5897181436705 64.41891243511525Q170.15483246611893 63.74718497074003 169.2126303431019 63.18148100342116L164.2727395718801 59.435018600844316Q163.0179999564992 58.62333369752661 162.4728423487096 57.45571037893191Q161.92768474091997 56.288087060337205 162.0275195754675 55.02747323340741Q162.1051688912267 53.699018284489156 162.76417781784056 52.61916692638427Q163.42318674445443 51.539315568279385 164.61657497042364 50.91228697333267Q165.80996319639286 50.28525837838596 167.48292258845024 50.28525837838596ZM172.26174756374002 50.55929904472204 172.2284692855575 51.1347844440278H169.38035982320554V50.55929904472204ZM185.62771978020075 50.75112751115729V69.85176195478208H182.29346913383236V50.75112751115729ZM192.4487097171546 50.64151124462286V51.685488431514514H175.4724791968785V50.64151124462286ZM192.4487097171546 51.60327623161369V54.488571192586164L192.17466905081852 54.46116712595256V54.10622558712292Q192.17466905081852 53.032877342486756 191.51206735472658 52.37288492031744Q190.8494656586346 51.71289249814812 189.78133596184372 51.685488431514514V51.60327623161369ZM192.4487097171546 50.148238045217916V50.94295597759255L189.10541358785443 50.64151124462286Q189.7083030537938 50.64151124462286 190.37970268631722 50.55929904472204Q191.0511023188406 50.477086844821216 191.62658771814637 50.367470578286785Q192.20207311745213 50.257854311752354 192.4487097171546 50.148238045217916ZM182.37568133373318 67.8512650905287V69.85176195478208H180.18335600304457V69.577721288446Q180.18335600304457 69.577721288446 180.36148243616302 69.577721288446Q180.53960886928147 69.577721288446 180.53960886928147 69.577721288446Q181.25211460175527 69.577721288446 181.759089834477 69.07074605572424Q182.26606506719875 68.5637708230025 182.29346913383236 67.8512650905287ZM185.54550758029993 67.8512650905287H185.62771978020075Q185.65512384683436 68.5637708230025 186.16209907955613 69.07074605572424Q186.66907431227787 69.577721288446 187.38158004475167 69.577721288446Q187.38158004475167 69.577721288446 187.55970647787012 69.577721288446Q187.73783291098857 69.577721288446 187.73783291098857 69.577721288446V69.85176195478208H185.54550758029993ZM178.13985295218941 51.60327623161369V51.685488431514514Q177.05541194815908 51.71289249814812 176.40096590568686 52.37288492031744Q175.74651986321462 53.032877342486756 175.74651986321462 54.10622558712292V54.46116712595256L175.4724791968785 54.488571192586164V51.60327623161369ZM175.4724791968785 50.148238045217916Q175.74651986321462 50.257854311752354 176.30830322920357 50.367470578286785Q176.87008659519253 50.477086844821216 177.55518826103273 50.55929904472204Q178.24028992687292 50.64151124462286 178.8157753261787 50.64151124462286L175.4724791968785 50.94295597759255Z"/><path fill="#EEE6D6" d="M203.70538557246977 50.66891531125647H207.83042016899097Q209.80416863031436 50.66891531125647 211.29411087325983 51.17784415419722Q212.78405311620529 51.686772997137965 213.61890703386678 52.71442549589826Q214.4537609515283 53.74207799465856 214.4537609515283 55.3230437548282Q214.4537609515283 56.54057110980476 213.98201760720804 57.409345588460496Q213.5102742628878 58.278120067116234 212.77525517977386 58.773674708592Q212.0402360966599 59.269229350067754 211.20636567455384 59.41081256737743Q212.61441016855838 59.56348854408127 213.7027450121348 60.247934546217834Q214.79107985571122 60.932380548354395 215.40278063897395 62.03115248762135Q216.01448142223668 63.1299244268883 216.01448142223668 64.56668431493372Q216.01448142223668 66.24551791853999 215.12481937130798 67.43237626925668Q214.23515732037924 68.61923461997335 212.59677415301974 69.23549828737771Q210.95839098566026 69.85176195478208 208.74191314507237 69.85176195478208H205.9219169366253Q205.9219169366253 69.85176195478208 205.9356189699421 69.56075431750293Q205.94932100325892 69.26974668022378 205.94932100325892 68.9842854226417Q205.94932100325892 68.69882416505963 205.94932100325892 68.69882416505963H207.91126751791688Q209.20316587013443 68.69882416505963 210.16198037045888 68.2195808308233Q211.12079487078336 67.74033749658699 211.65256489621606 66.7537910977771Q212.1843349216488 65.7672446989672 212.1843349216488 64.28611377334511Q212.1843349216488 62.97334122974647 211.74489974084753 62.08630183363229Q211.30546456004626 61.19926243751812 210.57894234329575 60.67825733962775Q209.85242012654524 60.15725224173738 208.94744364482443 59.93475477104225Q208.04246716310365 59.71225730034711 207.10029180187044 59.71225730034711V59.46562070064464Q207.7416780938376 59.46562070064464 208.3980643656369 59.284229329899915Q209.05445063743625 59.102837959155195 209.6061113586946 58.67513782055982Q210.1577720799529 58.24743768196444 210.50162085938837 57.494481513243855Q210.84546963882383 56.741525344523275 210.84546963882383 55.61470705581099Q210.84546963882383 54.2816892227511 210.40439529876346 53.4213982295669Q209.96332095870312 52.561107236382696 209.14479172917297 52.15331117450484Q208.3262624996428 51.74551511262699 207.17725869214217 51.74551511262699H203.97942623880584Q203.97942623880584 51.71811104599338 203.91091607222182 51.462663128967556Q203.8424059056378 51.20721521194173 203.77389573905378 50.9380652615991Q203.70538557246977 50.66891531125647 203.70538557246977 50.66891531125647ZM206.16855353632778 50.66891531125647V69.85176195478208H202.8343028899594V50.66891531125647ZM202.9165150898602 67.8512650905287V69.85176195478208H200.72418975917157L200.740501066411 69.577721288446Q200.79530919967823 69.577721288446 200.92417387922654 69.577721288446Q201.05303855877486 69.577721288446 201.08044262540847 69.577721288446Q201.7929483578823 69.577721288446 202.30807924422376 69.07074605572424Q202.82321013056523 68.5637708230025 202.8343028899594 67.8512650905287ZM202.9165150898602 52.669412175509855H202.8343028899594Q202.82321013056523 51.95690644303605 202.30807924422376 51.4499312103143Q201.7929483578823 50.94295597759255 201.08044262540847 50.94295597759255Q201.05303855877486 50.94295597759255 200.92417387922654 50.94295597759255Q200.79530919967823 50.94295597759255 200.740501066411 50.94295597759255L200.72418975917157 50.66891531125647H202.9165150898602ZM229.0776440547528 50.28525837838596Q232.25391989122062 50.28525837838596 234.61230878097 51.50995789142678Q236.97069767071937 52.734657404467605 238.2675001198223 54.970698109029286Q239.56430256892523 57.206738813590974 239.56430256892523 60.26033863301927Q239.56430256892523 63.3028456930534 238.2675001198223 65.54443277731217Q236.97069767071937 67.78601986157094 234.61230878097 69.01071937461177Q232.25391989122062 70.23541888765259 229.0776440547528 70.23541888765259Q225.91767952552442 70.23541888765259 223.56483701547214 69.01071937461177Q221.21199450541985 67.78601986157094 219.91519205631693 65.54997915700926Q218.61838960721397 63.31393845244757 218.61838960721397 60.26033863301927Q218.61838960721397 57.21783157298515 219.91519205631693 54.97624448872638Q221.21199450541985 52.734657404467605 223.56483701547214 51.50995789142678Q225.91767952552442 50.28525837838596 229.0776440547528 50.28525837838596ZM229.0776440547528 69.19144170076095Q231.15185625254355 69.19144170076095 232.67015929589425 68.09038831942317Q234.18846233924495 66.9893349380854 235.02264721231091 64.98949373753565Q235.85683208537688 62.9896525369859 235.85683208537688 60.26033863301927Q235.85683208537688 57.531024729052646 235.02264721231091 55.53118352850289Q234.18846233924495 53.53134232795314 232.67015929589425 52.43028894661538Q231.15185625254355 51.32923556527761 229.0776440547528 51.32923556527761Q227.03083592359565 51.32923556527761 225.51253288024495 52.43028894661538Q223.99422983689425 53.53134232795314 223.16004496382828 55.53118352850289Q222.32586009076235 57.531024729052646 222.32586009076235 60.26033863301927Q222.32586009076235 62.9896525369859 223.16004496382828 64.98949373753565Q223.99422983689425 66.9893349380854 225.51253288024495 68.09038831942317Q227.03083592359565 69.19144170076095 229.0776440547528 69.19144170076095ZM252.7821616928237 50.28525837838596Q255.95843752929153 50.28525837838596 258.3168264190409 51.50995789142678Q260.67521530879026 52.734657404467605 261.97201775789324 54.970698109029286Q263.26882020699617 57.206738813590974 263.26882020699617 60.26033863301927Q263.26882020699617 63.3028456930534 261.97201775789324 65.54443277731217Q260.67521530879026 67.78601986157094 258.3168264190409 69.01071937461177Q255.95843752929153 70.23541888765259 252.7821616928237 70.23541888765259Q249.62219716359533 70.23541888765259 247.26935465354305 69.01071937461177Q244.91651214349076 67.78601986157094 243.61970969438784 65.54997915700926Q242.32290724528488 63.31393845244757 242.32290724528488 60.26033863301927Q242.32290724528488 57.21783157298515 243.61970969438784 54.97624448872638Q244.91651214349076 52.734657404467605 247.26935465354305 51.50995789142678Q249.62219716359533 50.28525837838596 252.7821616928237 50.28525837838596ZM252.7821616928237 69.19144170076095Q254.85637389061446 69.19144170076095 256.37467693396513 68.09038831942317Q257.89297997731586 66.9893349380854 258.7271648503818 64.98949373753565Q259.5613497234478 62.9896525369859 259.5613497234478 60.26033863301927Q259.5613497234478 57.531024729052646 258.7271648503818 55.53118352850289Q257.89297997731586 53.53134232795314 256.37467693396513 52.43028894661538Q254.85637389061446 51.32923556527761 252.7821616928237 51.32923556527761Q250.73535356166656 51.32923556527761 249.21705051831586 52.43028894661538Q247.69874747496516 53.53134232795314 246.8645626018992 55.53118352850289Q246.03037772883326 57.531024729052646 246.03037772883326 60.26033863301927Q246.03037772883326 62.9896525369859 246.8645626018992 64.98949373753565Q247.69874747496516 66.9893349380854 249.21705051831586 68.09038831942317Q250.73535356166656 69.19144170076095 252.7821616928237 69.19144170076095ZM274.6800849713227 58.46923934628021 282.06350055707725 68.0659079776721Q282.6722642345655 68.80256622004516 283.31136908446183 69.17644172092878Q283.9504739343582 69.55031722181239 284.8 69.577721288446V69.85176195478208H282.9005957741338Q282.6154623484036 69.85176195478208 281.98092038264883 69.81620223452876Q281.34637841689414 69.78064251427543 280.56306769487355 69.60218824930516Q279.779756972853 69.42373398433489 278.9908998711354 69.00320600380377Q278.20204276941774 68.58267802327266 277.6030605239164 67.81274150271709Q277.514318448763 67.69072114938122 277.08466469994863 67.13187488916671Q276.6550109511343 66.57302862895219 276.0345122314401 65.76298288489357Q275.4140135117459 64.95293714083496 274.7390344906363 64.0639441345018Q274.06405546952675 63.17495112816862 273.47313744155036 62.40280564537342Q272.882219413574 61.63066016257822 272.50618066849813 61.139294855344914Q272.13014192342223 60.647929548111605 272.13014192342223 60.647929548111605ZM281.9010163866027 50.860743777691724 273.6739221849714 60.537001954169895 272.13014192342223 60.647929548111605 279.6662602476644 50.860743777691724ZM283.81408250310994 50.66891531125647V50.91840433480316H283.7044662365755Q282.80013203766646 50.91840433480316 282.01911613860864 51.27877736881504Q281.2381002395508 51.63915040282692 280.69001890687866 52.25835117600573L278.63077992713625 52.20354304273852Q278.975940033979 51.737673909967185 278.7540982269875 51.32661291046306Q278.532256419996 50.91555191095894 277.97677991439434 50.91555191095894H277.6990416615936V50.66891531125647H283.7044662365755ZM271.2532117911468 50.66891531125647V69.85176195478208H267.9189611447784V50.66891531125647ZM268.0011733446792 67.8512650905287V69.85176195478208H265.8088480139906V69.577721288446Q265.8310335327789 69.577721288446 265.99252082680607 69.577721288446Q266.1540081208333 69.577721288446 266.1651008802275 69.577721288446Q266.8776066127013 69.577721288446 267.38458184542304 69.07074605572424Q267.8915570781448 68.5637708230025 267.9189611447784 67.8512650905287ZM268.0011733446792 52.669412175509855H267.9189611447784Q267.8915570781448 51.95690644303605 267.38458184542304 51.4499312103143Q266.8776066127013 50.94295597759255 266.1651008802275 50.94295597759255Q266.1540081208333 50.94295597759255 265.99252082680607 50.94295597759255Q265.8310335327789 50.94295597759255 265.8088480139906 50.94295597759255V50.66891531125647H268.0011733446792ZM271.17099959124596 67.8512650905287H271.2532117911468Q271.2806158577804 68.5637708230025 271.78759109050213 69.07074605572424Q272.2945663232239 69.577721288446 273.0070720556977 69.577721288446Q273.02925757448605 69.577721288446 273.1834425040777 69.577721288446Q273.3376274336693 69.577721288446 273.3633249219346 69.577721288446V69.85176195478208H271.17099959124596ZM271.17099959124596 52.669412175509855V50.66891531125647H273.3633249219346V50.94295597759255Q273.33592085530097 50.94295597759255 273.1825892148935 50.94295597759255Q273.02925757448605 50.94295597759255 273.0070720556977 50.94295597759255Q272.2945663232239 50.94295597759255 271.78759109050213 51.4499312103143Q271.2806158577804 51.95690644303605 271.2532117911468 52.669412175509855Z"/></svg></div>
+</div>
+<span id="safe-probe" aria-hidden="true"></span>
+<nav id="spur" aria-label="Kapitel">
+  <div class="spur-rand" aria-hidden="true"></div>
+  <div class="spur-marken"></div>
+  <div class="spur-kader" role="slider" tabindex="0" aria-label="Position auf der Seite" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <span class="spur-fenster"><span class="spur-akt" aria-hidden="true"></span><span class="spur-titel"></span></span>
   </div>
 </nav>
-
-<header class="hero hero-bgphoto bg-wedding">
-  <div class="wrap">
-    <div class="hero-content">
-      <h1 class="hero-title">Der Hochzeitsfilm<br>mit euren Liebsten<br>und den <em>gemeinsamen</em> Geschichten.</h1>
-      <p class="hero-emphasis">Nicht der klassische Hochzeitsfilm. Sondern der Film voller Lieblingsmenschen, die euch Dinge sagen, die ihr für immer hören wollt.</p>
-    </div>
+<header class="hero" id="top">
+  <div class="hero-mitte auf a2">
+    <div class="signatur" aria-hidden="true"><span class="linie"></span><span>Hochzeiten &amp; Events</span><span class="linie"></span></div>
+    <svg class="logo-streifen logo-hero" viewBox="0 0 320 120" role="img" aria-label="The Guestbook"><rect width="320" height="120" fill="#4A0F14"/><path fill="#EEE6D6" d="M18.29 7.56h11.76v8.40h-11.76zM18.29 104.04h11.76v8.40h-11.76zM42.99 7.56h11.76v8.40h-11.76zM42.99 104.04h11.76v8.40h-11.76zM67.68 7.56h11.76v8.40h-11.76zM67.68 104.04h11.76v8.40h-11.76zM92.38 7.56h11.76v8.40h-11.76zM92.38 104.04h11.76v8.40h-11.76zM117.08 7.56h11.76v8.40h-11.76zM117.08 104.04h11.76v8.40h-11.76zM141.77 7.56h11.76v8.40h-11.76zM141.77 104.04h11.76v8.40h-11.76zM166.47 7.56h11.76v8.40h-11.76zM166.47 104.04h11.76v8.40h-11.76zM191.16 7.56h11.76v8.40h-11.76zM191.16 104.04h11.76v8.40h-11.76zM215.86 7.56h11.76v8.40h-11.76zM215.86 104.04h11.76v8.40h-11.76zM240.56 7.56h11.76v8.40h-11.76zM240.56 104.04h11.76v8.40h-11.76zM265.25 7.56h11.76v8.40h-11.76zM265.25 104.04h11.76v8.40h-11.76zM289.95 7.56h11.76v8.40h-11.76zM289.95 104.04h11.76v8.40h-11.76z"/><path fill="#E6CFC4" fill-opacity=".55" d="M0 23.52h320v.6H0zM0 96.48h320v.6H0z"/><path fill="#EEE6D6" d="M45.35524058332217 50.75112751115729V69.85176195478208H42.0209899369538V50.75112751115729ZM52.17623052027602 50.64151124462286V51.685488431514514H35.199999999999946V50.64151124462286ZM52.17623052027602 51.60327623161369V54.488571192586164L51.902189853939944 54.46116712595256V54.10622558712292Q51.902189853939944 53.032877342486756 51.23958815784799 52.37288492031744Q50.576986461756036 51.71289249814812 49.508856764965145 51.685488431514514V51.60327623161369ZM52.17623052027602 50.148238045217916V50.94295597759255L48.83293439097585 50.64151124462286Q49.43582385691522 50.64151124462286 50.10722348943862 50.55929904472204Q50.77862312196201 50.477086844821216 51.35410852126778 50.367470578286785Q51.92959392057355 50.257854311752354 52.17623052027602 50.148238045217916ZM42.10320213685462 67.8512650905287V69.85176195478208H39.91087680616597V69.577721288446Q39.91087680616597 69.577721288446 40.08900323928442 69.577721288446Q40.26712967240288 69.577721288446 40.26712967240288 69.577721288446Q40.97963540487669 69.577721288446 41.48661063759844 69.07074605572424Q41.99358587032019 68.5637708230025 42.0209899369538 67.8512650905287ZM45.27302838342135 67.8512650905287H45.35524058332217Q45.38264464995578 68.5637708230025 45.88961988267753 69.07074605572424Q46.39659511539928 69.577721288446 47.10910084787309 69.577721288446Q47.10910084787309 69.577721288446 47.287227280991544 69.577721288446Q47.465353714109995 69.577721288446 47.465353714109995 69.577721288446V69.85176195478208H45.27302838342135ZM37.86737375531083 51.60327623161369V51.685488431514514Q36.78293275128049 51.71289249814812 36.12848670880825 52.37288492031744Q35.47404066633602 53.032877342486756 35.47404066633602 54.10622558712292V54.46116712595256L35.199999999999946 54.488571192586164V51.60327623161369ZM35.199999999999946 50.148238045217916Q35.47404066633602 50.257854311752354 36.03582403232499 50.367470578286785Q36.597607398313954 50.477086844821216 37.282709064154155 50.55929904472204Q37.967810729994355 50.64151124462286 38.54329612930012 50.64151124462286L35.199999999999946 50.94295597759255ZM72.32084215079246 50.66891531125647V69.85176195478208H68.98659150442407V50.66891531125647ZM59.33131456646226 50.66891531125647V69.85176195478208H55.99706392009388V50.66891531125647ZM69.23322810412655 59.8035952685312V60.84757245542285H59.05727390012618V59.8035952685312ZM56.0792761199947 67.8512650905287V69.85176195478208H53.88695078930606V69.577721288446Q53.88695078930606 69.577721288446 54.06507722242451 69.577721288446Q54.24320365554296 69.577721288446 54.24320365554296 69.577721288446Q54.95570938801677 69.577721288446 55.46268462073852 69.07074605572424Q55.96965985346027 68.5637708230025 55.99706392009388 67.8512650905287ZM56.0792761199947 52.669412175509855H55.99706392009388Q55.96965985346027 51.95690644303605 55.46268462073852 51.4499312103143Q54.95570938801677 50.94295597759255 54.24320365554296 50.94295597759255Q54.24320365554296 50.94295597759255 54.06507722242451 50.94295597759255Q53.88695078930606 50.94295597759255 53.88695078930606 50.94295597759255V50.66891531125647H56.0792761199947ZM59.24910236656144 67.8512650905287H59.33131456646226Q59.35871863309587 68.5637708230025 59.86569386581762 69.07074605572424Q60.37266909853936 69.577721288446 61.08517483101318 69.577721288446Q61.08517483101318 69.577721288446 61.24959923081482 69.577721288446Q61.41402363061647 69.577721288446 61.44142769725008 69.577721288446V69.85176195478208H59.24910236656144ZM59.24910236656144 52.669412175509855V50.66891531125647H61.44142769725008V50.94295597759255Q61.41402363061647 50.94295597759255 61.24959923081482 50.94295597759255Q61.08517483101318 50.94295597759255 61.08517483101318 50.94295597759255Q60.37266909853936 50.94295597759255 59.86569386581762 51.4499312103143Q59.35871863309587 51.95690644303605 59.33131456646226 52.669412175509855ZM69.06880370432489 67.8512650905287V69.85176195478208H66.87647837363626V69.577721288446Q66.90388244026987 69.577721288446 67.06830684007151 69.577721288446Q67.23273123987316 69.577721288446 67.23273123987316 69.577721288446Q67.94523697234698 69.577721288446 68.46591423838552 69.07074605572424Q68.98659150442407 68.5637708230025 68.98659150442407 67.8512650905287ZM69.06880370432489 52.669412175509855H68.98659150442407Q68.98659150442407 51.95690644303605 68.46591423838552 51.4499312103143Q67.94523697234698 50.94295597759255 67.23273123987316 50.94295597759255Q67.23273123987316 50.94295597759255 67.06830684007151 50.94295597759255Q66.90388244026987 50.94295597759255 66.87647837363626 50.94295597759255V50.66891531125647H69.06880370432489ZM72.23862995089164 67.8512650905287H72.32084215079246Q72.34824621742607 68.5637708230025 72.85522145014781 69.07074605572424Q73.36219668286957 69.577721288446 74.07470241534337 69.577721288446Q74.07470241534337 69.577721288446 74.25282884846183 69.577721288446Q74.43095528158028 69.577721288446 74.43095528158028 69.577721288446V69.85176195478208H72.23862995089164ZM72.23862995089164 52.669412175509855V50.66891531125647H74.43095528158028V50.94295597759255Q74.43095528158028 50.94295597759255 74.25282884846183 50.94295597759255Q74.07470241534337 50.94295597759255 74.07470241534337 50.94295597759255Q73.36219668286957 50.94295597759255 72.85522145014781 51.4499312103143Q72.34824621742607 51.95690644303605 72.32084215079246 52.669412175509855ZM82.48775087186102 50.66891531125647V69.85176195478208H79.15350022549265V50.66891531125647ZM89.77592126899349 68.78038070125682 90.21963164476031 69.85176195478208H82.4055386719602V68.78038070125682ZM88.70847399769005 59.875370372741486V60.91934755963314H82.4055386719602V59.875370372741486ZM89.99777645687689 50.66891531125647V51.74029656478173H82.4055386719602V50.66891531125647ZM91.66942452152699 64.63581000254565 90.30184384466114 69.85176195478208H85.19813081377367L86.18467721258357 68.78038070125682Q87.58162894719393 68.78038070125682 88.58840725457317 68.27274980483143Q89.5951855619524 67.76511890840605 90.28159855519988 66.82652293575902Q90.96801154844735 65.887926963112 91.39965030111175 64.63581000254565ZM88.70847399769005 60.86453942636592V63.22784579389257H88.43443333135397V62.92771238833016Q88.43443333135397 62.08012655201539 87.86774586847964 61.50528343552135Q87.30105840560532 60.93044031902731 86.45347256929055 60.91934755963314V60.86453942636592ZM88.70847399769005 57.566872138482054V59.9301785060087H86.45347256929055V59.875370372741486Q87.30105840560532 59.84796630610788 87.87329224817672 59.26757680991675Q88.44552609074813 58.68718731372562 88.43443333135397 57.839601477410866V57.566872138482054ZM89.99777645687689 51.65808436488091V54.51597525921977H89.72373579054081V54.13362965375653Q89.72373579054081 53.0765927163598 89.06928974806858 52.408444640570764Q88.41484370559635 51.74029656478173 87.33040270156602 51.71289249814812V51.65808436488091ZM89.99777645687689 50.17564211185153V50.970360044226155L86.65448032757672 50.66891531125647Q87.25736979351609 50.66891531125647 87.92876942603948 50.58670311135565Q88.60016905856288 50.50449091145482 89.17565445786866 50.39487464492039Q89.75113985717442 50.28525837838596 89.99777645687689 50.17564211185153ZM79.23571242539347 67.8512650905287V69.85176195478208H77.04338709470483V69.577721288446Q77.04338709470483 69.577721288446 77.22151352782328 69.577721288446Q77.39963996094174 69.577721288446 77.39963996094174 69.577721288446Q78.11214569341554 69.577721288446 78.6191209261373 69.07074605572424Q79.12609615885904 68.5637708230025 79.15350022549265 67.8512650905287ZM79.23571242539347 52.669412175509855H79.15350022549265Q79.14240746609848 51.95690644303605 78.62502336300507 51.4499312103143Q78.10763925991166 50.94295597759255 77.39963996094174 50.94295597759255Q77.39963996094174 50.94295597759255 77.229669181443 50.94295597759255Q77.05969840194427 50.94295597759255 77.05969840194427 50.94295597759255L77.04338709470483 50.66891531125647H79.23571242539347Z"/><path fill="#EEE6D6" d="M118.83941974817257 62.178623297371836V66.70029429191716Q118.19803345620542 67.52241629092539 116.97397622597632 68.34453828993364Q115.74991899574722 69.16666028894187 114.02410508064165 69.70103958829722Q112.29829116553606 70.23541888765259 110.12684002622849 70.23541888765259Q107.088895850336 70.21910758041315 104.79706351695165 68.99440806737232Q102.50523118356729 67.7697085543315 101.22506787355562 65.53073074399536Q99.94490456354393 63.291752933659225 99.94490456354393 60.23815311423093Q99.94490456354393 57.206738813590974 101.21397511416143 54.970698109029286Q102.48304566477894 52.734657404467605 104.80260989664873 51.50995789142678Q107.12217412851851 50.28525837838596 110.23776762017019 50.28525837838596Q111.74499128501864 50.28525837838596 113.1005224687187 50.504163079603Q114.45605365241875 50.723067780820045 115.58419664943021 51.08682063697303Q116.71233964644168 51.45057349312602 117.50705757881632 51.904694202799554L117.72235612966337 56.3233055678468H117.47571952996088Q116.99810197409175 54.54529279339664 116.02492977674684 53.451739401974955Q115.05175757940194 52.35818601055327 113.7099418099106 51.84371078791544Q112.36812604041927 51.32923556527761 110.79240558987871 51.32923556527761Q108.53483503023233 51.32923556527761 106.92518063780562 52.43583532631246Q105.31552624537893 53.542435087347314 104.4620929592991 55.55891542698832Q103.60865967321925 57.57539576662933 103.60865967321925 60.349080708172636Q103.60865967321925 63.022930815168415 104.4232683014195 65.01167925632399Q105.23787692961974 67.00042769747957 106.753242867196 68.08777904550053Q108.26860880477224 69.1751303935215 110.37088073290025 69.19144170076095Q111.45463931144312 69.19144170076095 112.44803003646545 68.8870598620168Q113.44142076148779 68.58267802327266 114.24493663029386 67.99838130664354Q115.04845249909994 67.41408459001441 115.5051691018042 66.58543271575364L115.5325731684378 62.178623297371836Q115.5325731684378 60.945440298859474 114.1349657701238 60.945440298859474H113.69650070398606V60.67139963252339H120.62068407935709V60.945440298859474H120.20962307985297Q118.78461161490536 60.945440298859474 118.83941974817257 62.178623297371836ZM127.53240984435904 50.66891531125647V62.726704630044Q127.53240984435904 64.67761190887543 128.20870019287588 66.12937177675302Q128.8849905413927 67.5811316446306 130.11719004434963 68.37258463937897Q131.34938954730654 69.16403763412734 133.00928918885882 69.16403763412734Q134.745526818763 69.16403763412734 136.0103489361988 68.41369073932938Q137.27517105363458 67.66334384453143 137.97592836301058 66.30195183017437Q138.67668567238658 64.94055981581734 138.67668567238658 63.0829574962809V50.66891531125647H140.408387179933V62.972029902339195Q140.408387179933 65.17610365612565 139.47371180861586 66.80697345267714Q138.53903643729873 68.43784324922864 136.80083181628362 69.33663106844061Q135.0626271952685 70.23541888765259 132.6765064070337 70.23541888765259Q129.9693512600716 70.23541888765259 128.0680201857702 69.34478672206032Q126.1666891114688 68.45415455646807 125.18242415472972 66.82883113961367Q124.19815919799065 65.20350772275926 124.19815919799065 62.9994339689728V50.66891531125647ZM124.28037139789147 50.66891531125647V52.31315930927295H124.19815919799065Q124.19815919799065 51.71026984333358 123.77339616516973 51.32661291046306Q123.34863313234881 50.94295597759255 122.74574366640942 50.94295597759255Q122.74574366640942 50.94295597759255 122.52651113334056 50.94295597759255Q122.3072786002717 50.94295597759255 122.3072786002717 50.94295597759255V50.66891531125647ZM129.42329044207798 50.66891531125647V50.94295597759255Q129.42329044207798 50.94295597759255 129.20405790900912 50.94295597759255Q128.98482537594026 50.94295597759255 128.98482537594026 50.94295597759255Q128.3819359100009 50.94295597759255 127.95717287717997 51.32661291046306Q127.53240984435904 51.71026984333358 127.53240984435904 52.31315930927295H127.47760171109182V50.66891531125647ZM138.7588978722874 50.66891531125647V52.31315930927295H138.67668567238658Q138.67668567238658 51.71026984333358 138.25192263956566 51.32661291046306Q137.82715960674474 50.94295597759255 137.22427014080537 50.94295597759255Q137.22427014080537 50.94295597759255 137.00503760773648 50.94295597759255Q136.78580507466762 50.94295597759255 136.78580507466762 50.94295597759255V50.66891531125647ZM142.29926777765195 50.66891531125647V50.94295597759255Q142.29926777765195 50.94295597759255 142.0800352445831 50.94295597759255Q141.8608027115142 50.94295597759255 141.8608027115142 50.94295597759255Q141.25791324557483 50.94295597759255 140.8331502127539 51.32661291046306Q140.408387179933 51.71026984333358 140.408387179933 52.31315930927295H140.35357904666577V50.66891531125647ZM150.08464535641116 50.66891531125647V69.85176195478208H146.75039471004277V50.66891531125647ZM157.37281575354362 68.78038070125682 157.81652612931043 69.85176195478208H150.00243315651034V68.78038070125682ZM156.30536848224017 59.875370372741486V60.91934755963314H150.00243315651034V59.875370372741486ZM157.594670941427 50.66891531125647V51.74029656478173H150.00243315651034V50.66891531125647ZM159.2663190060771 64.63581000254565 157.89873832921126 69.85176195478208H152.7950252983238L153.7815716971337 68.78038070125682Q155.17852343174405 68.78038070125682 156.1853017391233 68.27274980483143Q157.19208004650253 67.76511890840605 157.87849303975 66.82652293575902Q158.56490603299747 65.887926963112 158.99654478566185 64.63581000254565ZM156.30536848224017 60.86453942636592V63.22784579389257H156.0313278159041V62.92771238833016Q156.0313278159041 62.08012655201539 155.46464035302978 61.50528343552135Q154.89795289015544 60.93044031902731 154.0503670538407 60.91934755963314V60.86453942636592ZM156.30536848224017 57.566872138482054V59.9301785060087H154.0503670538407V59.875370372741486Q154.89795289015544 59.84796630610788 155.47018673272686 59.26757680991675Q156.04242057529825 58.68718731372562 156.0313278159041 57.839601477410866V57.566872138482054ZM157.594670941427 51.65808436488091V54.51597525921977H157.32063027509093V54.13362965375653Q157.32063027509093 53.0765927163598 156.66618423261872 52.408444640570764Q156.01173819014647 51.74029656478173 154.92729718611614 51.71289249814812V51.65808436488091ZM157.594670941427 50.17564211185153V50.970360044226155L154.25137481212684 50.66891531125647Q154.8542642780662 50.66891531125647 155.52566391058963 50.58670311135565Q156.19706354311302 50.50449091145482 156.77254894241878 50.39487464492039Q157.34803434172454 50.28525837838596 157.594670941427 50.17564211185153ZM146.8326069099436 67.8512650905287V69.85176195478208H144.64028157925495V69.577721288446Q144.64028157925495 69.577721288446 144.8184080123734 69.577721288446Q144.99653444549185 69.577721288446 144.99653444549185 69.577721288446Q145.70904017796568 69.577721288446 146.21601541068742 69.07074605572424Q146.72299064340916 68.5637708230025 146.75039471004277 67.8512650905287ZM146.8326069099436 52.669412175509855H146.75039471004277Q146.7393019506486 51.95690644303605 146.22191784755518 51.4499312103143Q145.70453374446177 50.94295597759255 144.99653444549185 50.94295597759255Q144.99653444549185 50.94295597759255 144.82656366599312 50.94295597759255Q144.6565928864944 50.94295597759255 144.6565928864944 50.94295597759255L144.64028157925495 50.66891531125647H146.8326069099436ZM167.48292258845024 50.28525837838596Q167.98794421095297 50.28525837838596 168.70013549246687 50.34006651165318Q169.4123267739808 50.39487464492039 170.14148502643775 50.49078887813802Q170.87064327889473 50.58670311135565 171.4399400156917 50.68261734457327Q172.00923675248865 50.7785315777909 172.2395620449517 50.88814784432533L172.01770685706828 54.373709616422644H171.75997749797165Q171.75997749797165 52.98066510225026 170.75026208481796 52.154950333763935Q169.74054667166428 51.32923556527761 168.1530510362421 51.32923556527761Q166.57927081502862 51.32923556527761 165.6253470306976 52.15265551080121Q164.6714232463666 52.97607545632481 164.6381449681841 54.13682768692324Q164.6048666900016 54.84608186266269 165.04856368487648 55.48387538515176Q165.49226067975138 56.121668907640824 166.27785284384277 56.66909457660935L171.56552637672183 60.60282256147982Q172.6760601199785 61.336858149038335 173.19414149298632 62.39127243162052Q173.71222286599416 63.4456867142027 173.6567590690233 64.74479736716026Q173.5791097532641 67.28556112320982 171.84023608765347 68.7604900054312Q170.1013624220428 70.23541888765259 167.12341816547897 70.23541888765259Q166.08856674687058 70.23541888765259 165.03708957006285 70.05402751690787Q163.9856123932551 69.87263614616315 163.11651008274754 69.5078997944547Q162.24740777224 69.14316344274626 161.7215119583562 68.61726762886245Q161.550557683302 68.07896772817718 161.57274320209035 67.28815701624055Q161.59492872087867 66.4973463043039 161.78774068286938 65.67130370396576Q161.9805526448601 64.84526110362762 162.2722159458429 64.25346439708241H162.51885254554537Q162.40401773116565 65.66216455479059 162.9749402463298 66.80335392141524Q163.54586276149394 67.94454328803987 164.66324083096305 68.58430380163983Q165.7806189004322 69.22406431523981 167.27480957655936 69.19144170076095Q168.9706101511087 69.14250777904263 169.99760698616535 68.23067359021749Q171.02460382122203 67.31883940139234 171.02460382122203 65.9186361100476Q171.02460382122203 65.09063989949045 170.5897181436705 64.41891243511525Q170.15483246611893 63.74718497074003 169.2126303431019 63.18148100342116L164.2727395718801 59.435018600844316Q163.0179999564992 58.62333369752661 162.4728423487096 57.45571037893191Q161.92768474091997 56.288087060337205 162.0275195754675 55.02747323340741Q162.1051688912267 53.699018284489156 162.76417781784056 52.61916692638427Q163.42318674445443 51.539315568279385 164.61657497042364 50.91228697333267Q165.80996319639286 50.28525837838596 167.48292258845024 50.28525837838596ZM172.26174756374002 50.55929904472204 172.2284692855575 51.1347844440278H169.38035982320554V50.55929904472204ZM185.62771978020075 50.75112751115729V69.85176195478208H182.29346913383236V50.75112751115729ZM192.4487097171546 50.64151124462286V51.685488431514514H175.4724791968785V50.64151124462286ZM192.4487097171546 51.60327623161369V54.488571192586164L192.17466905081852 54.46116712595256V54.10622558712292Q192.17466905081852 53.032877342486756 191.51206735472658 52.37288492031744Q190.8494656586346 51.71289249814812 189.78133596184372 51.685488431514514V51.60327623161369ZM192.4487097171546 50.148238045217916V50.94295597759255L189.10541358785443 50.64151124462286Q189.7083030537938 50.64151124462286 190.37970268631722 50.55929904472204Q191.0511023188406 50.477086844821216 191.62658771814637 50.367470578286785Q192.20207311745213 50.257854311752354 192.4487097171546 50.148238045217916ZM182.37568133373318 67.8512650905287V69.85176195478208H180.18335600304457V69.577721288446Q180.18335600304457 69.577721288446 180.36148243616302 69.577721288446Q180.53960886928147 69.577721288446 180.53960886928147 69.577721288446Q181.25211460175527 69.577721288446 181.759089834477 69.07074605572424Q182.26606506719875 68.5637708230025 182.29346913383236 67.8512650905287ZM185.54550758029993 67.8512650905287H185.62771978020075Q185.65512384683436 68.5637708230025 186.16209907955613 69.07074605572424Q186.66907431227787 69.577721288446 187.38158004475167 69.577721288446Q187.38158004475167 69.577721288446 187.55970647787012 69.577721288446Q187.73783291098857 69.577721288446 187.73783291098857 69.577721288446V69.85176195478208H185.54550758029993ZM178.13985295218941 51.60327623161369V51.685488431514514Q177.05541194815908 51.71289249814812 176.40096590568686 52.37288492031744Q175.74651986321462 53.032877342486756 175.74651986321462 54.10622558712292V54.46116712595256L175.4724791968785 54.488571192586164V51.60327623161369ZM175.4724791968785 50.148238045217916Q175.74651986321462 50.257854311752354 176.30830322920357 50.367470578286785Q176.87008659519253 50.477086844821216 177.55518826103273 50.55929904472204Q178.24028992687292 50.64151124462286 178.8157753261787 50.64151124462286L175.4724791968785 50.94295597759255Z"/><path fill="#EEE6D6" d="M203.70538557246977 50.66891531125647H207.83042016899097Q209.80416863031436 50.66891531125647 211.29411087325983 51.17784415419722Q212.78405311620529 51.686772997137965 213.61890703386678 52.71442549589826Q214.4537609515283 53.74207799465856 214.4537609515283 55.3230437548282Q214.4537609515283 56.54057110980476 213.98201760720804 57.409345588460496Q213.5102742628878 58.278120067116234 212.77525517977386 58.773674708592Q212.0402360966599 59.269229350067754 211.20636567455384 59.41081256737743Q212.61441016855838 59.56348854408127 213.7027450121348 60.247934546217834Q214.79107985571122 60.932380548354395 215.40278063897395 62.03115248762135Q216.01448142223668 63.1299244268883 216.01448142223668 64.56668431493372Q216.01448142223668 66.24551791853999 215.12481937130798 67.43237626925668Q214.23515732037924 68.61923461997335 212.59677415301974 69.23549828737771Q210.95839098566026 69.85176195478208 208.74191314507237 69.85176195478208H205.9219169366253Q205.9219169366253 69.85176195478208 205.9356189699421 69.56075431750293Q205.94932100325892 69.26974668022378 205.94932100325892 68.9842854226417Q205.94932100325892 68.69882416505963 205.94932100325892 68.69882416505963H207.91126751791688Q209.20316587013443 68.69882416505963 210.16198037045888 68.2195808308233Q211.12079487078336 67.74033749658699 211.65256489621606 66.7537910977771Q212.1843349216488 65.7672446989672 212.1843349216488 64.28611377334511Q212.1843349216488 62.97334122974647 211.74489974084753 62.08630183363229Q211.30546456004626 61.19926243751812 210.57894234329575 60.67825733962775Q209.85242012654524 60.15725224173738 208.94744364482443 59.93475477104225Q208.04246716310365 59.71225730034711 207.10029180187044 59.71225730034711V59.46562070064464Q207.7416780938376 59.46562070064464 208.3980643656369 59.284229329899915Q209.05445063743625 59.102837959155195 209.6061113586946 58.67513782055982Q210.1577720799529 58.24743768196444 210.50162085938837 57.494481513243855Q210.84546963882383 56.741525344523275 210.84546963882383 55.61470705581099Q210.84546963882383 54.2816892227511 210.40439529876346 53.4213982295669Q209.96332095870312 52.561107236382696 209.14479172917297 52.15331117450484Q208.3262624996428 51.74551511262699 207.17725869214217 51.74551511262699H203.97942623880584Q203.97942623880584 51.71811104599338 203.91091607222182 51.462663128967556Q203.8424059056378 51.20721521194173 203.77389573905378 50.9380652615991Q203.70538557246977 50.66891531125647 203.70538557246977 50.66891531125647ZM206.16855353632778 50.66891531125647V69.85176195478208H202.8343028899594V50.66891531125647ZM202.9165150898602 67.8512650905287V69.85176195478208H200.72418975917157L200.740501066411 69.577721288446Q200.79530919967823 69.577721288446 200.92417387922654 69.577721288446Q201.05303855877486 69.577721288446 201.08044262540847 69.577721288446Q201.7929483578823 69.577721288446 202.30807924422376 69.07074605572424Q202.82321013056523 68.5637708230025 202.8343028899594 67.8512650905287ZM202.9165150898602 52.669412175509855H202.8343028899594Q202.82321013056523 51.95690644303605 202.30807924422376 51.4499312103143Q201.7929483578823 50.94295597759255 201.08044262540847 50.94295597759255Q201.05303855877486 50.94295597759255 200.92417387922654 50.94295597759255Q200.79530919967823 50.94295597759255 200.740501066411 50.94295597759255L200.72418975917157 50.66891531125647H202.9165150898602ZM229.0776440547528 50.28525837838596Q232.25391989122062 50.28525837838596 234.61230878097 51.50995789142678Q236.97069767071937 52.734657404467605 238.2675001198223 54.970698109029286Q239.56430256892523 57.206738813590974 239.56430256892523 60.26033863301927Q239.56430256892523 63.3028456930534 238.2675001198223 65.54443277731217Q236.97069767071937 67.78601986157094 234.61230878097 69.01071937461177Q232.25391989122062 70.23541888765259 229.0776440547528 70.23541888765259Q225.91767952552442 70.23541888765259 223.56483701547214 69.01071937461177Q221.21199450541985 67.78601986157094 219.91519205631693 65.54997915700926Q218.61838960721397 63.31393845244757 218.61838960721397 60.26033863301927Q218.61838960721397 57.21783157298515 219.91519205631693 54.97624448872638Q221.21199450541985 52.734657404467605 223.56483701547214 51.50995789142678Q225.91767952552442 50.28525837838596 229.0776440547528 50.28525837838596ZM229.0776440547528 69.19144170076095Q231.15185625254355 69.19144170076095 232.67015929589425 68.09038831942317Q234.18846233924495 66.9893349380854 235.02264721231091 64.98949373753565Q235.85683208537688 62.9896525369859 235.85683208537688 60.26033863301927Q235.85683208537688 57.531024729052646 235.02264721231091 55.53118352850289Q234.18846233924495 53.53134232795314 232.67015929589425 52.43028894661538Q231.15185625254355 51.32923556527761 229.0776440547528 51.32923556527761Q227.03083592359565 51.32923556527761 225.51253288024495 52.43028894661538Q223.99422983689425 53.53134232795314 223.16004496382828 55.53118352850289Q222.32586009076235 57.531024729052646 222.32586009076235 60.26033863301927Q222.32586009076235 62.9896525369859 223.16004496382828 64.98949373753565Q223.99422983689425 66.9893349380854 225.51253288024495 68.09038831942317Q227.03083592359565 69.19144170076095 229.0776440547528 69.19144170076095ZM252.7821616928237 50.28525837838596Q255.95843752929153 50.28525837838596 258.3168264190409 51.50995789142678Q260.67521530879026 52.734657404467605 261.97201775789324 54.970698109029286Q263.26882020699617 57.206738813590974 263.26882020699617 60.26033863301927Q263.26882020699617 63.3028456930534 261.97201775789324 65.54443277731217Q260.67521530879026 67.78601986157094 258.3168264190409 69.01071937461177Q255.95843752929153 70.23541888765259 252.7821616928237 70.23541888765259Q249.62219716359533 70.23541888765259 247.26935465354305 69.01071937461177Q244.91651214349076 67.78601986157094 243.61970969438784 65.54997915700926Q242.32290724528488 63.31393845244757 242.32290724528488 60.26033863301927Q242.32290724528488 57.21783157298515 243.61970969438784 54.97624448872638Q244.91651214349076 52.734657404467605 247.26935465354305 51.50995789142678Q249.62219716359533 50.28525837838596 252.7821616928237 50.28525837838596ZM252.7821616928237 69.19144170076095Q254.85637389061446 69.19144170076095 256.37467693396513 68.09038831942317Q257.89297997731586 66.9893349380854 258.7271648503818 64.98949373753565Q259.5613497234478 62.9896525369859 259.5613497234478 60.26033863301927Q259.5613497234478 57.531024729052646 258.7271648503818 55.53118352850289Q257.89297997731586 53.53134232795314 256.37467693396513 52.43028894661538Q254.85637389061446 51.32923556527761 252.7821616928237 51.32923556527761Q250.73535356166656 51.32923556527761 249.21705051831586 52.43028894661538Q247.69874747496516 53.53134232795314 246.8645626018992 55.53118352850289Q246.03037772883326 57.531024729052646 246.03037772883326 60.26033863301927Q246.03037772883326 62.9896525369859 246.8645626018992 64.98949373753565Q247.69874747496516 66.9893349380854 249.21705051831586 68.09038831942317Q250.73535356166656 69.19144170076095 252.7821616928237 69.19144170076095ZM274.6800849713227 58.46923934628021 282.06350055707725 68.0659079776721Q282.6722642345655 68.80256622004516 283.31136908446183 69.17644172092878Q283.9504739343582 69.55031722181239 284.8 69.577721288446V69.85176195478208H282.9005957741338Q282.6154623484036 69.85176195478208 281.98092038264883 69.81620223452876Q281.34637841689414 69.78064251427543 280.56306769487355 69.60218824930516Q279.779756972853 69.42373398433489 278.9908998711354 69.00320600380377Q278.20204276941774 68.58267802327266 277.6030605239164 67.81274150271709Q277.514318448763 67.69072114938122 277.08466469994863 67.13187488916671Q276.6550109511343 66.57302862895219 276.0345122314401 65.76298288489357Q275.4140135117459 64.95293714083496 274.7390344906363 64.0639441345018Q274.06405546952675 63.17495112816862 273.47313744155036 62.40280564537342Q272.882219413574 61.63066016257822 272.50618066849813 61.139294855344914Q272.13014192342223 60.647929548111605 272.13014192342223 60.647929548111605ZM281.9010163866027 50.860743777691724 273.6739221849714 60.537001954169895 272.13014192342223 60.647929548111605 279.6662602476644 50.860743777691724ZM283.81408250310994 50.66891531125647V50.91840433480316H283.7044662365755Q282.80013203766646 50.91840433480316 282.01911613860864 51.27877736881504Q281.2381002395508 51.63915040282692 280.69001890687866 52.25835117600573L278.63077992713625 52.20354304273852Q278.975940033979 51.737673909967185 278.7540982269875 51.32661291046306Q278.532256419996 50.91555191095894 277.97677991439434 50.91555191095894H277.6990416615936V50.66891531125647H283.7044662365755ZM271.2532117911468 50.66891531125647V69.85176195478208H267.9189611447784V50.66891531125647ZM268.0011733446792 67.8512650905287V69.85176195478208H265.8088480139906V69.577721288446Q265.8310335327789 69.577721288446 265.99252082680607 69.577721288446Q266.1540081208333 69.577721288446 266.1651008802275 69.577721288446Q266.8776066127013 69.577721288446 267.38458184542304 69.07074605572424Q267.8915570781448 68.5637708230025 267.9189611447784 67.8512650905287ZM268.0011733446792 52.669412175509855H267.9189611447784Q267.8915570781448 51.95690644303605 267.38458184542304 51.4499312103143Q266.8776066127013 50.94295597759255 266.1651008802275 50.94295597759255Q266.1540081208333 50.94295597759255 265.99252082680607 50.94295597759255Q265.8310335327789 50.94295597759255 265.8088480139906 50.94295597759255V50.66891531125647H268.0011733446792ZM271.17099959124596 67.8512650905287H271.2532117911468Q271.2806158577804 68.5637708230025 271.78759109050213 69.07074605572424Q272.2945663232239 69.577721288446 273.0070720556977 69.577721288446Q273.02925757448605 69.577721288446 273.1834425040777 69.577721288446Q273.3376274336693 69.577721288446 273.3633249219346 69.577721288446V69.85176195478208H271.17099959124596ZM271.17099959124596 52.669412175509855V50.66891531125647H273.3633249219346V50.94295597759255Q273.33592085530097 50.94295597759255 273.1825892148935 50.94295597759255Q273.02925757448605 50.94295597759255 273.0070720556977 50.94295597759255Q272.2945663232239 50.94295597759255 271.78759109050213 51.4499312103143Q271.2806158577804 51.95690644303605 271.2532117911468 52.669412175509855Z"/></svg>
+  </div>
+  <div class="hero-himmel">
+    <h1 class="auf a3">Der Hochzeitsfilm mit euren Liebsten und den <em>gemeinsamen Geschichten</em></h1>
+  </div>
+  <div class="hero-unten auf a4">
+    <p class="untertitel">Nicht der klassische Hochzeitsfilm. Sondern der Film voller Lieblingsmenschen, die euch Dinge sagen, die ihr für immer hören wollt.</p>
+    <a class="btn" href="#kontakt">Termin anfragen</a>
   </div>
 </header>
 
-<section id="konzept">
-  <div class="wrap konzept-grid">
-    <div>
-      <div class="section-head" style="margin-bottom:0;">
-        <h2>Unsere Services</h2>
-      </div>
-    </div>
-    <div>
-      <p>Unser Kernangebot ist einfach: Wir interviewen die Menschen, die euch am besten kennen, und machen aus ihren Geschichten, Witzen und Ratschlägen einen Film, den ihr sonst nie bekommen würdet.</p>
-      <p>Der Einstieg sind Interviews am Apéro, ergänzt durch das, was ihr für euren Tag zusätzlich wünscht: Gedanken vor der Zeremonie oder Interviews am Abend, wenn die Party läuft.</p>
-      <p class="konzept-not">Es ist Film, Content und Gästeunterhaltung in einem. <strong>Kein Ersatz</strong> für eure klassische Hochzeitsvideografie/Fotografie, sondern das Zusatzstück dazu.</p>
-    </div>
-  </div>
-</section>
+<main>
 
-<section class="alt" id="pakete">
-  <div class="wrap pakete-layout">
-    <div class="pakete-intro">
-      <div class="section-head" style="margin-bottom:0;">
-        <h2>Pakete für Hochzeiten</h2>
-      </div>
-      <div class="pakete-cta">
-        <a class="btn btn-primary" href="kontakt.html">Termin anfragen</a>
-      </div>
-    </div>
-
-    <div class="pakete-list">
-      <div class="pakete-item is-open">
-        <button class="pakete-toggle" aria-expanded="true">
-          <span>Die Interviews <span class="pakete-price">CHF 1'900</span></span>
-          <span class="pakete-icon">–</span>
-        </button>
-        <div class="pakete-body">
-          <p>Unser Signature-Film: Wir sind mit einem zweiköpfigen Videoteam beim Apéro oder Empfang dabei und interviewen eure Gäste über den Nachmittag oder Abend hinweg. So entstehen Geschichten, Erinnerungen, Witze, Ratschläge und Botschaften, die sonst mit dem Tag verloren gehen.</p>
-          <p>Wir sind schon zur Ankunft der Gäste vor Ort und sprechen während des Apéros mit so vielen wie möglich. Enthalten sind bis zu 4 Stunden vor Ort, professionelle Kamera- und Tontechnik sowie der fertig geschnittene Interviewfilm, meist 30 bis 45 Minuten lang.</p>
-        </div>
-      </div>
-
-      <div class="pakete-item">
-        <button class="pakete-toggle" aria-expanded="false">
-          <span>Abend Interviews <span class="pakete-price">CHF 1'900</span></span>
-          <span class="pakete-icon">+</span>
-        </button>
-        <div class="pakete-body">
-          <p>Die lockere, ehrliche Seite des Hochzeitsfilms: gleiches Prinzip wie tagsüber, einfach später am Abend, wenn die offiziellen Programmpunkte vorbei sind und das Tanzbein geschwungen wird. Gäste sind jetzt entspannter und eher bereit für lustige, chaotische oder herzliche Antworten.</p>
-          <p>Ideal, um die Energie der Nacht festzuhalten: Freunde nach dem einen oder anderen Drink, Familie mit Rückblick auf den Tag, späte Ratschläge und Momente, die tagsüber nie passieren würden. Enthalten ist die Coverage am Abend ab ca. 21 Uhr, professionelle Kamera- und Tontechnik sowie der geschnittene Film von 45 bis 60 Minuten, abhängig von Verfügbarkeit, Location und Lautstärke vor Ort.</p>
-        </div>
-      </div>
-
-      <div class="pakete-item">
-        <button class="pakete-toggle" aria-expanded="false">
-          <span>Der Moment davor <span class="pakete-price">+ CHF 600</span></span>
-          <span class="pakete-icon">+</span>
-        </button>
-        <div class="pakete-body">
-          <p>Gedanken, Nervosität und Vorfreude, bevor der Tag richtig losgeht. Wir sind schon vor der Zeremonie da und interviewen Braut und Bräutigam, je nach Zeitplan getrennt oder gemeinsam, und wenn die Zeit reicht auch Trauzeugen, Eltern oder die engste Familie.</p>
-          <p>So entstehen private Worte, ehrliche Gefühle und Ratschläge der Menschen, die euch am nächsten stehen, kurz bevor alles losgeht. Enthalten sind bis zu 1 Stunde Coverage, professionelle Kamera- und Tontechnik sowie die geschnittenen Interviews dieses Pakets als Teil eures Films, abhängig von Location, Zeitplan und Verfügbarkeit am Morgen.</p>
-        </div>
-      </div>
-
-      <div class="pakete-item">
-        <button class="pakete-toggle" aria-expanded="false">
-          <span>Highlights <span class="pakete-price">+ CHF 300</span></span>
-          <span class="pakete-icon">+</span>
-        </button>
-        <div class="pakete-body">
-          <p>Kurzformat-Content aus euren Gästeinterviews, fertig zum Teilen: eine Auswahl der besten, lustigsten oder herzlichsten Momente als kurze, vertikale Clips für Instagram Reels, TikTok, Stories oder zum direkten Versand an Freunde und Familie.</p>
-          <p>Enthalten sind 5 geschnittene Clips mit dezenten Untertiteln, bereit zum Teilen. Die Highlights lassen sich zu jedem Gästeinterview-Paket dazubuchen.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="warum">
-  <div class="wrap warum-split">
-    <div class="warum-split-title">
-      <h2>Warum es<br>Paare<br>lieben.</h2>
-    </div>
-    <div class="warum-split-list">
-      <div class="warum-split-item">
-        <h3>Hört, was ihr verpasst habt</h3>
-        <p>Ihr könnt nicht überall gleichzeitig sein. Das hier fängt ein, was eure Gäste sagen, während ihr mit dem Tag beschäftigt seid.</p>
-      </div>
-      <div class="warum-split-item">
-        <h3>Lustig, ehrlich und ganz persönlich</h3>
-        <p>Von emotionalen Ratschlägen bis zu Geschichten, die ihr noch nie gehört habt: Der Film dreht sich um eure Menschen.</p>
-      </div>
-      <div class="warum-split-item">
-        <h3>Ein einzigartiges Andenken</h3>
-        <p>Blumen, Location und Deko sind an dem Tag wichtig, aber die Stimmen der Menschen, die ihr liebt, sind das, was ihr in Jahren wieder hören wollt.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="alt" id="faq">
+<section class="kapitel" id="idee" aria-labelledby="t-idee">
   <div class="wrap">
-    <div class="section-head">
-      <h2>Häufige Fragen</h2>
-    </div>
-      <div class="faq-list">
-        <div class="faq-item is-open">
-          <button class="faq-toggle" aria-expanded="true">
-            <span>Ist das dasselbe wie eine normale Hochzeitsvideografie?</span>
-            <span class="faq-icon">–</span>
-          </button>
-          <div class="faq-body">
-            <p>Nein. The Guestbook ist ein moderiertes Gästeinterview-Format. Im Zentrum stehen die Gäste, ihre Geschichten, Ratschläge und Botschaften, nicht die Zeremonie.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-toggle" aria-expanded="false">
-            <span>Filmt ihr auch die Zeremonie?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-body">
-            <p>Unser Kerngeschäft sind die Gästeinterviews am Apéro und am Abend. Der Moment davor lässt sich dazubuchen.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-toggle" aria-expanded="false">
-            <span>Wie lange ist der fertige Film?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-body">
-            <p>Meistens zwischen 30 und 60 Minuten, je nach Anzahl Gäste und gebuchten Paketen.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-toggle" aria-expanded="false">
-            <span>Müssen sich die Gäste vorbereiten?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-body">
-            <p>Nein. Wir führen die Gespräche mit einfachen Fragen und lassen sie natürlich entstehen.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-toggle" aria-expanded="false">
-            <span>Reist ihr auch ausserhalb der Ostschweiz an?</span>
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-body">
-            <p>Ja. Die ersten 50 km ab Frauenfeld sind inklusive, danach verrechnen wir eine Kilometerpauschale.</p>
-          </div>
-        </div>
+    <h2 class="titel" id="t-idee"><span class="caps">Die</span><span class="skript">Idee</span></h2>
+    <div class="intro-raster">
+      <p class="gross">Wir interviewen die Menschen, die euch am besten kennen, und machen aus ihren Geschichten, Witzen und Ratschlägen einen Film, den ihr sonst nie bekommen würdet.</p>
+      <div class="schmal">
+        <p>Der klassische Hochzeitsfilm zeigt die Zeremonie, die Reden und die schönsten Einstellungen des Tages. Was dabei oft fehlt, sind die Stimmen der Menschen, die den Tag zu dem gemacht haben, was er war: Freunde, Geschwister, Grosseltern, Trauzeugen.</p>
+        <p>Der Einstieg sind Interviews am Apéro, ergänzt durch das, was ihr zusätzlich wünscht: Gedanken vor der Zeremonie oder Interviews am Abend, wenn die Party läuft. Ursprünglich für Hochzeiten entwickelt, heute auch für private Feiern und Firmenanlässe buchbar.</p>
+        <p class="hinweis">Es ist Film, Content und Gästeunterhaltung in einem. <strong>Kein Ersatz</strong> für eure klassische Videografie oder Fotografie, sondern das Zusatzstück dazu.</p>
       </div>
+    </div>
+    <div class="abschnitt-luft">
+      <h3 class="titel"><span class="caps" style="font-size:clamp(26px,4.4vw,48px)">Warum es</span><span class="skript" style="font-size:clamp(40px,6.4vw,74px)">so gut ankommt</span></h3>
+      <div class="gruende">
+        <div class="grund"><h3>Hört, was ihr verpasst habt</h3><p>Ihr könnt nicht an jedem Tisch gleichzeitig sein. Der Film fängt ein, was eure Gäste sagen, während ihr mit Feiern beschäftigt seid.</p></div>
+        <div class="grund"><h3>Lustig, ehrlich und ganz persönlich</h3><p>Von emotionalen Ratschlägen bis zu Geschichten, die ihr noch nie gehört habt: Der Film dreht sich um eure Menschen.</p></div>
+        <div class="grund"><h3>Mehr als ein Recap</h3><p>Location und Deko sind an dem Tag wichtig. Aber die Stimmen der Menschen, die ihr liebt, sind das, was ihr in Jahren wieder hören wollt.</p></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<footer>
+<section class="still" aria-label="Zitat">
+  <div class="rahmen o"></div>
+  <svg class="figuren" viewBox="0 0 200 120" aria-hidden="true">
+    <g fill="#1A1410" opacity=".85">
+      <ellipse cx="72" cy="22" rx="9" ry="10"/><path d="M60 34c6-4 18-4 24 0l4 44-6 42h-8l-3-38-4 38h-8l-2-44z"/>
+      <ellipse cx="128" cy="26" rx="8" ry="9"/><path d="M118 37c5-3 15-3 20 0l10 60c-12 6-34 6-42 0z"/>
+    </g>
+  </svg>
+  <div class="text">
+    <p>Die schönsten Sätze des Tages fallen selten vor der Zeremonie oder auf der Tanzfläche.</p>
+    <p>Sie fallen beim Anstossen mit dem Brautpaar, auf dem Weg zur Bar oder beim Warten aufs Dessert.</p>
+  </div>
+  <div class="rahmen u"></div>
+</section>
+
+<section class="kapitel bordeaux dunkel pakete-bereich" id="pakete" aria-labelledby="t-pakete">
   <div class="wrap">
-    <span>© 2026 The Guestbook</span>
-    <span><a href="https://liasoertig.ch" target="_blank" rel="noopener">a liasoertig production</a></span>
+<div class="zweispaltig">
+  <div class="spalte-links">
+    <h2 class="titel" id="t-pakete"><span class="caps">Unsere</span><span class="skript">Pakete</span></h2>
+
+    <div class="umschalter" role="group" aria-label="Anlass wählen">
+      <button type="button" aria-pressed="true" data-ziel="g-hochzeit" data-farbe="bordeaux">Hochzeiten</button>
+      <button type="button" aria-pressed="false" data-ziel="g-event" data-farbe="moos">Events</button>
+    </div>
+  </div>
+  <div class="spalte-rechts">
+    <div class="gruppe" id="g-hochzeit">
+      <article class="paket">
+        <p class="label">Unser Signature-Film</p>
+        <h3>Die Interviews</h3><p class="preis">CHF 1'900</p>
+        <p class="kern">Unser zweiköpfiges Videoteam ist beim Apéro oder Empfang dabei und interviewt eure Gäste über den Nachmittag oder Abend hinweg.</p>
+        <details><summary><span class="plus" aria-hidden="true"></span>Was enthalten ist</summary>
+          <p>Bis zu 4 Stunden vor Ort ab Ankunft der Gäste, professionelle Kamera- und Tontechnik sowie der fertig geschnittene Interviewfilm, meist 30 bis 45 Minuten lang.</p>
+        </details>
+      </article>
+      <article class="paket">
+        <p class="label">Die lockere, ehrliche Seite</p>
+        <h3>Abend Interviews</h3><p class="preis">CHF 1'900</p>
+        <p class="kern">Gleiches Prinzip, später am Abend, wenn das offizielle Programm vorbei ist. Gäste sind entspannter und eher bereit für lustige, chaotische oder herzliche Antworten.</p>
+        <details><summary><span class="plus" aria-hidden="true"></span>Was enthalten ist</summary>
+          <p>Coverage ab ca. 21 Uhr, professionelle Kamera- und Tontechnik sowie der geschnittene Film von 45 bis 60 Minuten, abhängig von Verfügbarkeit, Location und Lautstärke vor Ort.</p>
+        </details>
+      </article>
+      <article class="paket">
+        <p class="label">Zum Dazubuchen</p>
+        <h3>Der Moment davor</h3><p class="preis">CHF 600</p>
+        <p class="kern">Gedanken, Nervosität und Vorfreude, bevor der Tag losgeht. Wir interviewen Braut und Bräutigam, getrennt oder gemeinsam, und wenn die Zeit reicht auch Trauzeugen, Eltern oder die engste Familie.</p>
+        <details><summary><span class="plus" aria-hidden="true"></span>Was enthalten ist</summary>
+          <p>Bis zu 1 Stunde Coverage, professionelle Kamera- und Tontechnik sowie die geschnittenen Interviews als Teil eures Films, abhängig von Location, Zeitplan und Verfügbarkeit am Morgen.</p>
+        </details>
+      </article>
+      <article class="paket">
+        <p class="label">Zum Dazubuchen</p>
+        <h3>Highlights</h3><p class="preis">CHF 300</p>
+        <p class="kern">Die besten, lustigsten oder herzlichsten Momente aus euren Gästeinterviews als kurze, vertikale Clips, fertig zum Teilen.</p>
+        <details><summary><span class="plus" aria-hidden="true"></span>Was enthalten ist</summary>
+          <p>5 geschnittene Clips mit dezenten Untertiteln für Instagram Reels, TikTok, Stories oder zum direkten Versand an Freunde und Familie.</p>
+        </details>
+      </article>
+    </div>
+
+    <div class="gruppe" id="g-event" hidden>
+      <article class="paket">
+        <p class="label">Für private Feiern</p>
+        <h3>Privates Event</h3><p class="preis">CHF 1'900</p>
+        <p class="kern">Für Geburtstage, Jubiläen, Verlobungsfeiern oder private Dinner. Wir interviewen eure Gäste und machen daraus einen Film, der ganz um die Menschen im Raum geht.</p>
+        <details><summary><span class="plus" aria-hidden="true"></span>Was enthalten ist</summary>
+          <p>Zweiköpfiges Team, ein vereinbartes Zeitfenster am Anlass, professionelle Kamera- und Tonausrüstung sowie der geschnittene Gästefilm.</p>
+        </details>
+      </article>
+      <article class="paket">
+        <p class="label">Für Firmen und Marken</p>
+        <h3>Firmen Event</h3><p class="preis">CHF 1'900</p>
+        <p class="kern">Für Produktlaunches, Firmenfeiern und PR-Anlässe. Interviews mit Gästen, Kundinnen, Mitarbeitenden oder Gründern: echte Reaktionen statt eines gewöhnlichen Eventrecaps.</p>
+        <details><summary><span class="plus" aria-hidden="true"></span>Was enthalten ist</summary>
+          <p>Zweiköpfiges Team, professionelle Kamera- und Tonausrüstung, geschnittener Gästefilm und Nutzungsrecht für eure Kanäle. Ob roter Teppich, Roaming im Publikum oder Rückblicke am Ende des Abends.</p>
+        </details>
+      </article>
+      <article class="paket">
+        <p class="label">Zum Dazubuchen</p>
+        <h3>Highlights</h3><p class="preis">CHF 300</p>
+        <p class="kern">Die stärksten Reaktionen und Statements als kurze, vertikale Clips, aufbereitet für eure Kanäle.</p>
+        <details><summary><span class="plus" aria-hidden="true"></span>Was enthalten ist</summary>
+          <p>5 geschnittene Clips mit dezenten Untertiteln für Instagram, TikTok, LinkedIn oder interne Kommunikation.</p>
+        </details>
+      </article>
+    </div>
+
+    <p class="paket-cta"><a class="btn" href="#kontakt">Anfrage stellen</a></p>
+  </div>
+</div>
+  </div>
+</section>
+
+<section class="kapitel ueber" id="ueber-uns" aria-labelledby="t-ueber">
+  <div class="wrap">
+    <h2 class="titel" id="t-ueber"><span class="caps">Wer wir</span><span class="skript">sind</span></h2>
+    <div class="ueber-raster">
+      <figure class="bildfeld">
+        <div class="bild" role="img" aria-label="Platzhalter für das Foto der beiden Gründer">Foto folgt</div>
+        <figcaption>Die beiden Gründer von The Guestbook</figcaption>
+      </figure>
+      <div>
+        <p>The Guestbook ist die Idee von uns zwei, zwei Freunden aus der Ostschweiz. Wir waren an genug Hochzeiten dabei, um zu merken, dass die schönsten Sätze des Tages meistens schon am nächsten Morgen vergessen sind.</p>
+        <p>Aus der Schnapsidee für die Hochzeit eines Freundes wurde ein Studio, entstanden aus der Foto- und Videobranche, mit dem Anspruch, <strong>etwas Neues</strong> anzubieten, das es in dieser Form in der Schweiz noch nicht gab. Denn eine gute Hochzeit besteht vor allem aus guten Geschichten.</p>
+        <p style="margin-top:var(--s3)">Zuhause in Frauenfeld, unterwegs in der ganzen Schweiz. Destination Weddings und mehrtägige Anlässe sind auf Anfrage möglich.</p>
+      </div>
+    </div>
+
+    <div class="abschnitt-luft">
+      <h3 class="titel"><span class="caps" style="font-size:clamp(26px,4.4vw,48px)">Wie wir</span><span class="skript" style="font-size:clamp(40px,6.4vw,74px)">arbeiten</span></h3>
+      <div class="gruende">
+        <div class="grund"><h3>Diskret und professionell</h3><p>Ein eingespieltes Zweierteam mit professioneller Kamera- und Tontechnik, das sich nie in den Vordergrund drängt.</p></div>
+        <div class="grund"><h3>Ehrliche Fragen, echte Antworten</h3><p>Keine einstudierten Statements. Wir stellen einfache Fragen und lassen die Antworten natürlich entstehen.</p></div>
+        <div class="grund"><h3>Sorgfältiger Schnitt</h3><p>Jeder Film wird von Hand geschnitten, mit Blick für die Momente, die in Erinnerung bleiben, statt für ein starres Schema.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="kapitel bordeaux dunkel kontakt-bereich" id="kontakt" aria-labelledby="t-kontakt">
+  <div class="wrap">
+<div class="zweispaltig">
+  <div class="spalte-links">
+    <h2 class="titel" id="t-kontakt"><span class="caps">Erzählt uns</span><span class="skript">von eurem Tag.</span></h2>
+    <p class="schmal" style="margin-bottom:var(--s4);color:rgba(238,230,214,.88)">Ob Hochzeit oder eigener Anlass: Schreibt uns kurz, worum es geht, dann melden wir uns mit einem passenden Vorschlag.</p>
+
+    <div class="umschalter" id="kontakt-schalter" role="group" aria-label="Art der Anfrage wählen">
+      <button type="button" aria-pressed="true" data-art="hochzeit">Hochzeit</button>
+      <button type="button" aria-pressed="false" data-art="event">Event</button>
+    </div>
+  </div>
+  <div class="spalte-rechts">
+    <div id="kontakt-box">
+      <form class="formular" id="anfrage" novalidate>
+        <input type="hidden" name="anlass" id="anlass" value="Hochzeit">
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <div class="feld"><label for="vorname">Vorname</label><input id="vorname" name="vorname" autocomplete="given-name" required></div>
+        <div class="feld"><label for="nachname">Nachname</label><input id="nachname" name="nachname" autocomplete="family-name" required></div>
+        <div class="feld"><label for="email">E-Mail</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        <div class="feld"><label for="telefon">Telefon</label><input id="telefon" name="telefon" type="tel" autocomplete="tel"></div>
+        <div class="feld"><label for="datum" id="datum-label">Hochzeitsdatum</label><input id="datum" name="datum" type="date"></div>
+        <div class="feld"><label for="ort">Ort oder Location</label><input id="ort" name="ort" autocomplete="address-level2"></div>
+        <div class="feld"><label for="gaeste">Anzahl Gäste, ungefähr</label><input id="gaeste" name="gaeste" type="number" inputmode="numeric" min="1" step="1"></div>
+        <div class="feld" data-fuer="event" hidden><label for="firma">Anlass oder Firma</label><input id="firma" name="anlass_oder_firma" autocomplete="organization"></div>
+        <fieldset class="feld breit wahlgruppe">
+          <legend>Paket</legend>
+          <div class="wahlen">
+            <label class="wahl" data-fuer="hochzeit"><input type="radio" name="paket" value="Die Interviews" data-art="hochzeit"><span class="rund">Die Interviews<small>CHF 1'900</small></span></label>
+            <label class="wahl" data-fuer="hochzeit"><input type="radio" name="paket" value="Abend Interviews" data-art="hochzeit"><span class="rund">Abend Interviews<small>CHF 1'900</small></span></label>
+            <label class="wahl" data-fuer="event" hidden><input type="radio" name="paket" value="Privates Event" data-art="event" disabled><span class="rund">Privates Event<small>CHF 1'900</small></span></label>
+            <label class="wahl" data-fuer="event" hidden><input type="radio" name="paket" value="Firmen Event" data-art="event" disabled><span class="rund">Firmen Event<small>CHF 1'900</small></span></label>
+            <label class="wahl"><input type="radio" name="paket" value="Weiss ich noch nicht" data-art="offen"><span class="rund">Weiss ich noch nicht</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="feld breit wahlgruppe" id="zusatz-gruppe">
+          <legend>Zum Dazubuchen</legend>
+          <div class="wahlen">
+            <label class="wahl" id="zusatz-moment" data-fuer="hochzeit"><input type="checkbox" name="zusatz" value="Der Moment davor"><span class="eckig">Der Moment davor<small>CHF 600</small></span></label>
+            <label class="wahl"><input type="checkbox" name="zusatz" value="Highlights"><span class="eckig">Highlights<small>CHF 300</small></span></label>
+          </div>
+        </fieldset>
+        <div class="feld breit"><label for="nachricht">Gibt es sonst noch etwas, das wir wissen sollten?</label><textarea id="nachricht" name="nachricht"></textarea></div>
+        <p class="breit" id="fehler" role="alert" style="margin:0;color:var(--blush);font-style:italic;font-size:15px"></p>
+        <div class="breit senden"><button class="btn voll" type="submit">Anfrage senden</button></div>
+        <p class="breit form-hinweis">Mit dem Absenden nehmt ihr unsere <a href="/datenschutz.html">Datenschutzerklärung</a> zur Kenntnis.</p>
+      </form>
+      <div class="danke" role="status"><p>Danke für eure Nachricht!</p><span class="danke-sub">Ihr erhaltet gleich eine Bestätigung per E-Mail.</span>
+        <div class="ablauf">
+          <p class="ablauf-titel">So geht es weiter</p>
+          <ol>
+            <li><span class="nr">1</span><span><strong>Wir melden uns</strong>Gemeinsam besprechen wir Datum, Ablauf und eure Wünsche.</span></li>
+            <li><span class="nr">2</span><span><strong>Vertrag</strong>Ihr erhaltet eine Offerte und den Vertrag, damit euer Tag fix reserviert ist.</span></li>
+            <li><span class="nr">3</span><span><strong>Drehtag</strong>Wir sind vor Ort und sammeln die Stimmen eurer Gäste.</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+<section class="kapitel fragen" id="fragen" aria-labelledby="t-fragen">
+  <div class="wrap">
+<div class="zweispaltig">
+  <div class="spalte-links">
+    <h2 class="titel" id="t-fragen"><span class="caps">Häufige</span><span class="skript">Fragen</span></h2>
+  </div>
+  <div class="spalte-rechts">
+    <div class="fragen-liste">
+      <details class="frage"><summary>Ist das dasselbe wie eine normale Video­grafie?<span class="plus" aria-hidden="true"></span></summary><p>Nein. The Guestbook ist ein moderiertes Gästeinterview-Format. Im Zentrum stehen die Gäste, ihre Geschichten, Ratschläge und Botschaften, nicht die Zeremonie oder der Programmablauf.</p></details>
+      <details class="frage"><summary>Filmt ihr auch die Zeremonie?<span class="plus" aria-hidden="true"></span></summary><p>Unser Kerngeschäft sind die Gästeinterviews am Apéro und am Abend. Der Moment davor lässt sich dazubuchen.</p></details>
+      <details class="frage"><summary>Wie lange ist der fertige Film?<span class="plus" aria-hidden="true"></span></summary><p>Bei Hochzeiten meistens 30 bis 60 Minuten, bei Events 15 bis 40 Minuten, je nach Anzahl Gäste und gebuchten Paketen.</p></details>
+      <details class="frage"><summary>Müssen sich die Gäste vorbereiten?<span class="plus" aria-hidden="true"></span></summary><p>Nein. Wir führen die Gespräche mit einfachen Fragen und lassen sie natürlich entstehen.</p></details>
+      <details class="frage"><summary>Für wie viele Gäste eignet sich das?<span class="plus" aria-hidden="true"></span></summary><p>Ab kleinen privaten Runden bis zu grösseren Firmenanlässen. Bei sehr grossen Events sprechen wir Team-Grösse und Ablauf gerne im Voraus mit euch ab.</p></details>
+      <details class="frage"><summary>Reist ihr auch ausserhalb der Ostschweiz an?<span class="plus" aria-hidden="true"></span></summary><p>Ja. Die ersten 50 km ab Frauenfeld sind inklusive, danach verrechnen wir eine Kilometerpauschale. Destination Weddings und Events auf Anfrage.</p></details>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+</main>
+
+<footer class="abspann">
+  <div class="wrap">
+    <dl class="credits">
+      <dt>Ein Film von</dt><dd>euren Gästen</dd>
+      <dt>Kamera &amp; Ton</dt><dd>ein eingespieltes Zweierteam</dd>
+      <dt>Schnitt</dt><dd>von Hand</dd>
+      <dt>Produktion</dt><dd>The Guestbook</dd>
+      <dt>Kontakt</dt><dd><a href="mailto:info@liasoertig.ch">info@liasoertig.ch</a></dd>
+    </dl>
+    <svg class="logo-streifen logo-fuss" viewBox="0 0 320 120" role="img" aria-label="The Guestbook"><rect width="320" height="120" fill="#4A0F14"/><path fill="#EEE6D6" d="M18.29 7.56h11.76v8.40h-11.76zM18.29 104.04h11.76v8.40h-11.76zM42.99 7.56h11.76v8.40h-11.76zM42.99 104.04h11.76v8.40h-11.76zM67.68 7.56h11.76v8.40h-11.76zM67.68 104.04h11.76v8.40h-11.76zM92.38 7.56h11.76v8.40h-11.76zM92.38 104.04h11.76v8.40h-11.76zM117.08 7.56h11.76v8.40h-11.76zM117.08 104.04h11.76v8.40h-11.76zM141.77 7.56h11.76v8.40h-11.76zM141.77 104.04h11.76v8.40h-11.76zM166.47 7.56h11.76v8.40h-11.76zM166.47 104.04h11.76v8.40h-11.76zM191.16 7.56h11.76v8.40h-11.76zM191.16 104.04h11.76v8.40h-11.76zM215.86 7.56h11.76v8.40h-11.76zM215.86 104.04h11.76v8.40h-11.76zM240.56 7.56h11.76v8.40h-11.76zM240.56 104.04h11.76v8.40h-11.76zM265.25 7.56h11.76v8.40h-11.76zM265.25 104.04h11.76v8.40h-11.76zM289.95 7.56h11.76v8.40h-11.76zM289.95 104.04h11.76v8.40h-11.76z"/><path fill="#E6CFC4" fill-opacity=".55" d="M0 23.52h320v.6H0zM0 96.48h320v.6H0z"/><path fill="#EEE6D6" d="M45.35524058332217 50.75112751115729V69.85176195478208H42.0209899369538V50.75112751115729ZM52.17623052027602 50.64151124462286V51.685488431514514H35.199999999999946V50.64151124462286ZM52.17623052027602 51.60327623161369V54.488571192586164L51.902189853939944 54.46116712595256V54.10622558712292Q51.902189853939944 53.032877342486756 51.23958815784799 52.37288492031744Q50.576986461756036 51.71289249814812 49.508856764965145 51.685488431514514V51.60327623161369ZM52.17623052027602 50.148238045217916V50.94295597759255L48.83293439097585 50.64151124462286Q49.43582385691522 50.64151124462286 50.10722348943862 50.55929904472204Q50.77862312196201 50.477086844821216 51.35410852126778 50.367470578286785Q51.92959392057355 50.257854311752354 52.17623052027602 50.148238045217916ZM42.10320213685462 67.8512650905287V69.85176195478208H39.91087680616597V69.577721288446Q39.91087680616597 69.577721288446 40.08900323928442 69.577721288446Q40.26712967240288 69.577721288446 40.26712967240288 69.577721288446Q40.97963540487669 69.577721288446 41.48661063759844 69.07074605572424Q41.99358587032019 68.5637708230025 42.0209899369538 67.8512650905287ZM45.27302838342135 67.8512650905287H45.35524058332217Q45.38264464995578 68.5637708230025 45.88961988267753 69.07074605572424Q46.39659511539928 69.577721288446 47.10910084787309 69.577721288446Q47.10910084787309 69.577721288446 47.287227280991544 69.577721288446Q47.465353714109995 69.577721288446 47.465353714109995 69.577721288446V69.85176195478208H45.27302838342135ZM37.86737375531083 51.60327623161369V51.685488431514514Q36.78293275128049 51.71289249814812 36.12848670880825 52.37288492031744Q35.47404066633602 53.032877342486756 35.47404066633602 54.10622558712292V54.46116712595256L35.199999999999946 54.488571192586164V51.60327623161369ZM35.199999999999946 50.148238045217916Q35.47404066633602 50.257854311752354 36.03582403232499 50.367470578286785Q36.597607398313954 50.477086844821216 37.282709064154155 50.55929904472204Q37.967810729994355 50.64151124462286 38.54329612930012 50.64151124462286L35.199999999999946 50.94295597759255ZM72.32084215079246 50.66891531125647V69.85176195478208H68.98659150442407V50.66891531125647ZM59.33131456646226 50.66891531125647V69.85176195478208H55.99706392009388V50.66891531125647ZM69.23322810412655 59.8035952685312V60.84757245542285H59.05727390012618V59.8035952685312ZM56.0792761199947 67.8512650905287V69.85176195478208H53.88695078930606V69.577721288446Q53.88695078930606 69.577721288446 54.06507722242451 69.577721288446Q54.24320365554296 69.577721288446 54.24320365554296 69.577721288446Q54.95570938801677 69.577721288446 55.46268462073852 69.07074605572424Q55.96965985346027 68.5637708230025 55.99706392009388 67.8512650905287ZM56.0792761199947 52.669412175509855H55.99706392009388Q55.96965985346027 51.95690644303605 55.46268462073852 51.4499312103143Q54.95570938801677 50.94295597759255 54.24320365554296 50.94295597759255Q54.24320365554296 50.94295597759255 54.06507722242451 50.94295597759255Q53.88695078930606 50.94295597759255 53.88695078930606 50.94295597759255V50.66891531125647H56.0792761199947ZM59.24910236656144 67.8512650905287H59.33131456646226Q59.35871863309587 68.5637708230025 59.86569386581762 69.07074605572424Q60.37266909853936 69.577721288446 61.08517483101318 69.577721288446Q61.08517483101318 69.577721288446 61.24959923081482 69.577721288446Q61.41402363061647 69.577721288446 61.44142769725008 69.577721288446V69.85176195478208H59.24910236656144ZM59.24910236656144 52.669412175509855V50.66891531125647H61.44142769725008V50.94295597759255Q61.41402363061647 50.94295597759255 61.24959923081482 50.94295597759255Q61.08517483101318 50.94295597759255 61.08517483101318 50.94295597759255Q60.37266909853936 50.94295597759255 59.86569386581762 51.4499312103143Q59.35871863309587 51.95690644303605 59.33131456646226 52.669412175509855ZM69.06880370432489 67.8512650905287V69.85176195478208H66.87647837363626V69.577721288446Q66.90388244026987 69.577721288446 67.06830684007151 69.577721288446Q67.23273123987316 69.577721288446 67.23273123987316 69.577721288446Q67.94523697234698 69.577721288446 68.46591423838552 69.07074605572424Q68.98659150442407 68.5637708230025 68.98659150442407 67.8512650905287ZM69.06880370432489 52.669412175509855H68.98659150442407Q68.98659150442407 51.95690644303605 68.46591423838552 51.4499312103143Q67.94523697234698 50.94295597759255 67.23273123987316 50.94295597759255Q67.23273123987316 50.94295597759255 67.06830684007151 50.94295597759255Q66.90388244026987 50.94295597759255 66.87647837363626 50.94295597759255V50.66891531125647H69.06880370432489ZM72.23862995089164 67.8512650905287H72.32084215079246Q72.34824621742607 68.5637708230025 72.85522145014781 69.07074605572424Q73.36219668286957 69.577721288446 74.07470241534337 69.577721288446Q74.07470241534337 69.577721288446 74.25282884846183 69.577721288446Q74.43095528158028 69.577721288446 74.43095528158028 69.577721288446V69.85176195478208H72.23862995089164ZM72.23862995089164 52.669412175509855V50.66891531125647H74.43095528158028V50.94295597759255Q74.43095528158028 50.94295597759255 74.25282884846183 50.94295597759255Q74.07470241534337 50.94295597759255 74.07470241534337 50.94295597759255Q73.36219668286957 50.94295597759255 72.85522145014781 51.4499312103143Q72.34824621742607 51.95690644303605 72.32084215079246 52.669412175509855ZM82.48775087186102 50.66891531125647V69.85176195478208H79.15350022549265V50.66891531125647ZM89.77592126899349 68.78038070125682 90.21963164476031 69.85176195478208H82.4055386719602V68.78038070125682ZM88.70847399769005 59.875370372741486V60.91934755963314H82.4055386719602V59.875370372741486ZM89.99777645687689 50.66891531125647V51.74029656478173H82.4055386719602V50.66891531125647ZM91.66942452152699 64.63581000254565 90.30184384466114 69.85176195478208H85.19813081377367L86.18467721258357 68.78038070125682Q87.58162894719393 68.78038070125682 88.58840725457317 68.27274980483143Q89.5951855619524 67.76511890840605 90.28159855519988 66.82652293575902Q90.96801154844735 65.887926963112 91.39965030111175 64.63581000254565ZM88.70847399769005 60.86453942636592V63.22784579389257H88.43443333135397V62.92771238833016Q88.43443333135397 62.08012655201539 87.86774586847964 61.50528343552135Q87.30105840560532 60.93044031902731 86.45347256929055 60.91934755963314V60.86453942636592ZM88.70847399769005 57.566872138482054V59.9301785060087H86.45347256929055V59.875370372741486Q87.30105840560532 59.84796630610788 87.87329224817672 59.26757680991675Q88.44552609074813 58.68718731372562 88.43443333135397 57.839601477410866V57.566872138482054ZM89.99777645687689 51.65808436488091V54.51597525921977H89.72373579054081V54.13362965375653Q89.72373579054081 53.0765927163598 89.06928974806858 52.408444640570764Q88.41484370559635 51.74029656478173 87.33040270156602 51.71289249814812V51.65808436488091ZM89.99777645687689 50.17564211185153V50.970360044226155L86.65448032757672 50.66891531125647Q87.25736979351609 50.66891531125647 87.92876942603948 50.58670311135565Q88.60016905856288 50.50449091145482 89.17565445786866 50.39487464492039Q89.75113985717442 50.28525837838596 89.99777645687689 50.17564211185153ZM79.23571242539347 67.8512650905287V69.85176195478208H77.04338709470483V69.577721288446Q77.04338709470483 69.577721288446 77.22151352782328 69.577721288446Q77.39963996094174 69.577721288446 77.39963996094174 69.577721288446Q78.11214569341554 69.577721288446 78.6191209261373 69.07074605572424Q79.12609615885904 68.5637708230025 79.15350022549265 67.8512650905287ZM79.23571242539347 52.669412175509855H79.15350022549265Q79.14240746609848 51.95690644303605 78.62502336300507 51.4499312103143Q78.10763925991166 50.94295597759255 77.39963996094174 50.94295597759255Q77.39963996094174 50.94295597759255 77.229669181443 50.94295597759255Q77.05969840194427 50.94295597759255 77.05969840194427 50.94295597759255L77.04338709470483 50.66891531125647H79.23571242539347Z"/><path fill="#EEE6D6" d="M118.83941974817257 62.178623297371836V66.70029429191716Q118.19803345620542 67.52241629092539 116.97397622597632 68.34453828993364Q115.74991899574722 69.16666028894187 114.02410508064165 69.70103958829722Q112.29829116553606 70.23541888765259 110.12684002622849 70.23541888765259Q107.088895850336 70.21910758041315 104.79706351695165 68.99440806737232Q102.50523118356729 67.7697085543315 101.22506787355562 65.53073074399536Q99.94490456354393 63.291752933659225 99.94490456354393 60.23815311423093Q99.94490456354393 57.206738813590974 101.21397511416143 54.970698109029286Q102.48304566477894 52.734657404467605 104.80260989664873 51.50995789142678Q107.12217412851851 50.28525837838596 110.23776762017019 50.28525837838596Q111.74499128501864 50.28525837838596 113.1005224687187 50.504163079603Q114.45605365241875 50.723067780820045 115.58419664943021 51.08682063697303Q116.71233964644168 51.45057349312602 117.50705757881632 51.904694202799554L117.72235612966337 56.3233055678468H117.47571952996088Q116.99810197409175 54.54529279339664 116.02492977674684 53.451739401974955Q115.05175757940194 52.35818601055327 113.7099418099106 51.84371078791544Q112.36812604041927 51.32923556527761 110.79240558987871 51.32923556527761Q108.53483503023233 51.32923556527761 106.92518063780562 52.43583532631246Q105.31552624537893 53.542435087347314 104.4620929592991 55.55891542698832Q103.60865967321925 57.57539576662933 103.60865967321925 60.349080708172636Q103.60865967321925 63.022930815168415 104.4232683014195 65.01167925632399Q105.23787692961974 67.00042769747957 106.753242867196 68.08777904550053Q108.26860880477224 69.1751303935215 110.37088073290025 69.19144170076095Q111.45463931144312 69.19144170076095 112.44803003646545 68.8870598620168Q113.44142076148779 68.58267802327266 114.24493663029386 67.99838130664354Q115.04845249909994 67.41408459001441 115.5051691018042 66.58543271575364L115.5325731684378 62.178623297371836Q115.5325731684378 60.945440298859474 114.1349657701238 60.945440298859474H113.69650070398606V60.67139963252339H120.62068407935709V60.945440298859474H120.20962307985297Q118.78461161490536 60.945440298859474 118.83941974817257 62.178623297371836ZM127.53240984435904 50.66891531125647V62.726704630044Q127.53240984435904 64.67761190887543 128.20870019287588 66.12937177675302Q128.8849905413927 67.5811316446306 130.11719004434963 68.37258463937897Q131.34938954730654 69.16403763412734 133.00928918885882 69.16403763412734Q134.745526818763 69.16403763412734 136.0103489361988 68.41369073932938Q137.27517105363458 67.66334384453143 137.97592836301058 66.30195183017437Q138.67668567238658 64.94055981581734 138.67668567238658 63.0829574962809V50.66891531125647H140.408387179933V62.972029902339195Q140.408387179933 65.17610365612565 139.47371180861586 66.80697345267714Q138.53903643729873 68.43784324922864 136.80083181628362 69.33663106844061Q135.0626271952685 70.23541888765259 132.6765064070337 70.23541888765259Q129.9693512600716 70.23541888765259 128.0680201857702 69.34478672206032Q126.1666891114688 68.45415455646807 125.18242415472972 66.82883113961367Q124.19815919799065 65.20350772275926 124.19815919799065 62.9994339689728V50.66891531125647ZM124.28037139789147 50.66891531125647V52.31315930927295H124.19815919799065Q124.19815919799065 51.71026984333358 123.77339616516973 51.32661291046306Q123.34863313234881 50.94295597759255 122.74574366640942 50.94295597759255Q122.74574366640942 50.94295597759255 122.52651113334056 50.94295597759255Q122.3072786002717 50.94295597759255 122.3072786002717 50.94295597759255V50.66891531125647ZM129.42329044207798 50.66891531125647V50.94295597759255Q129.42329044207798 50.94295597759255 129.20405790900912 50.94295597759255Q128.98482537594026 50.94295597759255 128.98482537594026 50.94295597759255Q128.3819359100009 50.94295597759255 127.95717287717997 51.32661291046306Q127.53240984435904 51.71026984333358 127.53240984435904 52.31315930927295H127.47760171109182V50.66891531125647ZM138.7588978722874 50.66891531125647V52.31315930927295H138.67668567238658Q138.67668567238658 51.71026984333358 138.25192263956566 51.32661291046306Q137.82715960674474 50.94295597759255 137.22427014080537 50.94295597759255Q137.22427014080537 50.94295597759255 137.00503760773648 50.94295597759255Q136.78580507466762 50.94295597759255 136.78580507466762 50.94295597759255V50.66891531125647ZM142.29926777765195 50.66891531125647V50.94295597759255Q142.29926777765195 50.94295597759255 142.0800352445831 50.94295597759255Q141.8608027115142 50.94295597759255 141.8608027115142 50.94295597759255Q141.25791324557483 50.94295597759255 140.8331502127539 51.32661291046306Q140.408387179933 51.71026984333358 140.408387179933 52.31315930927295H140.35357904666577V50.66891531125647ZM150.08464535641116 50.66891531125647V69.85176195478208H146.75039471004277V50.66891531125647ZM157.37281575354362 68.78038070125682 157.81652612931043 69.85176195478208H150.00243315651034V68.78038070125682ZM156.30536848224017 59.875370372741486V60.91934755963314H150.00243315651034V59.875370372741486ZM157.594670941427 50.66891531125647V51.74029656478173H150.00243315651034V50.66891531125647ZM159.2663190060771 64.63581000254565 157.89873832921126 69.85176195478208H152.7950252983238L153.7815716971337 68.78038070125682Q155.17852343174405 68.78038070125682 156.1853017391233 68.27274980483143Q157.19208004650253 67.76511890840605 157.87849303975 66.82652293575902Q158.56490603299747 65.887926963112 158.99654478566185 64.63581000254565ZM156.30536848224017 60.86453942636592V63.22784579389257H156.0313278159041V62.92771238833016Q156.0313278159041 62.08012655201539 155.46464035302978 61.50528343552135Q154.89795289015544 60.93044031902731 154.0503670538407 60.91934755963314V60.86453942636592ZM156.30536848224017 57.566872138482054V59.9301785060087H154.0503670538407V59.875370372741486Q154.89795289015544 59.84796630610788 155.47018673272686 59.26757680991675Q156.04242057529825 58.68718731372562 156.0313278159041 57.839601477410866V57.566872138482054ZM157.594670941427 51.65808436488091V54.51597525921977H157.32063027509093V54.13362965375653Q157.32063027509093 53.0765927163598 156.66618423261872 52.408444640570764Q156.01173819014647 51.74029656478173 154.92729718611614 51.71289249814812V51.65808436488091ZM157.594670941427 50.17564211185153V50.970360044226155L154.25137481212684 50.66891531125647Q154.8542642780662 50.66891531125647 155.52566391058963 50.58670311135565Q156.19706354311302 50.50449091145482 156.77254894241878 50.39487464492039Q157.34803434172454 50.28525837838596 157.594670941427 50.17564211185153ZM146.8326069099436 67.8512650905287V69.85176195478208H144.64028157925495V69.577721288446Q144.64028157925495 69.577721288446 144.8184080123734 69.577721288446Q144.99653444549185 69.577721288446 144.99653444549185 69.577721288446Q145.70904017796568 69.577721288446 146.21601541068742 69.07074605572424Q146.72299064340916 68.5637708230025 146.75039471004277 67.8512650905287ZM146.8326069099436 52.669412175509855H146.75039471004277Q146.7393019506486 51.95690644303605 146.22191784755518 51.4499312103143Q145.70453374446177 50.94295597759255 144.99653444549185 50.94295597759255Q144.99653444549185 50.94295597759255 144.82656366599312 50.94295597759255Q144.6565928864944 50.94295597759255 144.6565928864944 50.94295597759255L144.64028157925495 50.66891531125647H146.8326069099436ZM167.48292258845024 50.28525837838596Q167.98794421095297 50.28525837838596 168.70013549246687 50.34006651165318Q169.4123267739808 50.39487464492039 170.14148502643775 50.49078887813802Q170.87064327889473 50.58670311135565 171.4399400156917 50.68261734457327Q172.00923675248865 50.7785315777909 172.2395620449517 50.88814784432533L172.01770685706828 54.373709616422644H171.75997749797165Q171.75997749797165 52.98066510225026 170.75026208481796 52.154950333763935Q169.74054667166428 51.32923556527761 168.1530510362421 51.32923556527761Q166.57927081502862 51.32923556527761 165.6253470306976 52.15265551080121Q164.6714232463666 52.97607545632481 164.6381449681841 54.13682768692324Q164.6048666900016 54.84608186266269 165.04856368487648 55.48387538515176Q165.49226067975138 56.121668907640824 166.27785284384277 56.66909457660935L171.56552637672183 60.60282256147982Q172.6760601199785 61.336858149038335 173.19414149298632 62.39127243162052Q173.71222286599416 63.4456867142027 173.6567590690233 64.74479736716026Q173.5791097532641 67.28556112320982 171.84023608765347 68.7604900054312Q170.1013624220428 70.23541888765259 167.12341816547897 70.23541888765259Q166.08856674687058 70.23541888765259 165.03708957006285 70.05402751690787Q163.9856123932551 69.87263614616315 163.11651008274754 69.5078997944547Q162.24740777224 69.14316344274626 161.7215119583562 68.61726762886245Q161.550557683302 68.07896772817718 161.57274320209035 67.28815701624055Q161.59492872087867 66.4973463043039 161.78774068286938 65.67130370396576Q161.9805526448601 64.84526110362762 162.2722159458429 64.25346439708241H162.51885254554537Q162.40401773116565 65.66216455479059 162.9749402463298 66.80335392141524Q163.54586276149394 67.94454328803987 164.66324083096305 68.58430380163983Q165.7806189004322 69.22406431523981 167.27480957655936 69.19144170076095Q168.9706101511087 69.14250777904263 169.99760698616535 68.23067359021749Q171.02460382122203 67.31883940139234 171.02460382122203 65.9186361100476Q171.02460382122203 65.09063989949045 170.5897181436705 64.41891243511525Q170.15483246611893 63.74718497074003 169.2126303431019 63.18148100342116L164.2727395718801 59.435018600844316Q163.0179999564992 58.62333369752661 162.4728423487096 57.45571037893191Q161.92768474091997 56.288087060337205 162.0275195754675 55.02747323340741Q162.1051688912267 53.699018284489156 162.76417781784056 52.61916692638427Q163.42318674445443 51.539315568279385 164.61657497042364 50.91228697333267Q165.80996319639286 50.28525837838596 167.48292258845024 50.28525837838596ZM172.26174756374002 50.55929904472204 172.2284692855575 51.1347844440278H169.38035982320554V50.55929904472204ZM185.62771978020075 50.75112751115729V69.85176195478208H182.29346913383236V50.75112751115729ZM192.4487097171546 50.64151124462286V51.685488431514514H175.4724791968785V50.64151124462286ZM192.4487097171546 51.60327623161369V54.488571192586164L192.17466905081852 54.46116712595256V54.10622558712292Q192.17466905081852 53.032877342486756 191.51206735472658 52.37288492031744Q190.8494656586346 51.71289249814812 189.78133596184372 51.685488431514514V51.60327623161369ZM192.4487097171546 50.148238045217916V50.94295597759255L189.10541358785443 50.64151124462286Q189.7083030537938 50.64151124462286 190.37970268631722 50.55929904472204Q191.0511023188406 50.477086844821216 191.62658771814637 50.367470578286785Q192.20207311745213 50.257854311752354 192.4487097171546 50.148238045217916ZM182.37568133373318 67.8512650905287V69.85176195478208H180.18335600304457V69.577721288446Q180.18335600304457 69.577721288446 180.36148243616302 69.577721288446Q180.53960886928147 69.577721288446 180.53960886928147 69.577721288446Q181.25211460175527 69.577721288446 181.759089834477 69.07074605572424Q182.26606506719875 68.5637708230025 182.29346913383236 67.8512650905287ZM185.54550758029993 67.8512650905287H185.62771978020075Q185.65512384683436 68.5637708230025 186.16209907955613 69.07074605572424Q186.66907431227787 69.577721288446 187.38158004475167 69.577721288446Q187.38158004475167 69.577721288446 187.55970647787012 69.577721288446Q187.73783291098857 69.577721288446 187.73783291098857 69.577721288446V69.85176195478208H185.54550758029993ZM178.13985295218941 51.60327623161369V51.685488431514514Q177.05541194815908 51.71289249814812 176.40096590568686 52.37288492031744Q175.74651986321462 53.032877342486756 175.74651986321462 54.10622558712292V54.46116712595256L175.4724791968785 54.488571192586164V51.60327623161369ZM175.4724791968785 50.148238045217916Q175.74651986321462 50.257854311752354 176.30830322920357 50.367470578286785Q176.87008659519253 50.477086844821216 177.55518826103273 50.55929904472204Q178.24028992687292 50.64151124462286 178.8157753261787 50.64151124462286L175.4724791968785 50.94295597759255Z"/><path fill="#EEE6D6" d="M203.70538557246977 50.66891531125647H207.83042016899097Q209.80416863031436 50.66891531125647 211.29411087325983 51.17784415419722Q212.78405311620529 51.686772997137965 213.61890703386678 52.71442549589826Q214.4537609515283 53.74207799465856 214.4537609515283 55.3230437548282Q214.4537609515283 56.54057110980476 213.98201760720804 57.409345588460496Q213.5102742628878 58.278120067116234 212.77525517977386 58.773674708592Q212.0402360966599 59.269229350067754 211.20636567455384 59.41081256737743Q212.61441016855838 59.56348854408127 213.7027450121348 60.247934546217834Q214.79107985571122 60.932380548354395 215.40278063897395 62.03115248762135Q216.01448142223668 63.1299244268883 216.01448142223668 64.56668431493372Q216.01448142223668 66.24551791853999 215.12481937130798 67.43237626925668Q214.23515732037924 68.61923461997335 212.59677415301974 69.23549828737771Q210.95839098566026 69.85176195478208 208.74191314507237 69.85176195478208H205.9219169366253Q205.9219169366253 69.85176195478208 205.9356189699421 69.56075431750293Q205.94932100325892 69.26974668022378 205.94932100325892 68.9842854226417Q205.94932100325892 68.69882416505963 205.94932100325892 68.69882416505963H207.91126751791688Q209.20316587013443 68.69882416505963 210.16198037045888 68.2195808308233Q211.12079487078336 67.74033749658699 211.65256489621606 66.7537910977771Q212.1843349216488 65.7672446989672 212.1843349216488 64.28611377334511Q212.1843349216488 62.97334122974647 211.74489974084753 62.08630183363229Q211.30546456004626 61.19926243751812 210.57894234329575 60.67825733962775Q209.85242012654524 60.15725224173738 208.94744364482443 59.93475477104225Q208.04246716310365 59.71225730034711 207.10029180187044 59.71225730034711V59.46562070064464Q207.7416780938376 59.46562070064464 208.3980643656369 59.284229329899915Q209.05445063743625 59.102837959155195 209.6061113586946 58.67513782055982Q210.1577720799529 58.24743768196444 210.50162085938837 57.494481513243855Q210.84546963882383 56.741525344523275 210.84546963882383 55.61470705581099Q210.84546963882383 54.2816892227511 210.40439529876346 53.4213982295669Q209.96332095870312 52.561107236382696 209.14479172917297 52.15331117450484Q208.3262624996428 51.74551511262699 207.17725869214217 51.74551511262699H203.97942623880584Q203.97942623880584 51.71811104599338 203.91091607222182 51.462663128967556Q203.8424059056378 51.20721521194173 203.77389573905378 50.9380652615991Q203.70538557246977 50.66891531125647 203.70538557246977 50.66891531125647ZM206.16855353632778 50.66891531125647V69.85176195478208H202.8343028899594V50.66891531125647ZM202.9165150898602 67.8512650905287V69.85176195478208H200.72418975917157L200.740501066411 69.577721288446Q200.79530919967823 69.577721288446 200.92417387922654 69.577721288446Q201.05303855877486 69.577721288446 201.08044262540847 69.577721288446Q201.7929483578823 69.577721288446 202.30807924422376 69.07074605572424Q202.82321013056523 68.5637708230025 202.8343028899594 67.8512650905287ZM202.9165150898602 52.669412175509855H202.8343028899594Q202.82321013056523 51.95690644303605 202.30807924422376 51.4499312103143Q201.7929483578823 50.94295597759255 201.08044262540847 50.94295597759255Q201.05303855877486 50.94295597759255 200.92417387922654 50.94295597759255Q200.79530919967823 50.94295597759255 200.740501066411 50.94295597759255L200.72418975917157 50.66891531125647H202.9165150898602ZM229.0776440547528 50.28525837838596Q232.25391989122062 50.28525837838596 234.61230878097 51.50995789142678Q236.97069767071937 52.734657404467605 238.2675001198223 54.970698109029286Q239.56430256892523 57.206738813590974 239.56430256892523 60.26033863301927Q239.56430256892523 63.3028456930534 238.2675001198223 65.54443277731217Q236.97069767071937 67.78601986157094 234.61230878097 69.01071937461177Q232.25391989122062 70.23541888765259 229.0776440547528 70.23541888765259Q225.91767952552442 70.23541888765259 223.56483701547214 69.01071937461177Q221.21199450541985 67.78601986157094 219.91519205631693 65.54997915700926Q218.61838960721397 63.31393845244757 218.61838960721397 60.26033863301927Q218.61838960721397 57.21783157298515 219.91519205631693 54.97624448872638Q221.21199450541985 52.734657404467605 223.56483701547214 51.50995789142678Q225.91767952552442 50.28525837838596 229.0776440547528 50.28525837838596ZM229.0776440547528 69.19144170076095Q231.15185625254355 69.19144170076095 232.67015929589425 68.09038831942317Q234.18846233924495 66.9893349380854 235.02264721231091 64.98949373753565Q235.85683208537688 62.9896525369859 235.85683208537688 60.26033863301927Q235.85683208537688 57.531024729052646 235.02264721231091 55.53118352850289Q234.18846233924495 53.53134232795314 232.67015929589425 52.43028894661538Q231.15185625254355 51.32923556527761 229.0776440547528 51.32923556527761Q227.03083592359565 51.32923556527761 225.51253288024495 52.43028894661538Q223.99422983689425 53.53134232795314 223.16004496382828 55.53118352850289Q222.32586009076235 57.531024729052646 222.32586009076235 60.26033863301927Q222.32586009076235 62.9896525369859 223.16004496382828 64.98949373753565Q223.99422983689425 66.9893349380854 225.51253288024495 68.09038831942317Q227.03083592359565 69.19144170076095 229.0776440547528 69.19144170076095ZM252.7821616928237 50.28525837838596Q255.95843752929153 50.28525837838596 258.3168264190409 51.50995789142678Q260.67521530879026 52.734657404467605 261.97201775789324 54.970698109029286Q263.26882020699617 57.206738813590974 263.26882020699617 60.26033863301927Q263.26882020699617 63.3028456930534 261.97201775789324 65.54443277731217Q260.67521530879026 67.78601986157094 258.3168264190409 69.01071937461177Q255.95843752929153 70.23541888765259 252.7821616928237 70.23541888765259Q249.62219716359533 70.23541888765259 247.26935465354305 69.01071937461177Q244.91651214349076 67.78601986157094 243.61970969438784 65.54997915700926Q242.32290724528488 63.31393845244757 242.32290724528488 60.26033863301927Q242.32290724528488 57.21783157298515 243.61970969438784 54.97624448872638Q244.91651214349076 52.734657404467605 247.26935465354305 51.50995789142678Q249.62219716359533 50.28525837838596 252.7821616928237 50.28525837838596ZM252.7821616928237 69.19144170076095Q254.85637389061446 69.19144170076095 256.37467693396513 68.09038831942317Q257.89297997731586 66.9893349380854 258.7271648503818 64.98949373753565Q259.5613497234478 62.9896525369859 259.5613497234478 60.26033863301927Q259.5613497234478 57.531024729052646 258.7271648503818 55.53118352850289Q257.89297997731586 53.53134232795314 256.37467693396513 52.43028894661538Q254.85637389061446 51.32923556527761 252.7821616928237 51.32923556527761Q250.73535356166656 51.32923556527761 249.21705051831586 52.43028894661538Q247.69874747496516 53.53134232795314 246.8645626018992 55.53118352850289Q246.03037772883326 57.531024729052646 246.03037772883326 60.26033863301927Q246.03037772883326 62.9896525369859 246.8645626018992 64.98949373753565Q247.69874747496516 66.9893349380854 249.21705051831586 68.09038831942317Q250.73535356166656 69.19144170076095 252.7821616928237 69.19144170076095ZM274.6800849713227 58.46923934628021 282.06350055707725 68.0659079776721Q282.6722642345655 68.80256622004516 283.31136908446183 69.17644172092878Q283.9504739343582 69.55031722181239 284.8 69.577721288446V69.85176195478208H282.9005957741338Q282.6154623484036 69.85176195478208 281.98092038264883 69.81620223452876Q281.34637841689414 69.78064251427543 280.56306769487355 69.60218824930516Q279.779756972853 69.42373398433489 278.9908998711354 69.00320600380377Q278.20204276941774 68.58267802327266 277.6030605239164 67.81274150271709Q277.514318448763 67.69072114938122 277.08466469994863 67.13187488916671Q276.6550109511343 66.57302862895219 276.0345122314401 65.76298288489357Q275.4140135117459 64.95293714083496 274.7390344906363 64.0639441345018Q274.06405546952675 63.17495112816862 273.47313744155036 62.40280564537342Q272.882219413574 61.63066016257822 272.50618066849813 61.139294855344914Q272.13014192342223 60.647929548111605 272.13014192342223 60.647929548111605ZM281.9010163866027 50.860743777691724 273.6739221849714 60.537001954169895 272.13014192342223 60.647929548111605 279.6662602476644 50.860743777691724ZM283.81408250310994 50.66891531125647V50.91840433480316H283.7044662365755Q282.80013203766646 50.91840433480316 282.01911613860864 51.27877736881504Q281.2381002395508 51.63915040282692 280.69001890687866 52.25835117600573L278.63077992713625 52.20354304273852Q278.975940033979 51.737673909967185 278.7540982269875 51.32661291046306Q278.532256419996 50.91555191095894 277.97677991439434 50.91555191095894H277.6990416615936V50.66891531125647H283.7044662365755ZM271.2532117911468 50.66891531125647V69.85176195478208H267.9189611447784V50.66891531125647ZM268.0011733446792 67.8512650905287V69.85176195478208H265.8088480139906V69.577721288446Q265.8310335327789 69.577721288446 265.99252082680607 69.577721288446Q266.1540081208333 69.577721288446 266.1651008802275 69.577721288446Q266.8776066127013 69.577721288446 267.38458184542304 69.07074605572424Q267.8915570781448 68.5637708230025 267.9189611447784 67.8512650905287ZM268.0011733446792 52.669412175509855H267.9189611447784Q267.8915570781448 51.95690644303605 267.38458184542304 51.4499312103143Q266.8776066127013 50.94295597759255 266.1651008802275 50.94295597759255Q266.1540081208333 50.94295597759255 265.99252082680607 50.94295597759255Q265.8310335327789 50.94295597759255 265.8088480139906 50.94295597759255V50.66891531125647H268.0011733446792ZM271.17099959124596 67.8512650905287H271.2532117911468Q271.2806158577804 68.5637708230025 271.78759109050213 69.07074605572424Q272.2945663232239 69.577721288446 273.0070720556977 69.577721288446Q273.02925757448605 69.577721288446 273.1834425040777 69.577721288446Q273.3376274336693 69.577721288446 273.3633249219346 69.577721288446V69.85176195478208H271.17099959124596ZM271.17099959124596 52.669412175509855V50.66891531125647H273.3633249219346V50.94295597759255Q273.33592085530097 50.94295597759255 273.1825892148935 50.94295597759255Q273.02925757448605 50.94295597759255 273.0070720556977 50.94295597759255Q272.2945663232239 50.94295597759255 271.78759109050213 51.4499312103143Q271.2806158577804 51.95690644303605 271.2532117911468 52.669412175509855Z"/></svg>
+    <p class="fuss">© 2026 The Guestbook<br><a href="https://liasoertig.ch">a liasoertig production</a><br><a href="/impressum.html">Impressum</a>&emsp;<a href="/datenschutz.html">Datenschutz</a></p>
   </div>
 </footer>
 
 <script>
 (function(){
-  var navToggle = document.querySelector('.nav-toggle');
-  var navList = document.querySelector('nav ul');
-  if(!navToggle || !navList) return;
-  navToggle.addEventListener('click', function(){
-    var isOpen = navList.classList.toggle('is-open');
-    navToggle.classList.toggle('is-open', isOpen);
-    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  });
-  navList.querySelectorAll('a').forEach(function(link){
-    link.addEventListener('click', function(){
-      navList.classList.remove('is-open');
-      navToggle.classList.remove('is-open');
-      navToggle.setAttribute('aria-expanded','false');
+  var form=document.getElementById('anfrage');
+  function setzeArt(art){
+    var ev=art==='event',ber=document.getElementById('kontakt');
+    document.querySelectorAll('#kontakt-schalter button').forEach(function(x){x.setAttribute('aria-pressed',x.dataset.art===art?'true':'false');});
+    ber.classList.toggle('moos',ev);ber.classList.toggle('bordeaux',!ev);
+    document.getElementById('anlass').value=ev?'Event':'Hochzeit';
+    document.getElementById('datum-label').textContent=ev?'Eventdatum':'Hochzeitsdatum';
+    form.querySelectorAll('[data-fuer]').forEach(function(el){
+      var an=el.dataset.fuer===art; el.hidden=!an;
+      el.querySelectorAll('input').forEach(function(i){i.disabled=!an; if(!an)i.checked=false;});
+      if(el.tagName==='DIV'){var i=el.querySelector('input'); if(i){i.disabled=!an; if(!an)i.value='';}}
     });
+  }
+  document.querySelectorAll('#kontakt-schalter button').forEach(function(b){
+    b.addEventListener('click',function(){setzeArt(b.dataset.art);});
+  });
+  setzeArt('hochzeit');
+  document.querySelectorAll('#pakete .umschalter button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#pakete .umschalter button').forEach(function(x){
+        var an=x===b; x.setAttribute('aria-pressed',an?'true':'false');
+        document.getElementById(x.dataset.ziel).hidden=!an;
+      });
+      var ber=document.getElementById('pakete');
+      ber.classList.toggle('moos',b.dataset.farbe==='moos');
+      ber.classList.toggle('bordeaux',b.dataset.farbe!=='moos');
+      setzeArt(b.dataset.farbe==='moos'?'event':'hochzeit');
+    });
+  });
+  var box=document.getElementById('kontakt-box');
+  var fehler=document.getElementById('fehler');
+  document.querySelectorAll('input[name="paket"]').forEach(function(r){
+    r.addEventListener('change',function(){
+      var z=document.getElementById('zusatz-gruppe'),offen=r.dataset.art==='offen';
+      z.classList.toggle('aus',offen);
+      if(offen)z.querySelectorAll('input').forEach(function(c){c.checked=false;});
+    });
+  });
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var pflicht=['vorname','nachname','email'];
+    for(var i=0;i<pflicht.length;i++){
+      var f=document.getElementById(pflicht[i]);
+      if(!f.value.trim()||(f.type==='email'&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.value))){
+        fehler.textContent=f.type==='email'?'Bitte eine gültige E-Mail-Adresse angeben.':'Bitte Vorname, Nachname und E-Mail ausfüllen.';
+        f.focus();return;
+      }
+    }
+    fehler.textContent='';
+    var knopf=form.querySelector('button[type="submit"]'),alt=knopf.textContent;
+    var d=new FormData(form),daten={};
+    d.forEach(function(v,k){ if(k==='zusatz'){daten.zusatz=daten.zusatz?daten.zusatz+', '+v:v;} else daten[k]=v; });
+    if(daten._honey){box.classList.add('gesendet');return;}
+    delete daten._honey;
+    if(!daten.paket)daten.paket='Nicht gewählt';
+    if(!daten.zusatz)daten.zusatz='Keine';
+    daten._subject='Neue '+(daten.anlass==='Event'?'Eventanfrage':'Hochzeitsanfrage')+' über theguestbook.ch: '+daten.vorname+' '+daten.nachname;
+    daten._replyto=daten.email;
+    daten._template='table';
+    var fuerOfferte={};['anlass','vorname','nachname','email','telefon','datum','ort','gaeste','paket','zusatz','anlass_oder_firma'].forEach(function(k){if(daten[k]&&daten[k]!=='Keine'&&daten[k]!=='Nicht gewählt')fuerOfferte[k]=daten[k];});
+    daten['Offerte erstellen']='https://theguestbook.ch/offerte.html#'+encodeURIComponent(JSON.stringify(fuerOfferte));
+    daten._autoresponse='Danke für eure Anfrage bei The Guestbook! Wir haben eure Nachricht erhalten und melden uns in Kürze bei euch.\n\nSo geht es weiter:\n\n1. Wir melden uns und besprechen gemeinsam Datum, Ablauf und eure Wünsche.\n2. Ihr erhaltet eine Offerte und den Vertrag, damit euer Tag fix reserviert ist.\n3. Am Drehtag sind wir vor Ort und sammeln die Stimmen eurer Gäste.\n\nHerzliche Grüsse\nLias\nThe Guestbook\ntheguestbook.ch';
+    knopf.disabled=true;knopf.textContent='Wird gesendet';
+    fetch('https://formsubmit.co/ajax/info@liasoertig.ch',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(daten)})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+      .then(function(res){
+        if(res.ok&&String(res.j.success)==='true'){box.classList.add('gesendet');}
+        else throw new Error('fehlgeschlagen');
+      })
+      .catch(function(){
+        fehler.textContent='Die Anfrage konnte nicht gesendet werden. Bitte versucht es nochmals oder schreibt uns an info@liasoertig.ch.';
+      })
+      .then(function(){knopf.disabled=false;knopf.textContent=alt;});
   });
 })();
-</script>
 
-<script>
-document.querySelectorAll('.pakete-toggle').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    var item = btn.closest('.pakete-item');
-    if(item.classList.contains('is-open')) return; // immer bleibt eins offen
-    document.querySelectorAll('.pakete-item').forEach(function(i){
-      i.classList.remove('is-open');
-      i.querySelector('.pakete-toggle').setAttribute('aria-expanded','false');
-      i.querySelector('.pakete-icon').textContent = '+';
+
+(function(){
+  var logo=document.querySelector('.logo-hero'),band=document.getElementById('band');
+  if(!logo||!band)return;
+  var str=band.querySelector('.streifen'),kappe=band.querySelector('.kappe');
+  var Z=64,top0=0,w0=0,h0=0,dist=1,safe=0,vw=0,vh=0,lauf=false,zeigt=false;
+  var ruhig=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function messen(){
+    safe=document.getElementById('safe-probe').offsetHeight||0;zeichnen();
+  }
+  function zeichnen(){lauf=false;
+    var y=window.scrollY,r=logo.getBoundingClientRect();
+    top0=r.top+y;w0=r.width;h0=r.height;dist=Math.max(1,top0+h0*1.4+60);
+    vw=document.documentElement.clientWidth;vh=window.innerHeight;
+    var p=Math.min(1,Math.max(0,y/dist));
+    if(ruhig)p=p>=1?1:0;
+    document.documentElement.classList.toggle('band-oben',p>=1);
+    if(p<=0){if(zeigt){band.style.visibility='hidden';logo.style.visibility='';zeigt=false;}return;}
+    if(!zeigt){band.style.visibility='visible';logo.style.visibility='hidden';zeigt=true;}
+    var e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+    if(!ruhig)str.style.setProperty('--lauf',(-(y*0.12)%13.17).toFixed(2)+'px');
+    var t=top0-y,w=w0+(vw-w0)*e,h=h0+(Z-h0)*e,ex=safe*e,top=Math.max(0,t+(0-t)*e);
+    var left=(vw-w)/2,s=h/Z,cy=top+ex+h/2;
+    str.style.transform='translate3d(0,'+(cy-Z/2)+'px,0) scale('+s+')';
+    band.style.clipPath='inset('+top+'px '+(vw-left-w)+'px '+Math.max(0,vh-top-ex-h)+'px '+left+'px)';
+    kappe.style.opacity=e;
+  }
+  function tick(){if(!lauf){lauf=true;requestAnimationFrame(zeichnen);}}
+  window.addEventListener('scroll',tick,{passive:true});
+  window.addEventListener('resize',tick);
+  str.addEventListener('click',function(){window.scrollTo({top:0,behavior:ruhig?'auto':'smooth'});});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(messen);
+  window.addEventListener('load',messen);messen();
+})();
+
+(function(){
+  var spur=document.getElementById('spur');if(!spur)return;
+  var kader=spur.querySelector('.spur-kader'),fenster=spur.querySelector('.spur-fenster'),rand=spur.querySelector('.spur-rand'),marken=spur.querySelector('.spur-marken');
+  var akt=spur.querySelector('.spur-akt'),titel=spur.querySelector('.spur-titel');
+  var K=[['top','Start'],['idee','Idee'],['pakete','Pakete'],['ueber-uns','Über uns'],['kontakt','Kontakt'],['fragen','Fragen']],ROEM=['I','II','III','IV','V','VI'];
+  var els=K.map(function(k){return document.getElementById(k[0]);});
+  var punkte=[],labels=[],aktuell=-1,eintritt=null,ruheBis=0,zuletzt=-1,zuletztZeit=0,zieht=false,lauf=false,zeigT=0,offenT=0,maxS=1,h=1,dunkelZ=null,bereit=false;
+  function pad(){return parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0;}
+  function messen(){
+    maxS=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);h=spur.clientHeight;var pd=pad();
+    punkte=els.map(function(el,i){if(!el||i===0)return 0;return Math.min(maxS,Math.max(0,el.getBoundingClientRect().top+window.scrollY-pd));});
+    marken.innerHTML='';labels=[];
+    punkte.forEach(function(sp,i){
+      var y=sp/maxS*h,t=document.createElement('span');t.className='spur-tick';t.style.top=y.toFixed(1)+'px';marken.appendChild(t);
+      var b=document.createElement('button');b.type='button';b.className='spur-marke';b.textContent=K[i][1];b.dataset.y=y;
+      b.addEventListener('click',function(){zu(i);});marken.appendChild(b);labels.push(b);
     });
-    item.classList.add('is-open');
-    btn.setAttribute('aria-expanded','true');
-    item.querySelector('.pakete-icon').textContent = '–';
+    var unten=-1e9;
+    labels.forEach(function(b){var hh=b.offsetHeight,y=Math.max(+b.dataset.y,unten+hh/2+6);b.style.top=y.toFixed(1)+'px';unten=y+hh/2;});
+    var oben=1e9;
+    for(var j=labels.length-1;j>=0;j--){var b=labels[j],hh=b.offsetHeight,y=Math.min(parseFloat(b.style.top),h-hh/2,oben-hh/2-6);b.style.top=y.toFixed(1)+'px';oben=y-hh/2;}
+    ruheBis=Date.now()+700;zeichnen();bereit=true;
+  }
+  function kapitel(y){var i=0;for(var j=0;j<punkte.length;j++){if(y>=punkte[j]-2)i=j;}
+    if(aktuell<0||i===aktuell)return i;
+    var grenze=punkte[Math.max(i,aktuell)];
+    return Math.abs(y-grenze)<14?aktuell:i;}
+  function zeigen(ms){clearTimeout(zeigT);spur.classList.add('zeigen');if(ms)zeigT=setTimeout(function(){if(!zieht&&!spur.classList.contains('offen'))spur.classList.remove('zeigen');},ms);}
+  function zeichnen(){lauf=false;
+    var y=window.scrollY,t=Math.min(1,Math.max(0,y/maxS));
+    kader.style.transform='translate3d(0,'+(t*h).toFixed(1)+'px,0)';
+    kader.setAttribute('aria-valuenow',Math.round(t*100));
+    var i=kapitel(y);
+    if(i!==aktuell){var erst=aktuell===-1;aktuell=i;kader.setAttribute('aria-valuetext',K[i][1]);
+      titel.textContent=K[i][1];
+      if(spur.classList.contains('zeigen')){titel.classList.remove('wechsel');void titel.offsetWidth;titel.classList.add('wechsel');}
+      labels.forEach(function(b,j){b.setAttribute('aria-current',j===i?'true':'false');});
+      var jetzt=Date.now();
+      if(!erst&&bereit&&!zieht&&jetzt>ruheBis&&document.documentElement.classList.contains('band-oben')&&!(i===zuletzt&&jetzt-zuletztZeit<1500)){
+        zuletzt=i;zuletztZeit=jetzt;eintritt=y;zeigen(2800);}}
+    if(eintritt!==null&&!zieht&&!spur.classList.contains('offen')&&Math.abs(y-eintritt)>window.innerHeight*0.45){eintritt=null;clearTimeout(zeigT);spur.classList.remove('zeigen');}
+    var py=spur.getBoundingClientRect().top+t*h,dunkel=false,liste=document.elementsFromPoint(window.innerWidth-40,py);
+    for(var k=0;k<liste.length;k++){if(spur.contains(liste[k]))continue;dunkel=!!liste[k].closest('.dunkel,.still,.abspann,#band');break;}
+    if(dunkel!==dunkelZ){dunkelZ=dunkel;spur.classList.toggle('auf-dunkel',dunkel);}
+  }
+  function tick(){if(!lauf){lauf=true;requestAnimationFrame(zeichnen);}}
+  function zu(i){window.scrollTo({top:punkte[i]||0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});schliessen(600);}
+  function oeffnen(){clearTimeout(offenT);spur.classList.add('offen');zeigen();}
+  function schliessen(ms){clearTimeout(offenT);offenT=setTimeout(function(){if(!zieht&&spur.classList.contains('offen')){spur.classList.remove('offen');zeigen(900);}},ms||0);}
+  function ziehen(e){var r=spur.getBoundingClientRect(),t=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));window.scrollTo(0,t*maxS);}
+  function greifen(el){
+    el.addEventListener('pointerdown',function(e){e.preventDefault();zieht=true;el.setPointerCapture(e.pointerId);document.documentElement.style.scrollBehavior='auto';oeffnen();if(el===rand)ziehen(e);});
+    el.addEventListener('pointermove',function(e){if(zieht)ziehen(e);});
+    function los(){if(!zieht)return;zieht=false;document.documentElement.style.scrollBehavior='';schliessen(2500);}
+    el.addEventListener('pointerup',los);el.addEventListener('pointercancel',los);
+  }
+  greifen(fenster);greifen(rand);
+  rand.addEventListener('pointerenter',function(e){if(e.pointerType==='mouse')zeigen(1500);});
+  kader.addEventListener('focus',function(){zeigen();});kader.addEventListener('blur',function(){zeigen(600);});
+  kader.addEventListener('keydown',function(e){
+    if(e.key==='ArrowDown'||e.key==='PageDown'){e.preventDefault();zu(Math.min(K.length-1,aktuell+1));}
+    else if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();zu(Math.max(0,aktuell-1));}
+    else if(e.key==='Enter'||e.key===' '){e.preventDefault();spur.classList.contains('offen')?schliessen(0):oeffnen();}
   });
-});
-
-document.querySelectorAll('.faq-toggle').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    var item = btn.closest('.faq-item');
-    var wasOpen = item.classList.contains('is-open');
-    document.querySelectorAll('.faq-item').forEach(function(i){
-      i.classList.remove('is-open');
-      i.querySelector('.faq-toggle').setAttribute('aria-expanded','false');
-      i.querySelector('.faq-icon').textContent = '+';
-    });
-    if(!wasOpen){
-      item.classList.add('is-open');
-      btn.setAttribute('aria-expanded','true');
-      item.querySelector('.faq-icon').textContent = '–';
-    }
-  });
-});
+  marken.addEventListener('pointerenter',function(){clearTimeout(offenT);},true);
+  document.addEventListener('pointerdown',function(e){if(!spur.contains(e.target))schliessen(0);});
+  document.addEventListener('click',function(e){if(e.target.closest('.umschalter,summary'))ruheBis=Date.now()+900;},true);
+  window.addEventListener('scroll',tick,{passive:true});
+  var mT=0;function neu(){clearTimeout(mT);mT=setTimeout(messen,120);}
+  window.addEventListener('resize',neu);
+  if(window.ResizeObserver)new ResizeObserver(neu).observe(document.body);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(messen);window.addEventListener('load',messen);messen();
+})();
 </script>
-
 </body>
 </html>
