@@ -294,9 +294,10 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
 #spur.auf-dunkel{--tab-bg:var(--papier);--tab-fg:var(--bordeaux)}
 /* Bordeaux hinter der Statusleiste: Safari (iOS 26) prüft 8 px unter dem oberen Rand, welches Element getroffen wird, und nimmt die Hintergrundfarbe des ersten fixierten Elements darüber.
    Darum ist der Streifen selbst fixiert und diese Fläche antippbar (pointer-events), sonst wird sie übersprungen. Erscheint erst, wenn das Band oben ist */
-#kopf-tint{position:fixed;top:-160px;left:0;right:0;height:calc(160px + env(safe-area-inset-top,0px) + 64px);background-color:var(--bordeaux);z-index:39;visibility:hidden;cursor:pointer}
+#kopf-tint{position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top,0px) + 64px);background-color:var(--bordeaux);z-index:39;visibility:hidden;cursor:pointer}
 .band-oben #kopf-tint{visibility:visible}
-/* Ragt 160 px über den sichtbaren Bereich hinaus: Safari zeigt hinter der Statusleiste den Inhalt oberhalb der Seite, dort liegt jetzt Bordeaux */
+/* Bordeaux hinter der Statusleiste, von Anfang an: Safari zeigt dort den Bereich oberhalb der Seite. Diese Fläche liegt genau dort (und in der Safe Area, falls vorhanden) */
+#statusleiste{position:fixed;top:-160px;left:0;right:0;height:calc(160px + env(safe-area-inset-top,0px));background-color:var(--bordeaux);z-index:41;pointer-events:none}
 .band-oben #spur{visibility:visible}
 .spur-rand{position:absolute;right:0;top:-40px;bottom:-20px;width:18px;touch-action:none;cursor:grab}
 .band-oben .spur-rand{pointer-events:auto}
@@ -375,6 +376,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
 <body>
 <div class="korn" aria-hidden="true"></div>
 
+<div id="statusleiste" aria-hidden="true"></div>
 <div id="kopf-tint" aria-hidden="true"></div>
 <div id="band" aria-hidden="true"><div class="kappe"></div>
   <div class="streifen" role="button" tabindex="-1" aria-label="The Guestbook, nach oben"><div class="innen"><div class="loecher"></div><span class="band-linie o"></span><span class="band-linie u"></span>
