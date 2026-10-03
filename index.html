@@ -744,11 +744,13 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
       kop:kv?e:0};
   }
   /* Wo möglich: scrollgesteuerte Animation. Der Browser bewegt das Band direkt mit dem Scrollen, ohne JavaScript dazwischen */
-  var tl=!ruhig&&('ScrollTimeline' in window)&&!!Element.prototype.animate,anim=[];
+  var tl=!ruhig&&('ScrollTimeline' in window)&&!!Element.prototype.animate,anim=null,sig='',stl=null;
+  /* Animation einmal anlegen und danach nur die Werte austauschen. Neu anlegen liess das Band für ein Bild ungeformt aufblitzen */
   function timeline(){
-    anim.forEach(function(a){a.cancel();});anim=[];
     var maxS=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
-    var timeline=new ScrollTimeline({source:document.documentElement,axis:'block'});
+    var neuSig=[maxS,dist,top0,w0,h0,vw,safe].map(function(v){return Math.round(v);}).join(',');
+    if(anim&&neuSig===sig)return;
+    sig=neuSig;
     var N=60,end=Math.min(dist,maxS),k1=[],k2=[],k3=[];
     for(var i=0;i<=N;i++){var y=end*i/N,z=zustand(y),o=y/maxS;
       k1.push({offset:o,transform:z.str});k2.push({offset:o,transform:z.innen});k3.push({offset:o,transform:z.kappe,opacity:z.kop});}
@@ -756,12 +758,15 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
     var P=13.17/0.12,k4=[],n=Math.ceil(maxS/P);
     for(var j=0;j<n;j++){var o0=j*P/maxS,o1=Math.min(1,(j+1)*P/maxS),f=o1<1?1:(maxS-j*P)/P;
       k4.push({offset:o0,transform:'translate3d(0,0,0)'});k4.push({offset:o1,transform:'translate3d('+(-13.17*f).toFixed(2)+'px,0,0)'});}
-    var opt={timeline:timeline,fill:'both',easing:'linear'};
-    anim=[str.animate(k1,opt),innen.animate(k2,opt),kappe.animate(k3,opt),loecher.animate(k4,opt)];
+    var keys=[k1,k2,k3,k4],els=[str,innen,kappe,loecher];
+    if(anim){for(var m=0;m<4;m++)anim[m].effect.setKeyframes(keys[m]);return;}
+    stl=new ScrollTimeline({source:document.documentElement,axis:'block'});
+    var opt={timeline:stl,fill:'both',easing:'linear'};
+    anim=els.map(function(el,m){return el.animate(keys[m],opt);});
   }
   /* Nur transform und opacity: läuft auf der Grafikkarte, ohne Neuzeichnen */
   function zeichnen(){lauf=false;
-    if(messNoetig){messen();if(tl){try{timeline();}catch(err){tl=false;anim=[];}}}
+    if(messNoetig){messen();if(tl){try{timeline();}catch(err){tl=false;if(anim)anim.forEach(function(x){x.cancel();});anim=null;}}}
     var y=window.scrollY,z=zustand(y),p=z.p;
     var oben=p>=1;if(oben!==istOben){istOben=oben;document.documentElement.classList.toggle('band-oben',oben);}
     if(p<=0){if(zeigt){band.style.visibility='hidden';logo.style.visibility='';zeigt=false;}return;}
