@@ -296,9 +296,10 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
 #spur.auf-dunkel{--tab-bg:var(--papier);--tab-fg:var(--bordeaux)}
 /* Bordeaux hinter der Statusleiste, immer: Safari (iOS 26) prüft wenige Pixel unter dem oberen Rand, welches Element getroffen würde,
    und färbt die Statusleiste mit der Farbe des ersten fixierten Elements. Diese Fläche liegt oberhalb der Seite und ragt 10 px in den
-   sichtbaren Bereich, damit Safari sie trifft. Darum antippbar (ohne pointer-events:none). Liegt unter dem Band (z-index 39), das sie oben abdeckt */
-#statusleiste{position:fixed;top:-160px;left:0;right:0;height:calc(170px + env(safe-area-inset-top,0px));background-color:var(--bordeaux);z-index:39;cursor:pointer}
-@media (min-width:1000px){#statusleiste{height:calc(160px + env(safe-area-inset-top,0px))}}/* Desktop: nichts im sichtbaren Bereich */
+   sichtbaren Bereich, damit Safari sie trifft. Diese 10 px sind ein durchsichtiger Rand (background-clip), sichtbar endet das Bordeaux genau an der Statusleiste.
+   Darum antippbar (ohne pointer-events:none). Liegt unter dem Band (z-index 39) */
+#statusleiste{position:fixed;top:-160px;left:0;right:0;box-sizing:border-box;height:calc(170px + env(safe-area-inset-top,0px));border-bottom:10px solid transparent;background-clip:padding-box;background-color:var(--bordeaux);z-index:39;cursor:pointer}
+@media (min-width:1000px){#statusleiste{height:calc(160px + env(safe-area-inset-top,0px));border-bottom:0}}/* Desktop: nichts im sichtbaren Bereich */
 .band-oben #spur{visibility:visible}
 .spur-rand{position:absolute;right:0;top:-40px;bottom:-20px;width:18px;touch-action:none;cursor:grab}
 .band-oben .spur-rand{pointer-events:auto}
