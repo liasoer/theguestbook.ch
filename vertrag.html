@@ -72,7 +72,7 @@ p{margin:0 0 6px}
   <p>Vertragsgenerator. Alle Felder im Blatt lassen sich anklicken und ändern.</p>
   <div class="knoepfe">
     <button type="button" id="b-einst">Einstellungen</button>
-    <button type="button" class="voll" id="b-druck" title="Im Druckfenster: Ziel PDF, Papier A4, Hochformat, Hintergrundgrafiken an">Als PDF speichern</button>
+    <button type="button" class="voll" id="b-druck">PDF herunterladen</button>
   </div>
 </div>
 <div class="einst" id="einst">
@@ -198,6 +198,7 @@ p{margin:0 0 6px}
   <footer class="fuss"><span>The Guestbook</span><span>theguestbook.ch</span><span>info@liasoertig.ch</span></footer>
 </article>
 
+<script src="/pdf-download.js"></script>
 <script>
 (function(){
   var PAKETE={'Die Interviews':1900,'Abend Interviews':1900,'Der Moment davor':600,'Privates Event':1900,'Firmen Event':1900,'Highlights':300};
@@ -252,7 +253,7 @@ p{margin:0 0 6px}
   });
   document.querySelectorAll('#wahl li').forEach(function(li){li.addEventListener('click',function(){document.querySelectorAll('#wahl li').forEach(function(x){x.classList.toggle('an',x===li&&!li.classList.contains('an'));});});});
   $('b-einst').addEventListener('click',function(){$('einst').classList.toggle('offen');});
-  $('b-druck').addEventListener('click',function(){try{if(!localStorage.getItem('tgb-druckhinweis')){alert('Im Druckfenster bitte wählen: Als PDF sichern, Papier A4, Hochformat und Hintergrundgrafiken einschalten.');localStorage.setItem('tgb-druckhinweis','1');}}catch(e){}var alt=document.title;document.title='Vertrag '+($('v-onr').textContent||'')+(name?' '+name:'');window.print();setTimeout(function(){document.title=alt;},500);});
+  $('b-druck').addEventListener('click',function(){tgbPdf(this,document.querySelector('.blatt'),'Vertrag '+($('v-onr').textContent||'')+(name?' '+name:''),[10,0,12,0]);});
   einst();
 })();
 </script>

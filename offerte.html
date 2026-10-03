@@ -105,7 +105,7 @@ h2{font-family:"Cinzel",Georgia,serif;font-weight:600;font-size:13px;letter-spac
   <div class="knoepfe">
     <button type="button" id="b-einst">Einstellungen</button>
     <button type="button" id="b-vertrag">Vertrag erstellen</button>
-    <button type="button" class="voll" id="b-druck" title="Im Druckfenster: Ziel PDF, Papier A4, Hochformat, Hintergrundgrafiken an">Als PDF speichern</button>
+    <button type="button" class="voll" id="b-druck">PDF herunterladen</button>
   </div>
 </div>
 <div class="einst" id="einst">
@@ -184,6 +184,7 @@ h2{font-family:"Cinzel",Georgia,serif;font-weight:600;font-size:13px;letter-spac
   <footer class="fuss"><span>The Guestbook</span><span>theguestbook.ch</span><span>079 932 95 26</span><span>info@liasoertig.ch</span></footer>
 </article>
 
+<script src="/pdf-download.js"></script>
 <script>
 (function(){
   var PAKETE={
@@ -273,7 +274,7 @@ h2{font-family:"Cinzel",Georgia,serif;font-weight:600;font-size:13px;letter-spac
   });
   $('b-einst').addEventListener('click',function(){$('einst').classList.toggle('offen');});
   $('b-druck').addEventListener('click',function(){
-    try{if(!localStorage.getItem('tgb-druckhinweis')){alert('Im Druckfenster bitte wählen: Als PDF sichern, Papier A4, Hochformat und Hintergrundgrafiken einschalten.');localStorage.setItem('tgb-druckhinweis','1');}}catch(e){}var alt=document.title;document.title='Offerte '+$('v-nr').textContent+(name?' '+name:'');window.print();setTimeout(function(){document.title=alt;},500);
+    tgbPdf(this,$('blatt'),'Offerte '+$('v-nr').textContent+(name?' '+name:''),0,'#blatt{min-height:296.5mm!important}');
   });
   $('b-vertrag').addEventListener('click',function(){
     var V={};for(var k in D)V[k]=D[k];
