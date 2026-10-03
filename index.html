@@ -294,8 +294,11 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
 #spur{position:fixed;right:0;top:calc(env(safe-area-inset-top,0px) + 96px);bottom:calc(env(safe-area-inset-bottom,0px) + 36px);width:30px;z-index:39;
   pointer-events:none;visibility:hidden;--tab-bg:var(--bordeaux);--tab-fg:var(--papier)}
 #spur.auf-dunkel{--tab-bg:var(--papier);--tab-fg:var(--bordeaux)}
-/* Bordeaux hinter der Statusleiste, von Anfang an: Safari zeigt dort den Bereich oberhalb der Seite. Diese Fläche liegt genau dort (und in der Safe Area, falls vorhanden) */
-#statusleiste{position:fixed;top:-160px;left:0;right:0;height:calc(160px + env(safe-area-inset-top,0px));background-color:var(--bordeaux);z-index:41;pointer-events:none}
+/* Bordeaux hinter der Statusleiste, immer: Safari (iOS 26) prüft wenige Pixel unter dem oberen Rand, welches Element getroffen würde,
+   und färbt die Statusleiste mit der Farbe des ersten fixierten Elements. Diese Fläche liegt oberhalb der Seite und ragt 10 px in den
+   sichtbaren Bereich, damit Safari sie trifft. Darum antippbar (ohne pointer-events:none). Liegt unter dem Band (z-index 39), das sie oben abdeckt */
+#statusleiste{position:fixed;top:-160px;left:0;right:0;height:calc(170px + env(safe-area-inset-top,0px));background-color:var(--bordeaux);z-index:39;cursor:pointer}
+@media (min-width:1000px){#statusleiste{height:calc(160px + env(safe-area-inset-top,0px))}}/* Desktop: nichts im sichtbaren Bereich */
 .band-oben #spur{visibility:visible}
 .spur-rand{position:absolute;right:0;top:-40px;bottom:-20px;width:18px;touch-action:none;cursor:grab}
 .band-oben .spur-rand{pointer-events:auto}
@@ -789,6 +792,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
   /* Seitenhöhe ändert sich (z. B. aufgeklappte Fragen): Animation neu berechnen */
   if(window.ResizeObserver)new ResizeObserver(spaeter).observe(document.body);
   str.addEventListener('click',function(){window.scrollTo({top:0,behavior:ruhig?'auto':'smooth'});});
+  var sl=document.getElementById('statusleiste');if(sl)sl.addEventListener('click',function(){window.scrollTo({top:0,behavior:ruhig?'auto':'smooth'});});
   function neu(){messNoetig=true;tick();}
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(neu);
   window.addEventListener('load',neu);neu();
