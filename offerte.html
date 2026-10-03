@@ -64,8 +64,12 @@ h2{font-family:"Cinzel",Georgia,serif;font-weight:600;font-size:13px;letter-spac
 .leer:empty::before,.platz{color:#B07A70}
 .leer:empty::before{content:attr(data-platz)}
 @media screen and (max-width:820px){.blatt{padding:10mm 7mm 22mm;min-height:auto}.kopf{flex-direction:column}.absender{text-align:left}.meta{grid-template-columns:1fr}.meta div+div{padding-left:0;border-left:0;border-top:1px solid var(--hair)}.kond{grid-template-columns:1fr}.fuss{position:static;margin-top:10mm}}
-@page{size:A4;margin:0}
+@page{size:A4 portrait;margin:0}
 @media print{
+  html,body{width:auto!important;background:#F7F2E9!important}
+  .blatt{width:auto!important;max-width:none!important;min-height:0!important;margin:0!important}
+  .fuss{position:static!important;margin-top:4mm}
+  .blatt{padding-bottom:7mm!important}
   html,body{background:none}
   .leiste,.einst,.zeile-neu,.loeschen,.nur-bild{display:none!important}
   .blatt{margin:0;width:210mm;min-height:297mm;box-shadow:none}
@@ -101,7 +105,7 @@ h2{font-family:"Cinzel",Georgia,serif;font-weight:600;font-size:13px;letter-spac
   <div class="knoepfe">
     <button type="button" id="b-einst">Einstellungen</button>
     <button type="button" id="b-vertrag">Vertrag erstellen</button>
-    <button type="button" class="voll" id="b-druck">Als PDF speichern</button>
+    <button type="button" class="voll" id="b-druck" title="Im Druckfenster: Ziel PDF, Papier A4, Hochformat, Hintergrundgrafiken an">Als PDF speichern</button>
   </div>
 </div>
 <div class="einst" id="einst">
@@ -269,7 +273,7 @@ h2{font-family:"Cinzel",Georgia,serif;font-weight:600;font-size:13px;letter-spac
   });
   $('b-einst').addEventListener('click',function(){$('einst').classList.toggle('offen');});
   $('b-druck').addEventListener('click',function(){
-    var alt=document.title;document.title='Offerte '+$('v-nr').textContent+(name?' '+name:'');window.print();setTimeout(function(){document.title=alt;},500);
+    try{if(!localStorage.getItem('tgb-druckhinweis')){alert('Im Druckfenster bitte wählen: Als PDF sichern, Papier A4, Hochformat und Hintergrundgrafiken einschalten.');localStorage.setItem('tgb-druckhinweis','1');}}catch(e){}var alt=document.title;document.title='Offerte '+$('v-nr').textContent+(name?' '+name:'');window.print();setTimeout(function(){document.title=alt;},500);
   });
   $('b-vertrag').addEventListener('click',function(){
     var V={};for(var k in D)V[k]=D[k];

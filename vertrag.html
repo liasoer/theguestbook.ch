@@ -54,12 +54,13 @@ p{margin:0 0 6px}
 [contenteditable]:hover,[contenteditable]:focus{background:rgba(122,31,40,.07)}
 .leer:empty::before{content:attr(data-platz);color:#B07A70}
 @media screen and (max-width:820px){.blatt{padding:9mm 6mm}.kopf{flex-direction:column}.absender{text-align:left}.tab td:first-child{width:34%}.unterschrift{grid-template-columns:1fr}}
-@page{size:A4;margin:14mm 0}
+@page{size:A4 portrait;margin:14mm 0}
 @page:first{margin-top:0}
 @media print{
   html,body{background:none}
   .leiste,.einst{display:none!important}
-  .blatt{margin:0;width:210mm;padding:12mm 16mm 0;background:#fff}
+  html,body{width:auto!important}
+  .blatt{margin:0!important;width:auto!important;max-width:none!important;padding:12mm 16mm 0;background:#fff}
   [contenteditable]:hover,[contenteditable]:focus{background:none}
   .leer:empty::before{content:"________________";color:var(--muted)}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -71,7 +72,7 @@ p{margin:0 0 6px}
   <p>Vertragsgenerator. Alle Felder im Blatt lassen sich anklicken und ändern.</p>
   <div class="knoepfe">
     <button type="button" id="b-einst">Einstellungen</button>
-    <button type="button" class="voll" id="b-druck">Als PDF speichern</button>
+    <button type="button" class="voll" id="b-druck" title="Im Druckfenster: Ziel PDF, Papier A4, Hochformat, Hintergrundgrafiken an">Als PDF speichern</button>
   </div>
 </div>
 <div class="einst" id="einst">
@@ -251,7 +252,7 @@ p{margin:0 0 6px}
   });
   document.querySelectorAll('#wahl li').forEach(function(li){li.addEventListener('click',function(){document.querySelectorAll('#wahl li').forEach(function(x){x.classList.toggle('an',x===li&&!li.classList.contains('an'));});});});
   $('b-einst').addEventListener('click',function(){$('einst').classList.toggle('offen');});
-  $('b-druck').addEventListener('click',function(){var alt=document.title;document.title='Vertrag '+($('v-onr').textContent||'')+(name?' '+name:'');window.print();setTimeout(function(){document.title=alt;},500);});
+  $('b-druck').addEventListener('click',function(){try{if(!localStorage.getItem('tgb-druckhinweis')){alert('Im Druckfenster bitte wählen: Als PDF sichern, Papier A4, Hochformat und Hintergrundgrafiken einschalten.');localStorage.setItem('tgb-druckhinweis','1');}}catch(e){}var alt=document.title;document.title='Vertrag '+($('v-onr').textContent||'')+(name?' '+name:'');window.print();setTimeout(function(){document.title=alt;},500);});
   einst();
 })();
 </script>
