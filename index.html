@@ -807,6 +807,13 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
     function cp(t,rr,b,l){return 'inset('+t.toFixed(2)+'px '+rr.toFixed(2)+'px '+b.toFixed(2)+'px '+l.toFixed(2)+'px)';}
     var a1=tf(L0,T0,s0),a2=cp(T0,0,vh-T0-Hb,0),b1=tf(r.left,r.top,s1),b2=cp(r.top,vw-r.right,vh-r.bottom,r.left);
     band.style.transform=a1;clip.style.clipPath=a2;clip.style.visibility='visible';
+    /* Erst starten, wenn die Seite wirklich sichtbar ist: iOS zeigt beim Laden lange nichts an,
+       sonst läuft der Anfang der Animation unsichtbar ab und das Band springt */
+    function bereit(cb){
+      var los=false,go=function(){if(los)return;los=true;requestAnimationFrame(function(){requestAnimationFrame(function(){setTimeout(cb,120);});});};
+      if(document.readyState==='complete')go();else{window.addEventListener('load',go,{once:true});setTimeout(go,2500);}
+    }
+    bereit(function(){if(fertig)return;
     var m={duration:650,delay:900,easing:'cubic-bezier(.65,0,.35,1)',fill:'both'};
     anims=[
       loecher.animate([{transform:'translateX('+(-PITCH*26)+'px)'},{transform:'translateX(0px)'}],{duration:1000,easing:'cubic-bezier(.15,.75,.25,1)',fill:'both'}),
@@ -817,6 +824,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
     ];
     anims[1].finished.then(ende).catch(function(){});
     setTimeout(ende,2600);  /* Sicherheitsnetz */
+    });
   }
   requestAnimationFrame(los);
 })();
