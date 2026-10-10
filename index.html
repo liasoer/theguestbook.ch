@@ -129,9 +129,7 @@ p{margin:0 0 var(--s2)}
 .auf{opacity:0;animation:aufblende 1.8s cubic-bezier(.2,.6,.2,1) forwards}
 .auf.a2{animation-delay:.6s}.auf.a3{animation-delay:1.3s}.auf.a4{animation-delay:1.9s}
 @keyframes aufblende{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:blur(0)}}
-.hero::before{content:"";position:absolute;inset:0;background:#000;pointer-events:none;animation:schwarz 1.4s ease-out forwards}
-@keyframes schwarz{from{opacity:1}to{opacity:0}}
-@media (prefers-reduced-motion:reduce){.auf{opacity:1}.hero::before{display:none}}
+@media (prefers-reduced-motion:reduce){.auf{opacity:1}}
 
 /* Kapitel */
 .kapitel{padding:clamp(80px,12vw,var(--s5)) 0}
