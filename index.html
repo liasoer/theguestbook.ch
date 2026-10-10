@@ -282,7 +282,7 @@ details[open] summary .plus::after{transform:rotate(0)}
 #intro{display:none;position:fixed;inset:0;z-index:200;cursor:pointer}
 html.intro #intro{display:block}
 #intro .intro-grund{position:absolute;inset:0;background:var(--papier)}
-#intro .intro-clip{position:absolute;inset:0;visibility:hidden;will-change:clip-path}
+#intro .intro-clip{position:absolute;left:0;top:0;overflow:hidden;visibility:hidden;transform-origin:0 0;will-change:transform}
 #intro-band{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
 html.intro .auf{animation-play-state:paused}
 html.intro-ende .hero-mitte{animation:none;opacity:1;filter:none}
@@ -803,10 +803,19 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
     if(window.scrollY>10||r.height<10||r.bottom<0||r.top>vh){ende();return;}
     logo.style.visibility='hidden';
     var s1=r.height/120,s0=s1*1.12,Hb=120*s0,L0=vw/2-160*s0,T0=vh/2-Hb/2;
-    function tf(L,T,s){return 'translate('+(L-2000*s).toFixed(2)+'px,'+T.toFixed(2)+'px) scale('+s.toFixed(5)+')';}
-    function cp(t,rr,b,l){return 'inset('+t.toFixed(2)+'px '+rr.toFixed(2)+'px '+b.toFixed(2)+'px '+l.toFixed(2)+'px)';}
-    var a1=tf(L0,T0,s0),a2=cp(T0,0,vh-T0-Hb,0),b1=tf(r.left,r.top,s1),b2=cp(r.top,vw-r.right,vh-r.bottom,r.left);
-    band.style.transform=a1;clip.style.clipPath=a2;clip.style.visibility='visible';
+    /* Nur transform: Ein Rahmen (overflow hidden) wird verschoben und gestreckt, das Band darin
+       gegenläufig skaliert. clip-path wäre auf dem iPhone ruckelig */
+    var rs={l:0,t:T0,w:vw,h:Hb},re={l:r.left,t:r.top,w:r.width,h:r.height};
+    clip.style.width=vw+'px';clip.style.height=Hb+'px';
+    function ease(x){return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;}
+    function lerp(a,b,e){return a+(b-a)*e;}
+    function stand(e){
+      var s=lerp(s0,s1,e),L=lerp(L0,r.left,e),T=lerp(T0,r.top,e);
+      var bx=lerp(rs.l,re.l,e),by=lerp(rs.t,re.t,e),sx=lerp(rs.w,re.w,e)/vw,sy=lerp(rs.h,re.h,e)/Hb;
+      return {box:'translate('+bx.toFixed(2)+'px,'+by.toFixed(2)+'px) scale('+sx.toFixed(5)+','+sy.toFixed(5)+')',
+              band:'translate('+((L-2000*s-bx)/sx).toFixed(2)+'px,'+((T-by)/sy).toFixed(2)+'px) scale('+(s/sx).toFixed(5)+','+(s/sy).toFixed(5)+')'};
+    }
+    var k0=stand(0);clip.style.transform=k0.box;band.style.transform=k0.band;clip.style.visibility='visible';
     /* Erst starten, wenn die Seite wirklich sichtbar ist: iOS zeigt beim Laden lange nichts an,
        sonst läuft der Anfang der Animation unsichtbar ab und das Band springt */
     function bereit(cb){
@@ -814,11 +823,13 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
       if(document.readyState==='complete')go();else{window.addEventListener('load',go,{once:true});setTimeout(go,2500);}
     }
     bereit(function(){if(fertig)return;
-    var m={duration:650,delay:900,easing:'cubic-bezier(.65,0,.35,1)',fill:'both'};
+    var N=30,kb=[],kc=[];
+    for(var i=0;i<=N;i++){var st=stand(ease(i/N));kb.push({offset:i/N,transform:st.box});kc.push({offset:i/N,transform:st.band});}
+    var m={duration:650,delay:900,easing:'linear',fill:'both'};
     anims=[
       loecher.animate([{transform:'translateX('+(-PITCH*26)+'px)'},{transform:'translateX(0px)'}],{duration:1000,easing:'cubic-bezier(.15,.75,.25,1)',fill:'both'}),
-      band.animate([{transform:a1},{transform:b1}],m),
-      clip.animate([{clipPath:a2},{clipPath:b2}],m),
+      band.animate(kc,m),
+      clip.animate(kb,m),
       grund.animate([{opacity:1},{opacity:0}],{duration:500,delay:1050,easing:'ease-out',fill:'both'}),
       rand.animate([{opacity:1},{opacity:0}],{duration:450,delay:1050,easing:'ease-out',fill:'both'})
     ];
