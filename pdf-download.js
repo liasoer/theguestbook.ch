@@ -42,24 +42,47 @@
       });
     })).then(function(r){return function(){r.forEach(function(f){if(f)f();});};});
   }
-  window.tgbPdf=function(knopf,element,dateiname,rand,extraCss){
+  /* Leere Felder wirklich leeren: nach dem Löschen bleibt oft ein <br> zurück, das als Leerzeile im PDF landet */
+  function leereFelder(element){
+    [].forEach.call(element.querySelectorAll('[contenteditable]'),function(f){if(!f.textContent.trim()&&f.innerHTML!=='')f.innerHTML='';});
+    /* Leere Adresszeilen ausblenden. html2canvas wandelt Platzhalter in echte Elemente um, darum greift :empty dort nicht */
+    var weg=[].filter.call(element.querySelectorAll('.empf [contenteditable]'),function(f){return !f.textContent.trim();});
+    weg.forEach(function(f){f.style.display='none';});
+    return function(){weg.forEach(function(f){f.style.display='';});};
+  }
+  /* Ganze Seite auf genau ein A4-Blatt bringen: ist der Inhalt höher, wird er verkleinert statt umgebrochen */
+  function aufEineSeite(c,bg){
+    var W=c.width,H=c.height,pw=W,ph=Math.floor(W*297/210);
+    if(H>ph){ph=H;pw=Math.ceil(H*210/297);ph=Math.floor(pw*297/210);}
+    var o=document.createElement('canvas');o.width=pw;o.height=ph;
+    var g=o.getContext('2d');g.fillStyle=bg||'#F7F2E9';g.fillRect(0,0,pw,ph);
+    var k=Math.min(pw/W,ph/H,1);g.drawImage(c,Math.round((pw-W*k)/2),0,Math.round(W*k),Math.round(H*k));
+    return o;
+  }
+  window.tgbPdf=function(knopf,element,dateiname,rand,extraCss,optionen){
+    optionen=optionen||{};
     var text=knopf.textContent;knopf.disabled=true;knopf.textContent='PDF wird erstellt …';
-    var zurueck=null;
-    var ende=function(){druckRegeln(false);if(zurueck)zurueck();knopf.disabled=false;knopf.textContent=text;};
+    var zurueck=null,felder=null;
+    var ende=function(){druckRegeln(false);if(zurueck)zurueck();if(felder)felder();knopf.disabled=false;knopf.textContent=text;};
     lib().then(function(){return document.fonts?document.fonts.ready:null;}).then(function(){
       if(document.activeElement)document.activeElement.blur();
+      felder=leereFelder(element);
       druckRegeln(true,extraCss);
       return svgZuPng(element);
     }).then(function(z){
       zurueck=z;
-      return html2pdf().set({
-        margin:rand||0,
-        filename:dateiname.replace(/[\\\/:*?"<>|]+/g,'').replace(/\s+/g,' ').trim()+'.pdf',
-        image:{type:'jpeg',quality:0.96},
+      var name=dateiname.replace(/[\\\/:*?"<>|]+/g,'').replace(/\s+/g,' ').trim()+'.pdf';
+      var grund={margin:rand||0,filename:name,image:{type:'jpeg',quality:0.96},
         html2canvas:{scale:2,useCORS:true,logging:false,windowWidth:1100,scrollX:0,scrollY:0,backgroundColor:null},
         jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},
-        pagebreak:{mode:['css'],avoid:['tr','li','dt','dd','.unterschrift','.gruss']}
-      }).from(element).save();
+        pagebreak:{mode:['css'],avoid:['tr','li','dt','dd','.unterschrift','.gruss']}};
+      if(!optionen.einseitig)return html2pdf().set(grund).from(element).save();
+      var bg=getComputedStyle(element).backgroundColor;
+      return html2pdf().set(grund).from(element).toCanvas().get('canvas').then(function(c){
+        var seite=aufEineSeite(c,bg);
+        return html2pdf().set({margin:0,filename:name,image:{type:'jpeg',quality:0.96},
+          jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:[]}}).from(seite,'canvas').save();
+      });
     }).then(ende,function(){ende();window.print();});
   };
 })();

@@ -171,7 +171,7 @@ h2{font-family:"Cinzel",Georgia,serif;font-weight:600;font-size:13px;letter-spac
 
   <h2>So geht es weiter</h2>
   <ol class="schritte">
-    <li>Ihr gebt uns kurz Bescheid, ob die Offerte für euch passt.</li>
+    <li>Ihr gebt uns kurz Bescheid, ob die Offerte für euch passt. Offene Fragen klären wir gerne noch, und in einem kurzen Telefonat erzählen wir euch, was euch erwartet.</li>
     <li>Wir senden euch den Vertrag zur Unterschrift.</li>
     <li>Mit Vertrag und Anzahlung ist euer Datum fix reserviert.</li>
     <li>Kurz vor dem Anlass besprechen wir den Ablauf im Detail.</li>
@@ -277,7 +277,7 @@ h2{font-family:"Cinzel",Georgia,serif;font-weight:600;font-size:13px;letter-spac
   });
   $('b-einst').addEventListener('click',function(){$('einst').classList.toggle('offen');});
   $('b-druck').addEventListener('click',function(){
-    tgbPdf(this,$('blatt'),'Offerte '+$('v-nr').textContent+(name?' '+name:''),0,'#blatt{min-height:296.5mm!important}');
+    tgbPdf(this,$('blatt'),'Offerte '+$('v-nr').textContent+(name?' '+name:''),0,'#blatt{min-height:296.5mm!important}',{einseitig:true});
   });
   $('b-vertrag').addEventListener('click',function(){
     var V={};for(var k in D)V[k]=D[k];

@@ -696,14 +696,20 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
     daten['Offerte erstellen']='https://theguestbook.ch/offerte.html#'+encodeURIComponent(JSON.stringify(fuerOfferte));
     daten._autoresponse='Danke für eure Anfrage bei The Guestbook! Wir haben eure Nachricht erhalten und melden uns in Kürze bei euch.\n\nSo geht es weiter:\n\n1. Wir melden uns und besprechen gemeinsam Datum, Ablauf und eure Wünsche.\n2. Ihr erhaltet eine Offerte und den Vertrag, damit euer Tag fix reserviert ist.\n3. Am Drehtag sind wir vor Ort und sammeln die Stimmen eurer Gäste.\n\nHerzliche Grüsse\nLias\nThe Guestbook\ntheguestbook.ch';
     knopf.disabled=true;knopf.textContent='Wird gesendet';
-    fetch('https://formsubmit.co/ajax/info@liasoertig.ch',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(daten)})
+    /* FormSubmit verschickt die Mails, bevor es antwortet, das dauert oft mehrere Sekunden.
+       Darum zeigen wir die Bestätigung sofort. keepalive sorgt dafür, dass die Anfrage auch dann
+       zu Ende gesendet wird, wenn die Seite geschlossen wird. Schlägt sie fehl, kommt das Formular zurück. */
+    var sofort=setTimeout(function(){box.classList.add('gesendet');},600);
+    fetch('https://formsubmit.co/ajax/info@liasoertig.ch',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(daten)})
       .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
       .then(function(res){
-        if(res.ok&&String(res.j.success)==='true'){box.classList.add('gesendet');}
+        if(res.ok&&String(res.j.success)==='true'){clearTimeout(sofort);box.classList.add('gesendet');}
         else throw new Error('fehlgeschlagen');
       })
       .catch(function(){
+        clearTimeout(sofort);box.classList.remove('gesendet');
         fehler.textContent='Die Anfrage konnte nicht gesendet werden. Bitte versucht es nochmals oder schreibt uns an info@liasoertig.ch.';
+        fehler.scrollIntoView({block:'center',behavior:'smooth'});
       })
       .then(function(){knopf.disabled=false;knopf.textContent=alt;});
   });
