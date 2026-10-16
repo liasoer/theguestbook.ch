@@ -645,6 +645,14 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
       el.querySelectorAll('input').forEach(function(i){i.disabled=!an; if(!an)i.checked=false;});
       if(el.tagName==='DIV'){var i=el.querySelector('input'); if(i){i.disabled=!an; if(!an)i.value='';}}
     });
+    var pFarbe=ev?'moos':'bordeaux';
+    document.querySelectorAll('#pakete .umschalter button').forEach(function(x){
+      var an=x.dataset.farbe===pFarbe; x.setAttribute('aria-pressed',an?'true':'false');
+      document.getElementById(x.dataset.ziel).hidden=!an;
+    });
+    var paketeBer=document.getElementById('pakete');
+    paketeBer.classList.toggle('moos',pFarbe==='moos');
+    paketeBer.classList.toggle('bordeaux',pFarbe!=='moos');
   }
   document.querySelectorAll('#kontakt-schalter button').forEach(function(b){
     b.addEventListener('click',function(){setzeArt(b.dataset.art);});
