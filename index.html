@@ -147,12 +147,9 @@ p{margin:0 0 var(--s2)}
   background:
    radial-gradient(90% 60% at 50% 110%,rgba(0,0,0,.55),transparent 70%),
    linear-gradient(to bottom,#E2E6DA 0%,#B9C4B0 38%,#94A08E 46%,#56634F 46.3%,#3A4637 62%,#1F2720 100%)}
-.still .rahmen{position:absolute;left:0;right:0;height:clamp(28px,6vw,64px);background:#0F0A08}
+.still .rahmen{position:absolute;left:0;right:0;height:clamp(28px,6vw,64px);background:#0F0A08;z-index:2}
 .still .rahmen.o{top:0}.still .rahmen.u{bottom:0}
-.still .figuren{position:absolute;left:50%;top:46%;transform:translate(-50%,-100%);width:min(60vw,460px);max-width:88vw;height:auto;border-radius:3px;box-shadow:0 18px 48px rgba(0,0,0,.35)}
-.still .text{position:relative;text-align:center;padding:0 var(--rand) calc(clamp(28px,6vw,64px) + 34px);max-width:900px}
-.still .text p{font-style:italic;color:var(--papier);font-size:clamp(18px,2.4vw,26px);line-height:1.4;margin:0 0 6px;text-shadow:0 1px 10px rgba(0,0,0,.55)}
-.still .quelle{margin-top:var(--s2)!important;font-size:14px!important;color:rgba(238,230,214,.75)!important;font-style:normal!important}
+.still .figuren{position:absolute;inset:clamp(28px,6vw,64px) 0;width:100%;height:calc(100% - clamp(56px,12vw,128px));object-fit:cover;z-index:1}
 
 /* Pakete */
 .pakete-kopf{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s4)}
@@ -415,10 +412,6 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
 <section class="still" aria-label="Zitat">
   <div class="rahmen o"></div>
   <img class="figuren" src="haende.jpg" alt="Hand in Hand, Brautpaar an einer Hochzeit" loading="lazy">
-  <div class="text">
-    <p>Die schönsten Sätze des Tages fallen selten vor der Zeremonie oder auf der Tanzfläche.</p>
-    <p>Sie fallen beim Anstossen mit dem Brautpaar, auf dem Weg zur Bar oder beim Warten aufs Dessert.</p>
-  </div>
   <div class="rahmen u"></div>
 </section>
 
