@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>In theguestbook business übernehmen</title>
+<style>
+:root{--bordeaux:#4A0F14;--papier:#EEE6D6;--tinte:#26140F;--muted:#6B5A50}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--papier);color:var(--tinte);font-family:Georgia,serif;padding:24px;box-sizing:border-box}
+main{max-width:420px;text-align:center}
+h1{font-weight:400;font-size:22px;margin:0 0 12px}
+p{color:var(--muted);line-height:1.5;margin:0 0 20px}
+a.knopf{display:inline-block;padding:12px 22px;background:var(--bordeaux);color:var(--papier);text-decoration:none;border-radius:2px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Anfrage wird übernommen</h1>
+  <p id="info">theguestbook business öffnet sich und legt Kunde und Auftrag an.</p>
+  <a class="knopf" id="knopf" href="#">In der App öffnen</a>
+</main>
+<script>
+// Die Daten stehen nur im Teil nach # und werden nie an den Server geschickt.
+(function () {
+  var daten = location.hash.slice(1);
+  var knopf = document.getElementById('knopf');
+  if (!daten) {
+    document.getElementById('info').textContent = 'Dieser Link enthält keine Anfrage.';
+    knopf.hidden = true;
+    return;
+  }
+  var ziel = 'theguestbook-business://anfrage#' + daten;
+  knopf.href = ziel;
+  location.href = ziel;
+})();
+</script>
+</body>
+</html>
