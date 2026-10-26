@@ -691,7 +691,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
     daten._template='table';
     var fuerOfferte={};['anlass','vorname','nachname','email','telefon','datum','ort','gaeste','paket','zusatz','anlass_oder_firma'].forEach(function(k){if(daten[k]&&daten[k]!=='Keine'&&daten[k]!=='Nicht gewählt')fuerOfferte[k]=daten[k];});
     daten['Offerte erstellen']='https://theguestbook.ch/offerte.html#'+encodeURIComponent(JSON.stringify(fuerOfferte));
-    daten['In App übernehmen']='https://theguestbook.ch/app-uebernehmen.html#'+encodeURIComponent(JSON.stringify(fuerOfferte));
+    daten['In App uebernehmen']='https://theguestbook.ch/app-uebernehmen.html#'+encodeURIComponent(JSON.stringify(fuerOfferte));
     daten._autoresponse='Danke für eure Anfrage bei The Guestbook! Wir haben eure Nachricht erhalten und melden uns in Kürze bei euch.\n\nSo geht es weiter:\n\n1. Wir melden uns und besprechen gemeinsam Datum, Ablauf und eure Wünsche.\n2. Ihr erhaltet eine Offerte und den Vertrag, damit euer Tag fix reserviert ist.\n3. Am Drehtag sind wir vor Ort und sammeln die Stimmen eurer Gäste.\n\nHerzliche Grüsse\nLias\nThe Guestbook\ntheguestbook.ch';
     knopf.disabled=true;knopf.textContent='Wird gesendet';
     /* FormSubmit verschickt die Mails, bevor es antwortet, das dauert oft mehrere Sekunden.
