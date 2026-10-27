@@ -291,8 +291,8 @@
       (B.istMac ? abschnitt('kalender', 'Apple Kalender', e.kalenderAbgleich ? 'Automatischer Abgleich ein' : 'Ausgeschaltet',
         '<label class="check"><input type="checkbox" data-e="kalenderAbgleich" data-typ="check"' + (e.kalenderAbgleich ? ' checked' : '') + '> Anlässe und Fristen automatisch in den Kalender «theguestbook» eintragen</label>' +
         '<p style="margin:10px 0 0;color:var(--muted)">' + esc(app.kalenderStatus || 'Noch nicht abgeglichen.') + '</p><div class="aktionen" style="margin-top:10px"><button class="knopf" data-aktion="abgleich">Jetzt abgleichen</button></div>') : '') +
-      abschnitt('daten', 'Daten und Sicherung', B.istMac ? 'Datenordner und Sicherung' : 'Sicherung exportieren',
-        '<p style="margin:0 0 10px;color:var(--muted)">' + (B.istMac ? 'Die Daten liegen in deinem Dokumente-Ordner (iCloud) mit automatischen Sicherungen.' : 'Eine Sicherung ist eine Datei mit allen Daten, zum Aufbewahren.') + '</p>' +
+      abschnitt('daten', 'Daten und Sicherung', 'Version vom ' + app.version,
+        '<p style="margin:0 0 10px;color:var(--muted)">Version vom ' + app.version + '. ' + (B.istMac ? 'Die Daten liegen in deinem Dokumente-Ordner (iCloud) mit automatischen Sicherungen.' : 'Eine Sicherung ist eine Datei mit allen Daten, zum Aufbewahren.') + '</p>' +
         '<div class="aktionen">' + (B.istMac ? '<button class="knopf" data-aktion="ordner">Datenordner zeigen</button>' : '') + '<button class="knopf" data-aktion="sicherung">Sicherung exportieren</button></div>' +
         (B.istMac ? '<h3 class="unter">Speicherorte für PDFs</h3><div class="felder">' + f('Offerten', 'ablageOfferten', { breit: true }) + f('Verträge', 'ablageVertraege', { breit: true, hilfe: 'Hier öffnet sich das Speichern, und hier landen auch die PDFs, die du per Mail verschickst. Leer lassen heisst: zuletzt benutzter Ordner.' }) + '</div>' : '')) +
       '</div>';

@@ -77,13 +77,21 @@
   // geladen ist. Darum alle Schriften der Dokumente vorher hier laden (nicht nur im Vorschau-Rahmen).
   const SCHRIFTEN = ['300 16px Newsreader', '400 16px Newsreader', '500 16px Newsreader', '600 16px Newsreader', '700 16px Newsreader',
     'italic 400 16px Newsreader', 'italic 600 16px Newsreader', '500 16px Cinzel', '600 16px Cinzel', '700 16px Corinthia'];
+  // Gibt zurück, ob die Schriften wirklich bereit sind. Sonst weicht das PDF auf Systemschriften aus,
+  // damit der Text auf jeden Fall sichtbar ist (lieber andere Schrift als leere Seite).
   async function schriftenLaden() {
-    if (!document.fonts || !document.fonts.load) return;
-    try { await Promise.all(SCHRIFTEN.map(f => document.fonts.load(f, 'Aa'))); await document.fonts.ready; } catch (e) { /* ohne Schriften weiter */ }
+    if (!document.fonts || !document.fonts.load) return false;
+    try {
+      await Promise.race([Promise.all(SCHRIFTEN.map(f => document.fonts.load(f, 'Aa'))), new Promise(ok => setTimeout(ok, 6000))]);
+      await document.fonts.ready;
+      return ['400 16px Newsreader', '500 16px Cinzel', '700 16px Corinthia'].every(f => document.fonts.check(f, 'Aa'));
+    } catch (e) { return false; }
   }
+  const ERSATZ = '*{font-family:Georgia,"Times New Roman",serif!important}.qr-zahlteil,.qr-zahlteil *{font-family:Helvetica,Arial,sans-serif!important}';
 
   async function erstellen(html) {
-    await Promise.all([bibliotheken(), schriftenLaden()]);
+    const [, schriftenOk] = await Promise.all([bibliotheken(), schriftenLaden()]);
+    if (!schriftenOk) html = html.replace('</head>', '<style>' + ERSATZ + '</style></head>');
     const f = await rahmen(html);
     try {
       const doc = f.contentDocument;

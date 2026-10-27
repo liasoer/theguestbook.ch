@@ -499,6 +499,7 @@
     if (v.danach) v.danach(main);
   };
   app.ansichten = {};
+  app.version = '27.10.2026, 22:35';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
 
   // ---------- Start ----------
   async function start() {
