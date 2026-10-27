@@ -73,8 +73,17 @@
     return seiten;
   }
 
+  // Safari zeichnet Text auf einem Canvas unsichtbar, solange die Schrift im Hauptdokument noch nicht
+  // geladen ist. Darum alle Schriften der Dokumente vorher hier laden (nicht nur im Vorschau-Rahmen).
+  const SCHRIFTEN = ['300 16px Newsreader', '400 16px Newsreader', '500 16px Newsreader', '600 16px Newsreader', '700 16px Newsreader',
+    'italic 400 16px Newsreader', 'italic 600 16px Newsreader', '500 16px Cinzel', '600 16px Cinzel', '700 16px Corinthia'];
+  async function schriftenLaden() {
+    if (!document.fonts || !document.fonts.load) return;
+    try { await Promise.all(SCHRIFTEN.map(f => document.fonts.load(f, 'Aa'))); await document.fonts.ready; } catch (e) { /* ohne Schriften weiter */ }
+  }
+
   async function erstellen(html) {
-    await bibliotheken();
+    await Promise.all([bibliotheken(), schriftenLaden()]);
     const f = await rahmen(html);
     try {
       const doc = f.contentDocument;
