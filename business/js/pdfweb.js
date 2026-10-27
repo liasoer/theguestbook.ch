@@ -121,8 +121,10 @@
     }
     const datei = new File([blob], name, { type: 'application/pdf' });
     if (navigator.canShare && navigator.canShare({ files: [datei] })) {
-      const daten = { files: [datei], title: (teilen && teilen.titel) || dateiname };
-      if (teilen && teilen.text) daten.text = teilen.text;
+      // Nur die Datei teilen. Ein zusätzlicher Titel kommt in Kurzbefehlen als zweites Objekt an,
+      // und «Datei sichern» legt dann einen Ordner statt einer Datei an.
+      const daten = { files: [datei] };
+      if (teilen && teilen.text) { daten.text = teilen.text; daten.title = teilen.titel; }
       await navigator.share(daten);
       return 'geteilt';
     }
