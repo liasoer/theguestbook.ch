@@ -185,6 +185,7 @@ details[open] summary .plus::after{transform:rotate(0)}
 /* Über uns */
 .ueber-raster{display:grid;gap:var(--s4);grid-template-columns:1fr}
 @media (min-width:900px){.ueber-raster{grid-template-columns:5fr 6fr;align-items:start}}
+@media (min-width:900px){.ueber-raster.voll{grid-template-columns:1fr;max-width:680px;margin:0 auto}}
 .ueber h3{font-family:var(--f-display);font-weight:500;font-size:clamp(24px,2.8vw,32px);line-height:1.15;margin:0 0 var(--s2)}
 .bildfeld{margin:0}
 .bildfeld .bild{aspect-ratio:4/5;background:
@@ -498,11 +499,7 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
 <section class="kapitel ueber" id="ueber-uns" aria-labelledby="t-ueber">
   <div class="wrap">
     <h2 class="titel" id="t-ueber"><span class="caps">Wer wir</span><span class="skript">sind</span></h2>
-    <div class="ueber-raster">
-      <figure class="bildfeld">
-        <div class="bild" role="img" aria-label="Platzhalter für das Foto der beiden Gründer">Foto folgt</div>
-        <figcaption>Die beiden Gründer von The Guestbook</figcaption>
-      </figure>
+    <div class="ueber-raster voll">
       <div>
         <p>The Guestbook ist die Idee von uns zwei, zwei Freunden aus der Ostschweiz. Wir waren an genug Hochzeiten dabei, um zu merken, dass die schönsten Sätze des Tages meistens schon am nächsten Morgen vergessen sind.</p>
         <p>Aus der Schnapsidee für die Hochzeit eines Freundes wurde ein Studio, entstanden aus der Foto- und Videobranche, mit dem Anspruch, <strong>etwas Neues</strong> anzubieten, das es in dieser Form in der Schweiz noch nicht gab. Denn eine gute Hochzeit besteht vor allem aus guten Geschichten.</p>
