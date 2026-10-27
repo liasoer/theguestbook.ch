@@ -110,8 +110,15 @@
   // Mehrseitige Dokumente (Vertrag) brauchen auf jeder Seite einen Rand: 16 mm oben, 18 mm unten
   const raenderFuer = html => /<body class="[^"]*\bvertrag\b/.test(html) ? { oben: 45, unten: 51 } : {};
   const dateiName = n => n.replace(/[\\/:*?"<>|]/g, '-');
-  // Standard-Speicherort am Mac: Offerten und Verträge haben eigene Ordner (Einstellungen → Daten und Sicherung)
-  const ablageFuer = n => { const e = app.daten.einstellungen; return /^Offerte/.test(n) ? e.ablageOfferten : /^Vertrag/.test(n) ? e.ablageVertraege : ''; };
+  // Speicherort am Mac: Dateien/<Jahr>/<Auftragsnummer> <Kunde>/, abgeleitet aus dem Dateinamen
+  // («Offerte 2026-001 Anna und Marc Muster», «Rechnung 2026-001-2 …», «2. Mahnung 2026-001-1 …»)
+  app.auftragsOrdner = n => {
+    const basis = (app.daten.einstellungen.ablageDateien || '').replace(/\/+$/, '');
+    const m = String(n).match(/(\d{4})-(\d{3})(?:-\d+)?\s+(.+)$/);
+    if (!basis || !m) return basis;
+    return basis + '/' + m[1] + '/' + dateiName(m[1] + '-' + m[2] + ' ' + m[3]).trim();
+  };
+  const ablageFuer = n => app.auftragsOrdner(n);
 
   // Vorschau mit «Als PDF speichern» und, wenn eine Mailvorlage mitkommt, «Per Mail senden».
   // Gibt 'pdf', 'mail' oder false zurück, damit der Aufrufer z.B. die Offerte als verschickt markieren kann.
@@ -529,7 +536,7 @@
     if (v.danach) v.danach(main);
   };
   app.ansichten = {};
-  app.version = '27.10.2026, 23:20';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
+  app.version = '27.10.2026, 23:30';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
 
   // ---------- Start ----------
   async function start() {

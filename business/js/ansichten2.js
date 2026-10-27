@@ -294,7 +294,7 @@
       abschnitt('daten', 'Daten und Sicherung', 'Version vom ' + app.version,
         '<p style="margin:0 0 10px;color:var(--muted)">Version vom ' + app.version + '. ' + (B.istMac ? 'Die Daten liegen in deinem Dokumente-Ordner (iCloud) mit automatischen Sicherungen.' : 'Eine Sicherung ist eine Datei mit allen Daten, zum Aufbewahren.') + '</p>' +
         '<div class="aktionen">' + (B.istMac ? '<button class="knopf" data-aktion="ordner">Datenordner zeigen</button>' : '') + '<button class="knopf" data-aktion="sicherung">Sicherung exportieren</button></div>' +
-        (B.istMac ? '<h3 class="unter">Speicherorte für PDFs</h3><div class="felder">' + f('Offerten', 'ablageOfferten', { breit: true }) + f('Verträge', 'ablageVertraege', { breit: true, hilfe: 'Hier öffnet sich das Speichern, und hier landen auch die PDFs, die du per Mail verschickst. Leer lassen heisst: zuletzt benutzter Ordner.' }) + '</div>' : '')) +
+        (B.istMac ? '<h3 class="unter">Ablage der PDFs</h3><div class="felder">' + f('Ordner für Dokumente', 'ablageDateien', { breit: true, hilfe: 'Darin legt die App pro Jahr und Auftrag einen Ordner an, z.B. 2026/2026-001 Anna und Marc Muster. Dort öffnet sich das Speichern, und dort landen auch die PDFs, die du per Mail verschickst.' }) + '</div>' : '')) +
       '</div>';
   };
 

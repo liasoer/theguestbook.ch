@@ -53,8 +53,7 @@
       restFaelligTage: 10,
       mahnFristTage: 10,        // neue Zahlungsfrist pro Mahnung
       mahnGebuehrRappen: 0,     // nur verlangen, wenn vertraglich vereinbart
-      ablageOfferten: '~/Documents/theguestbook/Dateien/Offerten',     // Standard-Speicherort am Mac
-      ablageVertraege: '~/Documents/theguestbook/Dateien/Verträge',
+      ablageDateien: '~/Documents/theguestbook/Dateien',   // am Mac: darin pro Jahr und Auftrag ein Ordner
       ablaufVorherTage: 14,
       lieferungWochen: 8,
       korrekturTage: 14,
