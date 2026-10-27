@@ -523,11 +523,14 @@
             '<option value="auto"' + (!a.statusManuell && offen ? ' selected' : '') + '>Automatisch (' + esc(app.statusName(M.statusErmitteln(a))) + ')</option>' +
             M.STATUS.map(x => '<option value="' + x.id + '"' + ((a.statusManuell || !offen) && x.id === a.status ? ' selected' : '') + '>Von Hand: ' + x.name + '</option>').join('') + '</select>' +
             '<small>Der Status läuft normalerweise von selbst mit. Von Hand nur für Ausnahmen.</small></label>' +
-            (!loeschbar ? '<p style="margin:12px 0 0;color:var(--muted)">Löschen geht nicht, weil es Buchungen im Kassenbuch gibt. Absagen oder archivieren geht immer.</p>' : ''),
+            (offen || loeschbar ? '<h3 class="unter">Auftrag beenden</h3><div class="aktionen mehr-aktionen"></div>' : '') +
+            (!loeschbar ? '<p style="margin:10px 0 0;color:var(--muted)">Löschen geht nicht, weil es Buchungen im Kassenbuch gibt. Absagen oder archivieren geht immer.</p>' : ''),
           knoepfe: [{ text: 'Schliessen', wert: null }]
-            .concat(offen ? [{ text: 'Absagen', art: 'gefahr', wert: 'absagen' }, { text: 'Archivieren', wert: 'archivieren' }] : [])
-            .concat(loeschbar ? [{ text: 'Löschen', art: 'gefahr', wert: 'auftrag-loeschen' }] : [])
-            .concat([{ text: 'Status übernehmen', art: 'haupt', wert: 'status' }])
+            .concat(offen ? [{ text: 'Absagen', art: 'gefahr verschieben', wert: 'absagen' }, { text: 'Archivieren', art: 'verschieben', wert: 'archivieren' }] : [])
+            .concat(loeschbar ? [{ text: 'Löschen', art: 'gefahr verschieben', wert: 'auftrag-loeschen' }] : [])
+            .concat([{ text: 'Status übernehmen', art: 'haupt', wert: 'status' }]),
+          // Absagen, Archivieren und Löschen stehen als eigene Gruppe über der Fusszeile
+          danach: hg => { const ziel = hg.querySelector('.mehr-aktionen'); if (ziel) hg.querySelectorAll('.unten .verschieben').forEach(k => ziel.appendChild(k)); }
         });
         if (r.wert === 'status') {
           const w = r.werte.status;

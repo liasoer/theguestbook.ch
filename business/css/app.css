@@ -201,7 +201,7 @@ input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and
 .dialog{background:var(--karte);border-radius:12px;width:min(560px,100%);max-height:calc(100vh - 48px);overflow:auto;padding:22px 24px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .dialog.gross{width:min(980px,100%);height:calc(100vh - 48px);display:flex;flex-direction:column;padding:16px}
 .dialog h3{font-family:var(--f-titel);font-weight:500;font-size:19px;margin:0 0 12px}
-.dialog .unten{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.dialog .unten{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin-top:18px}
 .dialog iframe{flex:1;width:100%;border:1px solid var(--linie);border-radius:8px;background:#fff}
 .dialog textarea{width:100%;min-height:140px;background:var(--flaeche);border:1px solid var(--linie-stark);border-radius:8px;padding:10px;font-family:ui-monospace,Menlo,monospace;font-size:12px}
 
@@ -218,7 +218,7 @@ input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and
 @media (prefers-reduced-motion:reduce){.abschnitt>summary::after{transition:none}}
 
 /* Untertitel in Abschnitten */
-h3.unter{font-size:13px;font-weight:600;margin:18px 0 6px}
+h3.unter,.dialog h3.unter{font-family:var(--f-ui);font-size:13px;font-weight:600;margin:18px 0 8px}
 
 /* Mailvorlagen */
 .breit-karte{grid-column:1/-1}
