@@ -80,6 +80,20 @@ h2{font-family:var(--f-titel);font-weight:600;font-size:13px;letter-spacing:.06e
 .kennzahlen span{font-size:12px;color:var(--muted)}
 .kennzahlen b{font-family:var(--f-titel);font-weight:500;font-size:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media (max-width:720px){.kennzahlen>div{padding:10px 12px}.kennzahlen b{font-size:15px}}
+/* Übersicht: Kennzahlen in Gruppen */
+.gruppen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 16px;margin-bottom:18px}
+.gruppe h2{margin:0 0 8px 2px}
+.kacheln{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.kachel{display:flex;flex-direction:column;gap:2px;text-align:left;background:var(--karte);border:1px solid var(--linie);border-radius:10px;padding:11px 13px;min-width:0;cursor:pointer;color:inherit;font:inherit;border-left:3px solid var(--linie)}
+.kachel:hover{border-color:var(--akzent)}
+.kachel.warn{border-left-color:var(--warn)}
+.kachel.krit{border-left-color:var(--krit)}
+.kachel.krit .k-wert{color:var(--krit)}
+.k-label{font-size:12px;color:var(--muted)}
+.k-wert{font-family:var(--f-titel);font-weight:500;font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k-info{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:1100px){.gruppen{grid-template-columns:minmax(0,1fr)}.kacheln{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:720px){.start-inhalt{display:flex;flex-direction:column}.start-inhalt>.raster{order:-1;margin-bottom:18px}.kacheln{grid-template-columns:repeat(2,minmax(0,1fr))}.k-wert{font-size:17px}.kachel{padding:10px 11px}}
 .kennzahl .label{font-size:12px;color:var(--muted)}
 .kennzahl .wert{font-family:var(--f-titel);font-size:22px;margin-top:2px}
 .kennzahl .info{font-size:12px;color:var(--muted);margin-top:2px}

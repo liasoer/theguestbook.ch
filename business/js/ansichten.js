@@ -78,6 +78,47 @@
     return liste.sort((x, y) => String(x.sort).localeCompare(String(y.sort)));
   }
 
+  // Kennzahlen in drei Gruppen: Geld, laufendes Jahr, Aufträge. Jede Kachel führt zur passenden Ansicht.
+  function kennzahlenGruppen(aktiv, kommende, offen, ahv, jahr) {
+    const heute = M.heute(), e = E();
+    const er = M.erfolgsrechnung(app.daten, jahr);
+    const rech = M.offeneRechnungen(app.daten), ueber = rech.filter(x => x.ueberfaellig);
+    const rechSumme = rech.reduce((t, x) => t + x.r.rappen, 0), ueberSumme = ueber.reduce((t, x) => t + x.r.rappen, 0);
+    const maOffen = M.mitarbeiterOffen(app.daten), maSumme = maOffen.reduce((t, a) => t + M.mitarbeiterAnteil(a, e), 0);
+    const phase = id => aktiv.filter(a => M.phase(a) === id);
+    const anfragen = phase('anfrage'), offerten = phase('offerte'), gebucht = phase('gebucht'), nachher = phase('nachher');
+    const filmOffen = nachher.filter(a => !a.geliefertAm);
+    const naechster = kommende[0];
+    const saison = jahr + 1, inSaison = aktiv.filter(a => (a.datum || '').startsWith(String(saison)) && ['gebucht', 'nachher', 'fertig'].includes(M.phase(a)));
+    const umsatzGebucht = gebucht.reduce((t, a) => t + app.total(a), 0);
+    const kachel = (label, wert, info, ziel, klasse) => '<button class="kachel' + (klasse ? ' ' + klasse : '') + '" data-aktion="ziel" data-wert="' + ziel + '">' +
+      '<span class="k-label">' + label + '</span><b class="k-wert zahl">' + wert + '</b><span class="k-info">' + info + '</span></button>';
+    const chf = r => 'CHF ' + M.chf(r);
+    const gruppe = (titel, inhalt) => '<section class="gruppe"><h2>' + titel + '</h2><div class="kacheln">' + inhalt + '</div></section>';
+    return '<div class="gruppen">' +
+      gruppe('Aufträge',
+        kachel('Neue Anfragen', anfragen.length, anfragen.length ? anfragen.filter(a => !a.offerte).length + ' ohne Offerte' : 'keine offen', 'auftraege', anfragen.some(a => !a.offerte) ? 'warn' : '') +
+        kachel('Offerten offen', offerten.length, offerten.length ? 'warten auf Antwort' : 'keine', 'auftraege') +
+        kachel('Gebucht', gebucht.length, naechster ? 'nächster ' + app.wann(naechster.datum) : 'keine geplant', 'auftraege') +
+        kachel('Film liefern', filmOffen.length, filmOffen.length ? 'nach dem Anlass' : 'alles geliefert', 'auftraege', filmOffen.length ? 'warn' : '')) +
+      gruppe('Geld',
+        kachel('Rechnungen offen', chf(rechSumme), rech.length ? rech.length + (rech.length === 1 ? ' Rechnung' : ' Rechnungen') : 'keine offen', 'auftraege') +
+        kachel('Überfällig', chf(ueberSumme), ueber.length ? ueber.length + ' zum Mahnen' : 'nichts überfällig', 'auftraege', ueber.length ? 'krit' : '') +
+        kachel('Noch zu verrechnen', chf(Math.max(0, offen - rechSumme)), 'aus gebuchten Aufträgen', 'auftraege') +
+        kachel('An Mitarbeiterin', chf(maSumme), maOffen.length ? maOffen.length + ' zu überweisen' : 'alles überwiesen', 'start', maOffen.length ? 'warn' : '')) +
+      gruppe('Jahr ' + jahr,
+        kachel('Einnahmen', chf(er.totalErtrag), 'gebucht im Kassenbuch', 'kassenbuch') +
+        kachel('Ausgaben', chf(er.totalAufwand), 'inkl. Mitarbeiterin', 'kassenbuch') +
+        kachel('Gewinn', chf(ahv.gewinnNach), 'nach Sozialversicherung', 'steuern') +
+        kachel('AHV zurücklegen', chf(ahv.offen), ahv.offen > 0 ? 'für die SVA Thurgau' : 'gedeckt', 'steuern', ahv.offen > 0 ? 'warn' : '')) +
+      gruppe('Ausblick',
+        kachel('Nächster Anlass', naechster ? M.datumCH(naechster.datum) : 'keiner', naechster ? app.kunde(naechster).name : 'noch keiner gebucht', naechster ? 'auftrag:' + naechster.id : 'kalender') +
+        kachel('Umsatz gebucht', chf(umsatzGebucht), 'aus ' + gebucht.length + (gebucht.length === 1 ? ' Auftrag' : ' Aufträgen'), 'auftraege') +
+        kachel('Saison ' + saison, inSaison.length, inSaison.length === 1 ? 'Anlass gebucht' : 'Anlässe gebucht', 'kalender') +
+        kachel('Anlässe ' + jahr, aktiv.concat(app.daten.auftraege.filter(a => a.status === 'archiv')).filter(a => (a.datum || '').startsWith(String(jahr)) && a.datum <= heute && M.stufe(a.status) >= M.stufe('vertrag')).length, 'durchgeführt', 'kalender')) +
+      '</div>';
+  }
+
   A.start = () => {
     const heute = M.heute(), jahr = +heute.slice(0, 4);
     const aktiv = app.daten.auftraege.filter(a => !['abgesagt', 'archiv'].includes(a.status));
@@ -90,24 +131,36 @@
       '<div class="aktionen"><button class="knopf" data-aktion="anfrage">Anfrage einfügen</button><button class="knopf haupt" data-aktion="neu">Neuer Auftrag</button></div></div>' +
       (!app.sync.konfig && !B.istMac ? '<div class="hinweis warn"><div><strong>Noch nicht mit dem Mac verbunden</strong><p>Unter Mehr, Abgleich gibst du einmal deinen GitHub-Schlüssel ein. Danach siehst du hier dieselben Daten wie am Mac.</p></div></div>' : '') +
       (app.sync.status === 'fehler' ? '<div class="hinweis krit"><div><strong>Abgleich mit GitHub fehlgeschlagen</strong><p>' + esc(app.sync.fehler) + '</p></div></div>' : '') +
-      '<div class="kennzahlen">' +
-        '<div><span>Offen</span><b class="zahl">CHF ' + M.chf(offen) + '</b></div>' +
-        '<div><span>Gebucht</span><b>' + kommende.length + (kommende.length === 1 ? ' Anlass' : ' Anlässe') + '</b></div>' +
-        '<div><span>Gewinn ' + jahr + '</span><b class="zahl">CHF ' + M.chf(ahv.gewinnNach) + '</b></div>' +
-      '</div>' +
+      '<div class="start-inhalt">' + kennzahlenGruppen(aktiv, kommende, offen, ahv, jahr) +
       '<div class="raster zwei">' +
-        '<div class="karte"><h2>Zu erledigen</h2>' + (todo.length ? '<div class="zeilen">' + todo.map(t =>
+        '<div class="karte zu-erledigen"><h2>Zu erledigen</h2>' + (todo.length ? '<div class="zeilen">' + todo.map(t =>
           '<div class="zeile" data-aktion="auftrag" data-wert="' + t.a.id + '"><div class="datum">' + t.wann + '</div>' +
           '<div class="haupt"><b>' + esc(t.titel) + '</b><span>' + esc(t.info) + '</span></div>' +
-          (t.knopf ? '<button class="knopf klein ' + t.knopf[2] + '" data-aktion="' + t.knopf[0] + '" data-wert="' + t.a.id + '">' + t.knopf[1] + '</button>' : '') + '</div>').join('') + '</div>'
+          (t.knopf ? '<button class="knopf klein ' + t.knopf[2] + '" data-aktion="' + t.knopf[0] + '" data-wert="' + t.a.id + '">' + t.knopf[1] + '</button>'
+            : (() => { const sch = naechsterSchritt(t.a); return sch ? '<button class="knopf klein" data-aktion="schritt" data-wert="' + t.a.id + ':' + sch[0] + '">' + esc(kurz(sch[1])) + '</button>' : ''; })()) + '</div>').join('') + '</div>'
           : '<div class="leer"><strong>Alles erledigt</strong>Neue Anfragen, fällige Zahlungen und Fristen erscheinen hier.</div>') + '</div>' +
         '<div class="karte"><h2>Nächste Anlässe</h2>' + (kommende.length ? '<div class="zeilen">' + kommende.slice(0, 5).map(a =>
           '<div class="zeile" data-aktion="auftrag" data-wert="' + a.id + '"><div class="datum">' + M.datumCH(a.datum) + '</div>' +
           '<div class="haupt"><b>' + esc(app.kunde(a).name) + '</b><span>' + esc(app.artName(a.art)) + (a.location ? ', ' + esc(a.location) : '') + '</span></div></div>').join('') + '</div>'
           : '<div class="leer"><strong>Noch keine Anlässe</strong>Sobald ein Vertrag unterschrieben ist, steht der Anlass hier.</div>') + '</div>' +
-      '</div>';
+      '</div></div>';
   };
+  // Nächsten Schritt eines Auftrags auslösen: Auftrag öffnen und dort denselben Knopf drücken
+  function schrittAusfuehren(w) {
+    const [id, aktion] = w.split(':');
+    app.oeffnen('auftrag', id, aktion === 'tab-rechnungen' ? 'rechnungen' : 'auftrag');
+    const knopf = document.querySelector('main .kopfzeile [data-aktion="' + aktion + '"]');
+    if (knopf && aktion !== 'tab-rechnungen') knopf.click();
+  }
   A.start.danach = main => klick(main, {
+    schritt: schrittAusfuehren,
+    ziel: z => {
+      if (z.startsWith('auftrag:')) return app.oeffnen('auftrag', z.slice(8), 'auftrag');
+      if (z === 'steuern') { app.kb.tab = 'er'; return app.oeffnen('kassenbuch'); }
+      if (z === 'kassenbuch') app.kb.tab = 'liste';
+      if (z !== 'start') app.oeffnen(z);
+      else { const el = document.querySelector('.zu-erledigen'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+    },
     'auftrag-rechnungen': id => app.oeffnen('auftrag', id, 'rechnungen'),
     'auftrag-mahnungen': id => app.oeffnen('auftrag', id, 'mahnungen'),
     anfrage: () => app.anfrageEinfuegen(),
