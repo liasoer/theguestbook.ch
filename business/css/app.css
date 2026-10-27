@@ -217,6 +217,9 @@ input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and
 .a-inhalt{padding:0 18px 18px}
 @media (prefers-reduced-motion:reduce){.abschnitt>summary::after{transition:none}}
 
+/* Untertitel in Abschnitten */
+h3.unter{font-size:13px;font-weight:600;margin:18px 0 6px}
+
 /* Mailvorlagen */
 .breit-karte{grid-column:1/-1}
 .vorlage{border-top:1px solid var(--linie);padding:10px 0}

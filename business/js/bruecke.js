@@ -39,6 +39,7 @@
         return 'vorschau';
       }
       case 'ausstehendeLinks': return [];
+      case 'mitteilung': return null;
       case 'lokalLesen': try { return localStorage.getItem('tgb-lokal-' + args.schluessel); } catch (e) { return null; }
       case 'lokalSchreiben': try { if (args.inhalt == null) localStorage.removeItem('tgb-lokal-' + args.schluessel); else localStorage.setItem('tgb-lokal-' + args.schluessel, args.inhalt); } catch (e) { throw new Error('Speicher im Browser ist voll oder gesperrt'); } return null;
       case 'kalenderAbgleichen': return { neu: 0, geaendert: 0, geloescht: 0, vorschau: true };
@@ -53,6 +54,7 @@
     speichern: (daten) => senden('speichern', { json: JSON.stringify(daten, null, 2) }),
     pdf: (html, dateiname, raender) => senden('pdf', { html, dateiname, raender: raender || {} }),
     mail: (o) => senden('mail', o),
+    mitteilung: (titel, text) => senden('mitteilung', { titel, text }),
     lokalLesen: (schluessel) => senden('lokalLesen', { schluessel }),
     lokalSchreiben: (schluessel, inhalt) => senden('lokalSchreiben', inhalt == null ? { schluessel } : { schluessel, inhalt }),
     exportieren: (inhalt, dateiname) => senden('exportieren', { inhalt, dateiname }),

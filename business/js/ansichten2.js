@@ -303,13 +303,23 @@
     if (s.konfig) return '' +
       '<p style="margin:0 0 6px">Verbunden mit <strong>' + esc(s.konfig.repo) + '</strong></p>' +
       '<p style="margin:0 0 12px;color:var(--muted)" data-sync-status>' + esc(app.syncText()) + '</p>' +
-      '<div class="aktionen"><button class="knopf" data-aktion="sync-jetzt">Jetzt abgleichen</button><button class="knopf text" data-aktion="sync-trennen">Trennen</button></div>';
+      '<div class="aktionen"><button class="knopf" data-aktion="sync-jetzt">Jetzt abgleichen</button><button class="knopf text" data-aktion="sync-trennen">Trennen</button></div>' +
+      '<h3 class="unter">Neue Anfragen</h3>' + mitteilungenText();
     return '' +
       '<p style="margin:0 0 12px;color:var(--muted)">Die Daten werden in deinem privaten GitHub-Repository gespeichert, damit Mac und iPhone dasselbe sehen. Den Schlüssel gibst du auf jedem Gerät einmal ein, er bleibt nur auf diesem Gerät.</p>' +
       '<div class="felder">' +
         '<label class="feld"><span>Repository</span><input id="sync-repo" autocomplete="off" autocapitalize="off" spellcheck="false" value="liasoer/theguestbook-daten"></label>' +
         '<label class="feld"><span>Schlüssel (github_pat_…)</span><input id="sync-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_…"></label>' +
       '</div><div class="aktionen" style="margin-top:12px"><button class="knopf haupt" data-aktion="sync-verbinden">Verbinden</button></div>';
+  }
+
+  function mitteilungenText() {
+    const st = app.mitteilungen.status;
+    if (B.istMac) return '<p style="margin:0;color:var(--muted)">Anfragen vom Kontaktformular kommen von selbst als neuer Auftrag in die App. Ist die App offen, erscheint eine Mitteilung am Mac.</p>';
+    if (st === 'nicht') return '<p style="margin:0;color:var(--muted)">Mitteilungen gehen nur, wenn die App vom Home-Bildschirm gestartet wird, nicht in Safari.</p>';
+    if (st === 'aktiv') return '<p style="margin:0 0 10px">Mitteilungen bei neuen Anfragen sind auf diesem Gerät eingeschaltet.</p><button class="knopf text" data-aktion="push-aus">Ausschalten</button>';
+    if (st === 'gesperrt') return '<p style="margin:0;color:var(--muted)">Mitteilungen sind gesperrt. Schalte sie in den iPhone-Einstellungen unter Mitteilungen, theguestbook ein.</p>';
+    return '<p style="margin:0 0 10px;color:var(--muted)">Lass dich benachrichtigen, sobald über die Website eine Anfrage eingeht.</p><button class="knopf haupt" data-aktion="push-ein">Mitteilungen einschalten</button>';
   }
 
   // Mailvorlagen: leer lassen heisst Standardtext. Platzhalter werden beim Senden ersetzt.
@@ -375,7 +385,9 @@
       'mv-zurueck': art => { if (e.mailVorlagen) delete e.mailVorlagen[art]; app.aendern(); },
       'sync-verbinden': () => app.syncVerbinden(main.querySelector('#sync-repo').value, main.querySelector('#sync-token').value),
       'sync-jetzt': () => app.syncJetzt(false),
-      'sync-trennen': () => app.syncTrennen()
+      'sync-trennen': () => app.syncTrennen(),
+      'push-ein': () => app.mitteilungenEinschalten(),
+      'push-aus': () => app.mitteilungenAus()
     });
   };
 })();

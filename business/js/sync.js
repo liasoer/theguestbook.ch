@@ -110,6 +110,23 @@
         if (sha) body.sha = sha;
         const r = await anfrage('/contents/' + PFAD, { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
         return r.content.sha;
+      },
+      // Dateien in einem Ordner (z.B. anfragen/). Leere Liste, wenn es den Ordner nicht gibt.
+      async liste(ordner) {
+        try { const l = await anfrage('/contents/' + ordner); return Array.isArray(l) ? l.filter(x => x.type === 'file' && /\.json$/.test(x.name)) : []; }
+        catch (e) { if (e.status === 404) return []; throw e; }
+      },
+      async datei(pfad) {
+        try { const f = await anfrage('/contents/' + pfad); return { sha: f.sha, text: textAusBase64(f.content) }; }
+        catch (e) { if (e.status === 404) return null; throw e; }
+      },
+      async dateiSchreiben(pfad, text, nachricht, sha) {
+        const body = { message: nachricht, content: base64AusText(text) }; if (sha) body.sha = sha;
+        return (await anfrage('/contents/' + pfad, { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } })).content.sha;
+      },
+      // Löschen gelingt nur einem Gerät: so übernimmt nie zweimal jemand dieselbe Anfrage
+      async loeschen(pfad, sha, nachricht) {
+        await anfrage('/contents/' + pfad, { method: 'DELETE', body: JSON.stringify({ message: nachricht || 'Erledigt', sha }), headers: { 'Content-Type': 'application/json' } });
       }
     };
   }

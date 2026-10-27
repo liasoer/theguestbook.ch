@@ -685,6 +685,8 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
     daten['In App uebernehmen']='https://theguestbook.ch/app-uebernehmen.html#'+encodeURIComponent(JSON.stringify(fuerOfferte));
     daten._autoresponse='Danke für eure Anfrage bei The Guestbook! Wir haben eure Nachricht erhalten und melden uns in Kürze bei euch.\n\nSo geht es weiter:\n\n1. Wir melden uns und besprechen gemeinsam Datum, Ablauf und eure Wünsche.\n2. Ihr erhaltet eine Offerte und den Vertrag, damit euer Tag fix reserviert ist.\n3. Am Drehtag sind wir vor Ort und sammeln die Stimmen eurer Gäste.\n\nHerzliche Grüsse\nLias\nThe Guestbook\ntheguestbook.ch';
     knopf.disabled=true;knopf.textContent='Wird gesendet';
+    /* Zusätzlich direkt in die App «theguestbook business». Klappt das nicht, kommt die Anfrage trotzdem per Mail. */
+    try{fetch('https://theguestbook-anfragen.lias-oertig.workers.dev/anfrage',{method:'POST',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign({},fuerOfferte,{nachricht:daten.nachricht||''}))}).catch(function(){});}catch(x){}
     /* FormSubmit verschickt die Mails, bevor es antwortet, das dauert oft mehrere Sekunden.
        Darum zeigen wir die Bestätigung sofort. keepalive sorgt dafür, dass die Anfrage auch dann
        zu Ende gesendet wird, wenn die Seite geschlossen wird. Schlägt sie fehl, kommt das Formular zurück. */

@@ -302,6 +302,7 @@
         catch (e) { if (e.status === 409 || e.status === 422) continue; throw e; }  // jemand war schneller: nochmals lesen
       }
       s.status = 'ok'; s.zuletzt = new Date(); s.fehler = '';
+      await anfragenAbholen(gh);
     } catch (e) {
       s.status = e.offline ? 'offline' : 'fehler'; s.fehler = e.message;
       if (!still) app.melden(e.offline ? 'Keine Verbindung zu GitHub' : 'Abgleich fehlgeschlagen: ' + e.message, true);
@@ -310,6 +311,70 @@
       if (s.nochmal) { s.nochmal = false; app.syncBald(); }
     }
   };
+  // Anfragen, die der Empfänger (Cloudflare) im Repository abgelegt hat, als Aufträge übernehmen.
+  // Wer die Datei zuerst löschen kann, übernimmt sie. So entsteht nie ein doppelter Auftrag.
+  async function anfragenAbholen(gh) {
+    let liste;
+    try { liste = await gh.liste('anfragen'); } catch (e) { return; }
+    const neu = [];
+    for (const f of liste) {
+      try {
+        const d = await gh.datei('anfragen/' + f.name); if (!d) continue;
+        await gh.loeschen('anfragen/' + f.name, d.sha, 'Anfrage übernommen von ' + geraet);
+        const r = M.anfrageUebernehmen(app.daten, M.anfrageLesen(d.text), M.heute());
+        if (r.neu) neu.push(r);
+      } catch (e) { /* anderes Gerät war schneller oder die Datei ist kaputt */ }
+    }
+    if (!neu.length) return;
+    app.aendern();
+    const text = neu.map(r => app.kunde(r.auftrag).name + (r.auftrag.datum ? ', ' + M.datumCH(r.auftrag.datum) : '')).join('; ');
+    app.melden((neu.length === 1 ? 'Neue Anfrage: ' : neu.length + ' neue Anfragen: ') + text);
+    if (B.istMac) B.mitteilung(neu.length === 1 ? 'Neue Anfrage' : neu.length + ' neue Anfragen', text).catch(() => {});
+  }
+
+  // ---------- Mitteilungen aufs iPhone (Web Push) ----------
+  const VAPID_PUBLIC = 'BB9IaPs_xdD36euZoje6HiH92V9AuS1Qyijt_R8dqZSioO2eAHJwufZX43Tw_TS8bd8SBRcCmTiLHHHCDhiBCME';
+  const pushMoeglich = () => !B.istMac && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+  app.mitteilungen = { status: 'unbekannt' };
+  async function geraetId() {
+    let id = await B.lokalLesen('geraet-id');
+    if (!id) { id = geraet.toLowerCase() + '-' + M.id(); await B.lokalSchreiben('geraet-id', id); }
+    return id;
+  }
+  app.mitteilungenPruefen = async () => {
+    if (!pushMoeglich()) { app.mitteilungen.status = 'nicht'; return; }
+    try {
+      const reg = await navigator.serviceWorker.getRegistration();
+      const abo = reg && await reg.pushManager.getSubscription();
+      app.mitteilungen.status = abo ? 'aktiv' : Notification.permission === 'denied' ? 'gesperrt' : 'aus';
+    } catch (e) { app.mitteilungen.status = 'aus'; }
+  };
+  app.mitteilungenEinschalten = async () => {
+    if (!app.sync.konfig) return app.melden('Zuerst den Abgleich verbinden.', true);
+    // Muss direkt aus dem Tipp kommen, sonst fragt iOS nicht
+    const erlaubt = await Notification.requestPermission();
+    if (erlaubt !== 'granted') { app.mitteilungen.status = 'gesperrt'; app.zeichnen(); return app.melden('Mitteilungen sind nicht erlaubt. Du kannst sie in den iPhone-Einstellungen unter Mitteilungen einschalten.', true); }
+    try {
+      const reg = await navigator.serviceWorker.register('sw.js'); await navigator.serviceWorker.ready;
+      const schluessel = Uint8Array.from(atob(VAPID_PUBLIC.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+      const abo = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: schluessel });
+      const gh = SY.client(app.sync.konfig), pfad = 'abos/' + await geraetId() + '.json';
+      const alt = await gh.datei(pfad);
+      await gh.dateiSchreiben(pfad, JSON.stringify({ geraet, erstellt: new Date().toISOString(), abo: abo.toJSON() }, null, 2), 'Mitteilungen für ' + geraet, alt && alt.sha);
+      app.mitteilungen.status = 'aktiv'; app.melden('Mitteilungen eingeschaltet');
+    } catch (e) { app.melden('Mitteilungen konnten nicht eingeschaltet werden: ' + e.message, true); }
+    app.zeichnen();
+  };
+  app.mitteilungenAus = async () => {
+    try {
+      const reg = await navigator.serviceWorker.getRegistration(); const abo = reg && await reg.pushManager.getSubscription();
+      if (abo) await abo.unsubscribe();
+      const gh = SY.client(app.sync.konfig), pfad = 'abos/' + await geraetId() + '.json', alt = await gh.datei(pfad);
+      if (alt) await gh.loeschen(pfad, alt.sha, 'Mitteilungen aus für ' + geraet);
+    } catch (e) { /* trotzdem als aus anzeigen */ }
+    app.mitteilungen.status = 'aus'; app.zeichnen();
+  };
+
   let syncTimer;
   app.syncBald = () => { if (!app.sync.konfig) return; clearTimeout(syncTimer); syncTimer = setTimeout(() => app.syncJetzt(true), 2000); };
 
@@ -450,6 +515,9 @@
     // Sicherheitsnetz: offene Änderungen beim Schliessen sofort schreiben
     window.addEventListener('beforeunload', () => { clearTimeout(speicherTimer); B.speichern(app.daten); });
     await syncKonfigLaden();
+    // Aus einer Mitteilung geöffnet: direkt zu den Aufträgen
+    if (location.hash === '#anfragen') { app.ansicht = { name: 'auftraege' }; history.replaceState(null, '', location.pathname); }
+    if (pushMoeglich()) { navigator.serviceWorker.register('sw.js').catch(() => {}); await app.mitteilungenPruefen(); }
     app.zeichnen();
     app.syncJetzt(true);
     try { (await B.ausstehendeLinks() || []).forEach(u => app.anfrageVerarbeiten(u)); } catch (e) { /* ohne Mac-Hülle */ }
