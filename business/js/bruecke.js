@@ -52,7 +52,7 @@
     istMac: mac,
     laden: () => senden('laden'),
     speichern: (daten) => senden('speichern', { json: JSON.stringify(daten, null, 2) }),
-    pdf: (html, dateiname, raender) => senden('pdf', { html, dateiname, raender: raender || {} }),
+    pdf: (html, dateiname, raender, ordner) => senden('pdf', { html, dateiname, raender: raender || {}, ordner: ordner || '' }),
     mail: (o) => senden('mail', o),
     mitteilung: (titel, text) => senden('mitteilung', { titel, text }),
     lokalLesen: (schluessel) => senden('lokalLesen', { schluessel }),

@@ -110,6 +110,8 @@
   // Mehrseitige Dokumente (Vertrag) brauchen auf jeder Seite einen Rand: 16 mm oben, 18 mm unten
   const raenderFuer = html => /<body class="[^"]*\bvertrag\b/.test(html) ? { oben: 45, unten: 51 } : {};
   const dateiName = n => n.replace(/[\\/:*?"<>|]/g, '-');
+  // Standard-Speicherort am Mac: Offerten und Verträge haben eigene Ordner (Einstellungen → Daten und Sicherung)
+  const ablageFuer = n => { const e = app.daten.einstellungen; return /^Offerte/.test(n) ? e.ablageOfferten : /^Vertrag/.test(n) ? e.ablageVertraege : ''; };
 
   // Vorschau mit «Als PDF speichern» und, wenn eine Mailvorlage mitkommt, «Per Mail senden».
   // Gibt 'pdf', 'mail' oder false zurück, damit der Aufrufer z.B. die Offerte als verschickt markieren kann.
@@ -127,7 +129,7 @@
   app.pdfSpeichern = async (html, dateiname) => {
     if (!B.istMac) return app.dokumentImBrowser(html, dateiname);
     try {
-      const pfad = await B.pdf(html, dateiName(dateiname) + '.pdf', raenderFuer(html));
+      const pfad = await B.pdf(html, dateiName(dateiname) + '.pdf', raenderFuer(html), ablageFuer(dateiname));
       if (pfad && pfad !== 'abgebrochen') { app.melden('PDF gespeichert'); return 'pdf'; }
     } catch (e) { app.melden('PDF konnte nicht gespeichert werden: ' + e.message, true); }
     return false;
@@ -141,7 +143,7 @@
     const enc = encodeURIComponent;
     const link = basis ? basis + '?to=' + enc(mail.an || '') + '&subject=' + enc(mail.betreff) + '&body=' + enc(mail.text) : null;
     try {
-      await B.mail({ html, dateiname: dateiName(dateiname) + '.pdf', raender: raenderFuer(html), an: mail.an, betreff: mail.betreff, text: mail.text, link });
+      await B.mail({ html, dateiname: dateiName(dateiname) + '.pdf', raender: raenderFuer(html), ordner: ablageFuer(dateiname), an: mail.an, betreff: mail.betreff, text: mail.text, link });
       app.melden(link ? 'Outlook geöffnet. Das PDF ist im Finder markiert, zieh es in die Mail.' : 'Mail mit PDF in Apple Mail vorbereitet');
       return 'mail';
     } catch (e) { app.melden('Mail konnte nicht vorbereitet werden: ' + e.message, true); }
