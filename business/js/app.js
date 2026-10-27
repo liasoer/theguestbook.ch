@@ -157,6 +157,7 @@
     const titel = dateiName(dateiname);
     const mitTitel = html.replace(/<title>[^<]*<\/title>/, '<title>' + esc(titel) + '</title>');
     const fehler = err => { if (err && (err.name === 'AbortError' || err.code === 'declined')) return; app.melden('PDF konnte nicht weitergegeben werden: ' + (err && err.message || err), true); };
+    if (PdfWeb.istIOS()) return app.dokumentAufIOS(mitTitel, titel, mail);
     await app.dialog({
       gross: true, inhalt: '<iframe title="Vorschau"></iframe><p class="pdf-status" aria-live="polite">PDF wird erstellt</p>',
       knoepfe: [{ text: 'Schliessen', wert: null }],
@@ -187,6 +188,36 @@
           blob = b; status.textContent = 'PDF bereit, ' + Math.max(1, Math.round(b.size / 1024)) + ' KB';
           kPdf.disabled = false; if (kMail) kMail.disabled = false;
         }).catch(err => { status.textContent = 'PDF konnte nicht erstellt werden: ' + err.message; status.classList.add('fehler'); });
+      }
+    });
+    return ergebnis;
+  };
+
+  // iPhone: PDF über den Druck von iOS (echter Text), Mail über das Mailprogramm mit fertigem Text
+  app.dokumentAufIOS = async (html, titel, mail) => {
+    let ergebnis = false;
+    const hinweis = mail
+      ? '1. «PDF sichern»: Im Druckfenster oben auf Teilen tippen und «In theguestbook ablegen» wählen.<br>2. «Mail öffnen»: Empfänger, Betreff und Text sind ausgefüllt. Das PDF hängst du über die Büroklammer aus dem Ordner an.'
+      : 'Im Druckfenster oben auf Teilen tippen und «In theguestbook ablegen» oder ein anderes Ziel wählen.';
+    await app.dialog({
+      gross: true, inhalt: '<iframe title="Vorschau"></iframe><p class="pdf-status">' + hinweis + '</p>',
+      knoepfe: [{ text: 'Schliessen', wert: null }],
+      danach: hg => {
+        const f = $('iframe', hg);
+        f.addEventListener('load', () => {
+          const st = f.contentDocument.createElement('style');
+          st.textContent = '@media screen{html{zoom:' + Math.min(1, (f.clientWidth - 4) / 794).toFixed(3) + '}}';
+          f.contentDocument.head.appendChild(st);
+        });
+        f.srcdoc = html;
+        const knopf = (text, haupt) => { const k = document.createElement('button'); k.type = 'button'; k.className = 'knopf' + (haupt ? ' haupt' : ''); k.textContent = text; $('.unten', hg).appendChild(k); return k; };
+        const kPdf = knopf('PDF sichern', true);
+        kPdf.addEventListener('click', () => { ergebnis = ergebnis || 'pdf'; PdfWeb.drucken(html, titel); });
+        if (mail) knopf('Mail öffnen', false).addEventListener('click', () => {
+          ergebnis = 'mail';
+          const enc = encodeURIComponent;
+          location.href = 'mailto:' + enc(mail.an || '') + '?subject=' + enc(mail.betreff) + '&body=' + enc(mail.text);
+        });
       }
     });
     return ergebnis;
@@ -499,7 +530,7 @@
     if (v.danach) v.danach(main);
   };
   app.ansichten = {};
-  app.version = '27.10.2026, 22:35';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
+  app.version = '27.10.2026, 22:50';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
 
   // ---------- Start ----------
   async function start() {

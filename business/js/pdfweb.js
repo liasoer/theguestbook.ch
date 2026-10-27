@@ -152,5 +152,35 @@
     return 'gespeichert';
   }
 
-  global.PdfWeb = { erstellen, weitergeben, _seitenumbrueche: seitenumbrueche };
+  // iPhone: Safari zeichnet den Text beim Umwandeln in ein Bild nicht zuverlässig. Darum dort mit
+  // dem Druck von iOS arbeiten: Das Dokument wird ins Hauptfenster gelegt (in einem Shadow Root, damit
+  // sich die Stile von App und Dokument nicht mischen) und nur es wird gedruckt. Im Druckfenster
+  // erstellt iOS daraus ein echtes PDF mit Text, das man über «Teilen» sichert oder verschickt.
+  function drucken(html, titel) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    let stile = [...doc.querySelectorAll('style')].map(x => x.textContent).join('\n');
+    const seitenRegeln = (stile.match(/@page[^{]*\{[^}]*\}/g) || []).join('\n');
+    stile = stile.replace(/@page[^{]*\{[^}]*\}/g, '')
+      .replace(/,\s*html:has\(body\.vertrag\)/g, '')
+      .replace(/\bhtml\s*,\s*body\b/g, '.dok-body')
+      .replace(/\bhtml\b(?=\s*[{,])/g, '.dok-body')
+      .replace(/\bbody\b/g, '.dok-body');
+    let host = document.getElementById('druck');
+    if (!host) { host = document.createElement('div'); host.id = 'druck'; document.body.appendChild(host); host.attachShadow({ mode: 'open' }); }
+    host.shadowRoot.innerHTML = '<style>' + stile + '</style><div class="dok-body ' + (doc.body.className || '') + '">' + doc.body.innerHTML + '</div>';
+    let druckStil = document.getElementById('druck-stil');
+    if (!druckStil) { druckStil = document.createElement('style'); druckStil.id = 'druck-stil'; document.head.appendChild(druckStil); }
+    druckStil.textContent = '#druck{display:none}@media print{body>*:not(#druck){display:none!important}#druck{display:block!important}' +
+      'html,body{background:#fff!important;height:auto!important;min-height:0!important;overflow:visible!important;padding:0!important;margin:0!important;display:block!important}}' +
+      (seitenRegeln || '@page{size:A4 portrait;margin:0}');
+    const alterTitel = document.title;
+    document.title = titel;   // iOS benennt das PDF nach dem Seitentitel
+    const zurueck = () => { document.title = alterTitel; window.removeEventListener('afterprint', zurueck); };
+    window.addEventListener('afterprint', zurueck);
+    setTimeout(zurueck, 60000);
+    window.print();
+  }
+  const istIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  global.PdfWeb = { erstellen, weitergeben, drucken, istIOS, _seitenumbrueche: seitenumbrueche };
 })(typeof window !== 'undefined' ? window : globalThis);
