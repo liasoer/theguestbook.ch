@@ -157,7 +157,6 @@
     const titel = dateiName(dateiname);
     const mitTitel = html.replace(/<title>[^<]*<\/title>/, '<title>' + esc(titel) + '</title>');
     const fehler = err => { if (err && (err.name === 'AbortError' || err.code === 'declined')) return; app.melden('PDF konnte nicht weitergegeben werden: ' + (err && err.message || err), true); };
-    if (PdfWeb.istIOS()) return app.dokumentAufIOS(mitTitel, titel, mail);
     await app.dialog({
       gross: true, inhalt: '<iframe title="Vorschau"></iframe><p class="pdf-status" aria-live="polite">PDF wird erstellt</p>',
       knoepfe: [{ text: 'Schliessen', wert: null }],
@@ -530,7 +529,7 @@
     if (v.danach) v.danach(main);
   };
   app.ansichten = {};
-  app.version = '27.10.2026, 22:50';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
+  app.version = '27.10.2026, 23:05';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
 
   // ---------- Start ----------
   async function start() {

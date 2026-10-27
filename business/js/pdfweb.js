@@ -89,9 +89,74 @@
   }
   const ERSATZ = '*{font-family:Georgia,"Times New Roman",serif!important}.qr-zahlteil,.qr-zahlteil *{font-family:Helvetica,Arial,sans-serif!important}';
 
+  // Text wird nicht aus dem Bild genommen, sondern als echter PDF-Text darübergelegt: Safari auf dem
+  // iPhone zeichnet Text beim Umwandeln in ein Bild nicht zuverlässig. Dafür jedes Wort im Layout
+  // ausmessen (Position, Grösse, Farbe, Schnitt), im Bild unsichtbar machen und mit jsPDF neu setzen.
+  function woerterMessen(wurzel) {
+    const doc = wurzel.ownerDocument, win = doc.defaultView, r0 = wurzel.getBoundingClientRect(), liste = [];
+    const stil = el => win.getComputedStyle(el);
+    const eintrag = (r, text, st, extra) => liste.push(Object.assign({
+      x: r.left - r0.left, y: r.top - r0.top, w: r.width, h: r.height, text,
+      groesse: parseFloat(st.fontSize), farbe: st.color, familie: st.fontFamily,
+      fett: (parseInt(st.fontWeight, 10) || 400) >= 600, kursiv: st.fontStyle === 'italic',
+      abstand: parseFloat(st.letterSpacing) || 0
+    }, extra || {}));
+    const gang = doc.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT);
+    const knoten = [];
+    for (let n = gang.nextNode(); n; n = gang.nextNode()) knoten.push(n);
+    for (const n of knoten) {
+      const t = n.nodeValue; if (!t || !t.trim()) continue;
+      const el = n.parentElement, st = stil(el);
+      if (st.visibility === 'hidden' || st.display === 'none' || el.closest('svg')) continue;
+      const tf = st.textTransform;
+      const re = /\S+/g; let m;
+      while ((m = re.exec(t))) {
+        const rg = doc.createRange(); rg.setStart(n, m.index); rg.setEnd(n, m.index + m[0].length);
+        const r = rg.getClientRects()[0]; if (!r || !r.width) continue;
+        let w = m[0]; if (tf === 'uppercase') w = w.toUpperCase(); else if (tf === 'lowercase') w = w.toLowerCase();
+        eintrag(r, w, st);
+      }
+    }
+    // Nummern von Listen (1., 2., ...) gehören nicht zum Text und werden extra gesetzt
+    wurzel.querySelectorAll('ol').forEach(ol => {
+      if (stil(ol).listStyleType !== 'decimal') return;
+      [...ol.children].filter(li => li.tagName === 'LI').forEach((li, i) => {
+        const st = stil(li), rg = doc.createRange(); rg.selectNodeContents(li);
+        const erste = rg.getClientRects()[0], lr = li.getBoundingClientRect(); if (!erste) return;
+        eintrag({ left: lr.left - parseFloat(st.fontSize) * 0.4, top: erste.top, width: 1, height: erste.height }, (i + 1) + '.', st, { rechts: true });
+      });
+    });
+    // Im Bild ausblenden, damit der Text nicht doppelt erscheint (Rahmen und Linien bleiben)
+    for (const n of knoten) {
+      if (!n.nodeValue || !n.nodeValue.trim() || !n.parentElement || n.parentElement.closest('svg')) continue;
+      const sp = doc.createElement('span'); sp.style.opacity = '0';
+      n.parentNode.insertBefore(sp, n); sp.appendChild(n);
+    }
+    const ol = doc.createElement('style'); ol.textContent = 'ol{list-style:none}'; doc.head.appendChild(ol);
+    return liste;
+  }
+
+  function farbeLesen(c) {
+    const m = String(c).match(/rgba?\(([\d.]+)[ ,]+([\d.]+)[ ,]+([\d.]+)(?:[ ,/]+([\d.]+))?/);
+    return m ? { r: +m[1], g: +m[2], b: +m[3], a: m[4] == null ? 1 : +m[4] } : { r: 0, g: 0, b: 0, a: 1 };
+  }
+  // Standardschriften im PDF: Times für die Serifenschriften, Helvetica für den QR-Zahlteil
+  function textSetzen(pdf, woerter, von, bis, obenMm) {
+    for (const w of woerter) {
+      if (w.y < von - 1 || w.y >= bis - 1) continue;
+      const f = farbeLesen(w.farbe); if (f.a === 0) continue;
+      const serifenlos = /helvetica|arial|sans-serif|system-ui|-apple-system/i.test(w.familie) && !/serif"?\s*$/i.test(w.familie.replace(/sans-serif/i, ''));
+      pdf.setFont(serifenlos ? 'helvetica' : 'times', w.fett && w.kursiv ? 'bolditalic' : w.fett ? 'bold' : w.kursiv ? 'italic' : 'normal');
+      pdf.setFontSize(w.groesse * 0.75);
+      pdf.setTextColor(f.r, f.g, f.b);
+      const x = w.x / MM, y = obenMm + (w.y - von + w.h * 0.79) / MM;
+      if (w.rechts) pdf.text(w.text, x, y, { align: 'right' });
+      else pdf.text(w.text, x, y, w.abstand ? { charSpace: w.abstand / MM } : undefined);
+    }
+  }
+
   async function erstellen(html) {
-    const [, schriftenOk] = await Promise.all([bibliotheken(), schriftenLaden()]);
-    if (!schriftenOk) html = html.replace('</head>', '<style>' + ERSATZ + '</style></head>');
+    await Promise.all([bibliotheken(), schriftenLaden()]);
     const f = await rahmen(html);
     try {
       const doc = f.contentDocument;
@@ -103,9 +168,10 @@
       if (doc.body.classList.contains('vertrag')) {
         const wurzel = doc.querySelector('.seite') || doc.body;
         const breite = wurzel.offsetWidth, hoehe = wurzel.scrollHeight;
+        const seiten = seitenumbrueche(bloecke(wurzel), hoehe, (297 - 16 - 18) * MM);
+        const woerter = woerterMessen(wurzel);
         const s = massstab(breite, hoehe, 2.5);
         const canvas = await global.html2canvas(wurzel, { scale: s, backgroundColor: '#ffffff', useCORS: true, logging: false, windowWidth: 794 });
-        const seiten = seitenumbrueche(bloecke(wurzel), hoehe, (297 - 16 - 18) * MM);
         for (const [a, b] of seiten) {
           const teil = document.createElement('canvas');
           teil.width = canvas.width; teil.height = Math.max(1, Math.round((b - a) * s));
@@ -113,15 +179,18 @@
           ctx.drawImage(canvas, 0, Math.round(a * s), canvas.width, teil.height, 0, 0, teil.width, teil.height);
           neueSeite();
           pdf.addImage(bild(teil, 0.9), 'JPEG', 0, 16, 210, (b - a) / MM, undefined, 'FAST');
+          textSetzen(pdf, woerter, a, b, 16);
         }
       } else {
         const blaetter = [...doc.querySelectorAll('.seite')];
         for (const el of (blaetter.length ? blaetter : [doc.body])) {
+          const woerter = woerterMessen(el);
           const s = massstab(el.offsetWidth, el.offsetHeight, 3);
           const canvas = await global.html2canvas(el, { scale: s, backgroundColor: '#FBF8F2', useCORS: true, logging: false, windowWidth: 794 });
           neueSeite();
           pdf.setFillColor(251, 248, 242); pdf.rect(0, 0, 210, 297, 'F');
           pdf.addImage(bild(canvas, 0.92), 'JPEG', 0, 0, 210, Math.min(297, el.offsetHeight / MM), undefined, 'FAST');
+          textSetzen(pdf, woerter, 0, el.offsetHeight + 2, 0);
         }
       }
       return pdf.output('blob');
