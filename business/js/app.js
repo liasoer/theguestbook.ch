@@ -406,7 +406,7 @@
   };
 
   function leisteZeichnen() {
-    const n = app.ansicht.name === 'auftrag' ? 'auftraege' : app.ansicht.name;
+    const n = ['auftrag', 'kunden'].includes(app.ansicht.name) ? 'auftraege' : app.ansicht.name;
     const anfragen = app.daten.auftraege.filter(a => a.status === 'anfrage').length;
     $$('.nav button').forEach(b => {
       b.setAttribute('aria-current', b.dataset.ziel === n ? 'page' : 'false');

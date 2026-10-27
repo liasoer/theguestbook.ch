@@ -74,6 +74,12 @@ h2{font-family:var(--f-titel);font-weight:600;font-size:13px;letter-spacing:.06e
 .karte{background:var(--karte);border:1px solid var(--linie);border-radius:10px;padding:16px 18px;min-width:0}
 .karte.flach{padding:0;overflow:hidden}
 
+.kennzahlen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:var(--karte);border:1px solid var(--linie);border-radius:10px;margin-bottom:16px}
+.kennzahlen>div{padding:12px 18px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kennzahlen>div+div{border-left:1px solid var(--linie)}
+.kennzahlen span{font-size:12px;color:var(--muted)}
+.kennzahlen b{font-family:var(--f-titel);font-weight:500;font-size:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:720px){.kennzahlen>div{padding:10px 12px}.kennzahlen b{font-size:15px}}
 .kennzahl .label{font-size:12px;color:var(--muted)}
 .kennzahl .wert{font-family:var(--f-titel);font-size:22px;margin-top:2px}
 .kennzahl .info{font-size:12px;color:var(--muted);margin-top:2px}
@@ -185,6 +191,18 @@ input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and
 .dialog iframe{flex:1;width:100%;border:1px solid var(--linie);border-radius:8px;background:#fff}
 .dialog textarea{width:100%;min-height:140px;background:var(--flaeche);border:1px solid var(--linie-stark);border-radius:8px;padding:10px;font-family:ui-monospace,Menlo,monospace;font-size:12px}
 
+/* Einstellungen als aufklappbare Abschnitte */
+.abschnitte{display:flex;flex-direction:column;gap:10px;max-width:900px}
+.abschnitt{background:var(--karte);border:1px solid var(--linie);border-radius:10px}
+.abschnitt>summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;flex-direction:column;gap:2px;position:relative;padding-right:44px}
+.abschnitt>summary::-webkit-details-marker{display:none}
+.abschnitt>summary::after{content:"";position:absolute;right:20px;top:50%;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);transition:transform .15s}
+.abschnitt[open]>summary::after{transform:translateY(-30%) rotate(225deg)}
+.a-titel{font-weight:600}
+.a-info{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.a-inhalt{padding:0 18px 18px}
+@media (prefers-reduced-motion:reduce){.abschnitt>summary::after{transition:none}}
+
 /* Mailvorlagen */
 .breit-karte{grid-column:1/-1}
 .vorlage{border-top:1px solid var(--linie);padding:10px 0}
@@ -220,6 +238,7 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--
 @media (prefers-color-scheme:dark){.ereignis.event{color:#A9B9A5}}
 
 /* Kassenbuch */
+.nebenlinks{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
 .saldo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
 .saldo>div{padding:14px 18px}
 .saldo>div+div{border-left:1px solid var(--linie)}
@@ -260,6 +279,9 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--
 /* ================= iPhone und schmale Fenster ================= */
 @media (max-width:720px){
   html,body{height:auto;min-height:100%}
+  /* Als Web-App auf dem Home-Bildschirm zählt iOS die Statusleiste nicht zur Seitenhöhe. Kurze Seiten
+     (Aufträge, Kalender) liessen sonst unter der Tab-Leiste einen Streifen frei. */
+  html{min-height:calc(100% + env(safe-area-inset-top, 0px))}
   body{display:block;overflow:visible;font-size:15px;background:var(--flaeche)}
   .nur-mobil{display:block}
   .nur-gross{display:none!important}
@@ -359,3 +381,5 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--
 .monatsliste button.anlass.event i{background:var(--moos)}
 .monatsliste button.ueber{color:var(--krit)}
 .monatsliste button.ueber i{background:var(--krit)}
+.mehr-knopf{letter-spacing:1px;padding-left:11px;padding-right:11px;color:var(--muted)}
+@media (max-width:720px){.kopfzeile .aktionen .mehr-knopf{flex:0 0 auto}}

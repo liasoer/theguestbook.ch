@@ -111,6 +111,7 @@
     const er = M.erfolgsrechnung(app.daten, jahr);
     const b = kb.bearbeiten ? app.daten.buchungen.find(x => x.id === kb.bearbeiten) : null;
     const typ = b ? b.typ : kb.typ;
+    const formSichtbar = !!(b || kb.formOffen);
     const heute = M.heute();
     const form = '<form class="karte" data-buchung style="margin-bottom:16px"><div class="kopfzeile" style="margin-bottom:12px"><h2 style="margin:0">' + (b ? 'Buchung bearbeiten' : 'Neue Buchung') + '</h2>' +
       '<div class="umschalter" role="group" aria-label="Art"><button type="button" class="ein" data-aktion="typ" data-wert="ein" aria-pressed="' + (typ === 'ein') + '">Einnahme</button><button type="button" class="aus" data-aktion="typ" data-wert="aus" aria-pressed="' + (typ === 'aus') + '">Ausgabe</button></div></div>' +
@@ -123,11 +124,10 @@
         '<label class="feld"><span>Beleg Nr.</span><input name="beleg" value="' + esc(b ? b.beleg || '' : nextBeleg(jahr)) + '"></label>' +
         '<label class="feld"><span>Auftrag (optional)</span><select name="auftragId"><option value="">Kein Auftrag</option>' + app.daten.auftraege.slice().reverse().map(a => '<option value="' + a.id + '"' + (b && b.auftragId === a.id ? ' selected' : '') + '>' + esc(a.nummer + ' ' + app.kunde(a).name) + '</option>').join('') + '</select></label>' +
       '</div><div class="aktionen" style="margin-top:12px"><button class="knopf haupt">' + (b ? 'Änderung speichern' : 'Buchen') + '</button>' +
-        (b ? '<button type="button" class="knopf" data-aktion="abbrechen">Abbrechen</button><button type="button" class="knopf gefahr" data-aktion="loeschen" data-wert="' + b.id + '">Löschen</button>' : '') +
+        '<button type="button" class="knopf" data-aktion="abbrechen">Abbrechen</button>' + (b ? '<button type="button" class="knopf gefahr" data-aktion="loeschen" data-wert="' + b.id + '">Löschen</button>' : '') +
         (b && (b.rechnungId || b.mitarbeiterId) ? '<span style="color:var(--muted)">Automatisch aus ' + (b.rechnungId ? 'einer Rechnung' : 'der Mitarbeiter-Auszahlung') + ' gebucht. Änderungen besser dort vornehmen.</span>' : '') + '</div></form>';
 
-    const f = kb.filter;
-    const sichtbar = jb.filter(x => f === 'alle' || x.typ === f).sort((x, y) => y.datum.localeCompare(x.datum));
+    const sichtbar = jb.slice().sort((x, y) => y.datum.localeCompare(x.datum));
     let liste = '', monat = -1;
     sichtbar.forEach(x => {
       const m = +x.datum.slice(5, 7) - 1;
@@ -151,14 +151,14 @@
 
     return '<div class="kopfzeile"><h1>Kassenbuch<small>Einnahmen und Ausgaben, Milchbüchlein</small></h1><div class="aktionen">' +
       '<select class="eingabe" style="width:auto" data-jahr aria-label="Jahr">' + [...jahre].sort((x, y) => y - x).map(j => '<option' + (j === jahr ? ' selected' : '') + '>' + j + '</option>').join('') + '</select>' +
-      '<button class="knopf" data-aktion="import">CSV einlesen</button><button class="knopf" data-aktion="csv">Buchungen als CSV</button></div></div>' +
+      (formSichtbar ? '' : '<button class="knopf haupt" data-aktion="erfassen" data-wert="aus">Ausgabe erfassen</button><button class="knopf" data-aktion="erfassen" data-wert="ein">Einnahme</button>') + '</div></div>' +
       '<div class="karte flach saldo" style="margin-bottom:16px"><div><div class="leise" style="color:var(--muted)">Einnahmen</div><div class="wert zahl plus">' + M.chf(er.totalErtrag) + '</div></div>' +
         '<div><div style="color:var(--muted)">Ausgaben</div><div class="wert zahl minus">' + M.chf(er.totalAufwand) + '</div></div>' +
         '<div style="background:var(--akzent-bg)"><div style="color:var(--muted)">Gewinn</div><div class="wert zahl">' + M.chf(er.gewinn) + '</div></div></div>' +
       '<div class="tabs"><button data-aktion="kbtab" data-wert="liste" aria-selected="' + (kb.tab === 'liste') + '">Buchungen</button><button data-aktion="kbtab" data-wert="er" aria-selected="' + (kb.tab === 'er') + '">Für die Steuern</button></div>' +
-      (kb.tab === 'er' ? erTab : form +
-        '<div class="filter">' + [['alle', 'Alle'], ['ein', 'Einnahmen'], ['aus', 'Ausgaben']].map(([k, t]) => '<button data-aktion="filter" data-wert="' + k + '" aria-pressed="' + (f === k) + '">' + t + '</button>').join('') + '</div>' +
-        '<div class="karte flach">' + (sichtbar.length ? '<table class="tabelle"><tbody>' + liste + '</tbody></table>' : '<div class="leer"><strong>Noch keine Buchungen in ' + jahr + '</strong>Bezahlte Rechnungen erscheinen automatisch. Ausgaben erfasst du oben.</div>') + '</div>') +
+      (kb.tab === 'er' ? erTab : (formSichtbar ? form : '') +
+        '<div class="karte flach">' + (sichtbar.length ? '<table class="tabelle"><tbody>' + liste + '</tbody></table>' : '<div class="leer"><strong>Noch keine Buchungen in ' + jahr + '</strong>Bezahlte Rechnungen und Überweisungen an die Mitarbeiterin werden automatisch gebucht. Ausgaben erfasst du mit «Ausgabe erfassen».</div>') + '</div>' +
+        '<p class="nebenlinks"><button class="knopf text" data-aktion="import">CSV einlesen</button><button class="knopf text" data-aktion="csv">Buchungen als CSV speichern</button></p>') +
       '<input type="file" accept=".csv,text/csv" data-datei hidden>';
   };
 
@@ -199,7 +199,7 @@
       const neu = { ...(alt || { id: M.id(), erstellt: new Date().toISOString() }), datum: form.datum.value, jahr: +form.datum.value.slice(0, 4), typ, kat: form.kat.value,
         text: form.text.value.trim(), betrag, zahlart: form.zahlart.value, beleg: form.beleg.value.trim(), auftragId: form.auftragId.value || undefined };
       if (alt) Object.assign(alt, neu); else app.daten.buchungen.push(neu);
-      kb.bearbeiten = null; kb.jahr = neu.jahr;
+      kb.bearbeiten = null; kb.formOffen = false; kb.jahr = neu.jahr;
       app.melden(alt ? 'Änderung gespeichert' : 'Gebucht');
       app.aendern();
     });
@@ -216,7 +216,8 @@
     klick(main, {
       typ: t => { if (kb.bearbeiten) return; kb.typ = t; app.zeichnen(); },
       bearbeiten: id => { kb.bearbeiten = id; app.zeichnen(); main.scrollTop = 0; },
-      abbrechen: () => { kb.bearbeiten = null; app.zeichnen(); },
+      abbrechen: () => { kb.bearbeiten = null; kb.formOffen = false; app.zeichnen(); },
+      erfassen: t => { kb.typ = t; kb.formOffen = true; kb.tab = 'liste'; app.zeichnen(); const f = document.querySelector('[data-buchung] [name=betrag]'); if (f) f.focus(); },
       loeschen: async id => {
         const b = app.daten.buchungen.find(x => x.id === id);
         if (!await app.bestaetigen('Buchung löschen?', b.text + ', CHF ' + M.chf(b.betrag), 'Löschen', true)) return;
@@ -245,30 +246,36 @@
 
   // ---------- Einstellungen ----------
 
+  // Einstellungen als aufklappbare Abschnitte: das Wichtigste oben, Seltenes eingeklappt
+  app.offeneAbschnitte = app.offeneAbschnitte || new Set();
   A.einstellungen = () => {
     const e = E();
     const ib = Q.ibanPruefen(e.iban);
-    const f = (label, key, opt = {}) => '<label class="feld' + (opt.breit ? ' breit' : '') + (opt.fehler ? ' fehler' : '') + '"><span>' + esc(label) + '</span><input data-e="' + key + '"' + (opt.zahl ? ' type="number" step="any" data-typ="zahl"' : '') +
-      (opt.rappen ? ' data-typ="rappen" class="betrag"' : '') + ' value="' + esc(opt.rappen ? (e[key] / 100).toFixed(2) : e[key]) + '">' + (opt.hilfe ? '<small>' + opt.hilfe + '</small>' : '') + '</label>';
-    return '<div class="kopfzeile"><h1>Einstellungen<small>Gelten für alle neuen Dokumente</small></h1><div class="aktionen">' + (B.istMac ? '<button class="knopf" data-aktion="ordner">Datenordner zeigen</button>' : '') + '<button class="knopf" data-aktion="sicherung">Sicherung exportieren</button></div></div>' +
-      '<div class="raster zwei">' +
-      syncKarte() +
-      '<div class="karte"><h2>Absender auf Dokumenten</h2><div class="felder">' + f('Firma', 'firma') + f('Inhaber', 'inhaber') + f('Strasse', 'strasse') + f('Nr.', 'hausnummer') + f('PLZ', 'plz') + f('Ort', 'ort') +
-        f('E-Mail', 'email') + f('Telefon', 'telefon') + f('Website', 'web') + '</div></div>' +
-      '<div class="karte"><h2>Bank und QR-Rechnung</h2><div class="felder">' + f('IBAN', 'iban', { breit: true, fehler: !ib.ok, hilfe: ib.ok ? (ib.qrIban ? 'Das ist eine QR-IBAN. Für RF-Referenzen brauchst du die normale IBAN.' : 'Gültig') : esc(ib.grund) }) +
-        f('Bank', 'bank') + f('Hinweis Mehrwertsteuer', 'mwstHinweis', { breit: true }) + '</div>' +
-        '<h2 style="margin-top:18px">Konditionen</h2><div class="felder drei">' + f('Anzahlung %', 'anzahlungProzent', { zahl: true }) + f('Anzahlung fällig (Tage)', 'anzahlungFaelligTage', { zahl: true }) +
-        f('Rest fällig nach Anlass (Tage)', 'restFaelligTage', { zahl: true }) + f('km inklusive', 'kmInklusive', { zahl: true }) + f('CHF pro km', 'kmRappen', { rappen: true }) + f('Offerte gültig (Tage)', 'offerteGueltigTage', { zahl: true }) +
-        f('Ablauf vorher (Tage)', 'ablaufVorherTage', { zahl: true }) + f('Lieferung (Wochen)', 'lieferungWochen', { zahl: true }) + f('Aufbewahrung (Monate)', 'archivMonate', { zahl: true }) +
-        f('Mahnfrist (Tage)', 'mahnFristTage', { zahl: true }) + f('Mahngebühr ab 2. Mahnung', 'mahnGebuehrRappen', { rappen: true, hilfe: 'Nur verlangen, wenn im Vertrag vereinbart' }) + f('Storno früh %', 'stornoFruehProzent', { zahl: true }) + f('Storno spät %', 'stornoSpaetProzent', { zahl: true }) + f('Grenze (Tage vorher)', 'stornoGrenzeTage', { zahl: true }) + '</div></div>' +
-      '</div>' +
-      '<div class="karte flach" style="margin-top:16px"><div class="kopfzeile" style="padding:14px 16px 0;margin-bottom:8px"><h2 style="margin:0">Pakete und Preise</h2><button class="knopf klein" data-aktion="paket-neu">Paket hinzufügen</button></div>' +
+    const f = (label, key, opt = {}) => '<label class="feld' + (opt.breit ? ' breit' : '') + (opt.fehler ? ' fehler' : '') + '"><span>' + esc(label) + '</span><input data-e="' + key + '"' + (opt.zahl ? ' type="number" step="any" inputmode="decimal" data-typ="zahl"' : '') +
+      (opt.rappen ? ' data-typ="rappen" inputmode="decimal" class="betrag"' : '') + ' value="' + esc(opt.rappen ? (e[key] / 100).toFixed(2) : e[key]) + '">' + (opt.hilfe ? '<small>' + opt.hilfe + '</small>' : '') + '</label>';
+    const abschnitt = (id, titel, info, inhalt, offen) => '<details class="abschnitt" data-abschnitt="' + id + '"' + (offen || app.offeneAbschnitte.has(id) ? ' open' : '') + '>' +
+      '<summary><span class="a-titel">' + titel + '</span><span class="a-info">' + info + '</span></summary><div class="a-inhalt">' + inhalt + '</div></details>';
+    const ma = e.mitarbeiter[0];
+    return '<div class="kopfzeile"><h1>Einstellungen<small>Gelten für alle neuen Dokumente</small></h1></div>' +
+      '<div class="abschnitte">' +
+      abschnitt('sync', 'Abgleich Mac und iPhone', app.sync.konfig ? esc(app.syncText()) : 'Nicht verbunden', syncKarte(), !app.sync.konfig) +
+      abschnitt('absender', 'Absender und Bank', esc([e.firma, e.iban].filter(Boolean).join(', ')),
+        '<div class="felder">' + f('Firma', 'firma') + f('Inhaber', 'inhaber') + f('Strasse', 'strasse') + f('Nr.', 'hausnummer') + f('PLZ', 'plz') + f('Ort', 'ort') +
+        f('E-Mail', 'email') + f('Telefon', 'telefon') + f('Website', 'web') +
+        f('IBAN', 'iban', { breit: true, fehler: !ib.ok, hilfe: ib.ok ? (ib.qrIban ? 'Das ist eine QR-IBAN. Für RF-Referenzen brauchst du die normale IBAN.' : 'Gültig') : esc(ib.grund) }) +
+        f('Bank', 'bank') + f('Hinweis Mehrwertsteuer', 'mwstHinweis', { breit: true }) + '</div>') +
+      abschnitt('pakete', 'Pakete und Preise', e.pakete.length + ' Pakete',
         '<table class="tabelle posten"><thead><tr><th>Name</th><th>Beschreibung</th><th class="r">CHF</th><th></th></tr></thead><tbody>' + e.pakete.map((p, i) =>
           '<tr><td style="width:24%"><input data-paket="' + i + '" data-f="name" value="' + esc(p.name) + '" aria-label="Name"></td><td><input data-paket="' + i + '" data-f="beschreibung" value="' + esc(p.beschreibung) + '" aria-label="Beschreibung"></td>' +
-          '<td style="width:120px"><input class="betrag" data-paket="' + i + '" data-f="rappen" value="' + (p.rappen / 100).toFixed(2) + '" aria-label="Preis"></td><td style="width:36px"><button class="entfernen" data-aktion="paket-weg" data-wert="' + i + '" aria-label="Paket entfernen">×</button></td></tr>').join('') +
-        '</tbody></table></div>' +
-      '<div class="raster zwei" style="margin-top:16px">' +
-      '<div class="karte"><div class="kopfzeile" style="margin-bottom:8px"><h2 style="margin:0">Mitarbeiterin</h2>' + (e.mitarbeiter.length ? '' : '<button class="knopf klein" data-aktion="ma-neu">Mitarbeiterin erfassen</button>') + '</div>' +
+          '<td class="r" style="width:120px"><input class="betrag" inputmode="decimal" data-paket="' + i + '" data-f="rappen" value="' + (p.rappen / 100).toFixed(2) + '" aria-label="Preis"></td><td style="width:36px"><button class="entfernen" data-aktion="paket-weg" data-wert="' + i + '" aria-label="Paket entfernen">×</button></td></tr>').join('') +
+        '</tbody></table><div class="aktionen" style="margin-top:10px"><button class="knopf klein" data-aktion="paket-neu">Paket hinzufügen</button></div>') +
+      abschnitt('konditionen', 'Zahlungen und Fristen', 'Anzahlung ' + e.anzahlungProzent + ' %, Offerte ' + e.offerteGueltigTage + ' Tage gültig',
+        '<div class="felder drei">' + f('Anzahlung %', 'anzahlungProzent', { zahl: true }) + f('Anzahlung fällig (Tage)', 'anzahlungFaelligTage', { zahl: true }) +
+        f('Rest fällig nach Anlass (Tage)', 'restFaelligTage', { zahl: true }) + f('km inklusive', 'kmInklusive', { zahl: true }) + f('CHF pro km', 'kmRappen', { rappen: true }) + f('Offerte gültig (Tage)', 'offerteGueltigTage', { zahl: true }) +
+        f('Ablauf vorher (Tage)', 'ablaufVorherTage', { zahl: true }) + f('Lieferung (Wochen)', 'lieferungWochen', { zahl: true }) + f('Aufbewahrung (Monate)', 'archivMonate', { zahl: true }) +
+        f('Mahnfrist (Tage)', 'mahnFristTage', { zahl: true }) + f('Mahngebühr ab 2. Mahnung', 'mahnGebuehrRappen', { rappen: true, hilfe: 'Nur verlangen, wenn im Vertrag vereinbart' }) + f('Storno früh %', 'stornoFruehProzent', { zahl: true }) + f('Storno spät %', 'stornoSpaetProzent', { zahl: true }) + f('Grenze (Tage vorher)', 'stornoGrenzeTage', { zahl: true }) + '</div>') +
+      abschnitt('mail', 'Mailvorlagen', 'Texte für Offerte, Vertrag, Rechnung und Mahnung', mailKarte()) +
+      abschnitt('mitarbeiterin', 'Mitarbeiterin', ma ? esc(ma.name) + ', ' + e.mitarbeiterProzent + ' %, Fremdleistung' : 'Keine erfasst',
         (e.mitarbeiter.length ? e.mitarbeiter.map((m, i) => {
           const j = M.mitarbeiterJahr(app.daten, m.id, new Date().getFullYear());
           return '<div class="felder" style="margin-bottom:10px;align-items:end"><label class="feld"><span>Name</span><input data-ma="' + i + '" data-f="name" value="' + esc(m.name) + '"></label>' +
@@ -277,35 +284,38 @@
         }).join('') + '<div class="felder">' + f('Anteil %', 'mitarbeiterProzent', { zahl: true }) +
           '<label class="check" style="align-self:end;padding-bottom:8px"><input type="checkbox" data-e="mitarbeiterOhneAnfahrt" data-typ="check"' + (e.mitarbeiterOhneAnfahrt ? ' checked' : '') + '> Anteil ohne Anfahrt berechnen</label>' +
           '<label class="check breit"><input type="checkbox" data-e="mitarbeiterStandard" data-typ="check"' + (e.mitarbeiterStandard ? ' checked' : '') + '> Neue Aufträge automatisch ihr zuordnen</label></div>'
-          : '<p style="margin:0;color:var(--muted)">Noch keine Mitarbeiterin erfasst.</p>') + '</div>' +
-      mailKarte() +
-      '<div class="karte"><h2>Sozialversicherung</h2>' +
+          : '<p style="margin:0 0 10px;color:var(--muted)">Noch keine Mitarbeiterin erfasst.</p><button class="knopf klein" data-aktion="ma-neu">Mitarbeiterin erfassen</button>')) +
+      abschnitt('sozial', 'Sozialversicherung', 'AHV/IV/EO für Selbständige',
         '<label class="check" style="margin-bottom:10px"><input type="checkbox" data-e="ahvMindestbeitragUeberLohn" data-typ="check"' + (e.ahvMindestbeitragUeberLohn ? ' checked' : '') + '> Mindestbeitrag ist schon über meinen Lohn bezahlt (Anstellung)</label>' +
-        '<div class="felder">' + f('Verwaltungskosten SVA in %', 'ahvVerwaltungskostenProzent', { zahl: true, hilfe: 'Steht auf der Akontorechnung der SVA, höchstens 5 %' }) + '</div></div>' +
-      (B.istMac ? '<div class="karte"><h2>Apple Kalender</h2><label class="check"><input type="checkbox" data-e="kalenderAbgleich" data-typ="check"' + (e.kalenderAbgleich ? ' checked' : '') + '> Anlässe und Fristen automatisch in den Kalender «theguestbook» eintragen</label>' +
-        '<p style="margin:10px 0 0;color:var(--muted)">' + esc(app.kalenderStatus || 'Noch nicht abgeglichen.') + '</p><div class="aktionen" style="margin-top:10px"><button class="knopf" data-aktion="abgleich"' + '>Jetzt abgleichen</button></div></div>' : '') +
+        '<div class="felder">' + f('Verwaltungskosten SVA in %', 'ahvVerwaltungskostenProzent', { zahl: true, hilfe: 'Steht auf der Akontorechnung der SVA, höchstens 5 %' }) + '</div>') +
+      (B.istMac ? abschnitt('kalender', 'Apple Kalender', e.kalenderAbgleich ? 'Automatischer Abgleich ein' : 'Ausgeschaltet',
+        '<label class="check"><input type="checkbox" data-e="kalenderAbgleich" data-typ="check"' + (e.kalenderAbgleich ? ' checked' : '') + '> Anlässe und Fristen automatisch in den Kalender «theguestbook» eintragen</label>' +
+        '<p style="margin:10px 0 0;color:var(--muted)">' + esc(app.kalenderStatus || 'Noch nicht abgeglichen.') + '</p><div class="aktionen" style="margin-top:10px"><button class="knopf" data-aktion="abgleich">Jetzt abgleichen</button></div>') : '') +
+      abschnitt('daten', 'Daten und Sicherung', B.istMac ? 'Datenordner und Sicherung' : 'Sicherung exportieren',
+        '<p style="margin:0 0 10px;color:var(--muted)">' + (B.istMac ? 'Die Daten liegen in deinem Dokumente-Ordner (iCloud) mit automatischen Sicherungen.' : 'Eine Sicherung ist eine Datei mit allen Daten, zum Aufbewahren.') + '</p>' +
+        '<div class="aktionen">' + (B.istMac ? '<button class="knopf" data-aktion="ordner">Datenordner zeigen</button>' : '') + '<button class="knopf" data-aktion="sicherung">Sicherung exportieren</button></div>') +
       '</div>';
   };
 
   // Abgleich zwischen Mac und iPhone über ein privates GitHub-Repository
   function syncKarte() {
     const s = app.sync;
-    if (s.konfig) return '<div class="karte breit-karte"><h2>Abgleich Mac und iPhone</h2>' +
+    if (s.konfig) return '' +
       '<p style="margin:0 0 6px">Verbunden mit <strong>' + esc(s.konfig.repo) + '</strong></p>' +
       '<p style="margin:0 0 12px;color:var(--muted)" data-sync-status>' + esc(app.syncText()) + '</p>' +
-      '<div class="aktionen"><button class="knopf" data-aktion="sync-jetzt">Jetzt abgleichen</button><button class="knopf text" data-aktion="sync-trennen">Trennen</button></div></div>';
-    return '<div class="karte breit-karte"><h2>Abgleich Mac und iPhone</h2>' +
+      '<div class="aktionen"><button class="knopf" data-aktion="sync-jetzt">Jetzt abgleichen</button><button class="knopf text" data-aktion="sync-trennen">Trennen</button></div>';
+    return '' +
       '<p style="margin:0 0 12px;color:var(--muted)">Die Daten werden in deinem privaten GitHub-Repository gespeichert, damit Mac und iPhone dasselbe sehen. Den Schlüssel gibst du auf jedem Gerät einmal ein, er bleibt nur auf diesem Gerät.</p>' +
       '<div class="felder">' +
         '<label class="feld"><span>Repository</span><input id="sync-repo" autocomplete="off" autocapitalize="off" spellcheck="false" value="liasoer/theguestbook-daten"></label>' +
         '<label class="feld"><span>Schlüssel (github_pat_…)</span><input id="sync-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_…"></label>' +
-      '</div><div class="aktionen" style="margin-top:12px"><button class="knopf haupt" data-aktion="sync-verbinden">Verbinden</button></div></div>';
+      '</div><div class="aktionen" style="margin-top:12px"><button class="knopf haupt" data-aktion="sync-verbinden">Verbinden</button></div>';
   }
 
   // Mailvorlagen: leer lassen heisst Standardtext. Platzhalter werden beim Senden ersetzt.
   function mailKarte() {
     const e = E(), eigene = e.mailVorlagen || {};
-    return '<div class="karte breit-karte"><h2>Mailvorlagen</h2>' +
+    return '' +
       '<label class="feld" style="max-width:360px;margin-bottom:12px"><span>Senden am Mac mit</span><select data-e="mailProgramm">' +
         [['outlook365', 'Outlook im Browser (Microsoft 365)'], ['outlookcom', 'Outlook im Browser (outlook.com)'], ['apple', 'Standard-Mailprogramm (Apple Mail oder Outlook-App)']]
           .map(([w, t]) => '<option value="' + w + '"' + ((e.mailProgramm || 'outlook365') === w ? ' selected' : '') + '>' + t + '</option>').join('') + '</select>' +
@@ -319,11 +329,12 @@
           '<label class="feld"><span>Text</span><textarea rows="9" data-mv="' + art + '" data-f="text">' + esc(ei.text || std.text) + '</textarea></label>' +
           (ei.betreff || ei.text ? '<button class="knopf klein text" data-aktion="mv-zurueck" data-wert="' + art + '">Standardtext wiederherstellen</button>' : '') +
         '</details>';
-      }).join('') + '</div>';
+      }).join('');
   }
 
   A.einstellungen.danach = main => {
     const e = E();
+    main.querySelectorAll('details.abschnitt').forEach(d => d.addEventListener('toggle', () => { d.open ? app.offeneAbschnitte.add(d.dataset.abschnitt) : app.offeneAbschnitte.delete(d.dataset.abschnitt); }));
     main.addEventListener('change', ev => {
       const el = ev.target;
       if (el.dataset.e) {

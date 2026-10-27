@@ -57,64 +57,56 @@
 
   // ---------- Übersicht ----------
 
+  // Alles, was ansteht, in einer Liste: überfällige Rechnungen, Überweisungen, neue Anfragen, Fristen
+  function zuErledigen() {
+    const heute = M.heute(), e = E(), liste = [];
+    M.offeneRechnungen(app.daten).filter(x => x.ueberfaellig).forEach(x => liste.push({
+      sort: x.frist, wann: '<span class="frist-ueber">seit ' + x.tageUeber + ' T.</span>', a: x.a,
+      titel: 'Rechnung überfällig, CHF ' + M.chf(x.r.rappen), info: app.kunde(x.a).name + ', ' + x.r.titel + (x.stufe ? ', ' + M.MAHNSTUFEN[x.stufe - 1] + ' verschickt' : ''),
+      knopf: ['auftrag-mahnungen', 'Mahnen', 'gefahr'] }));
+    M.mitarbeiterOffen(app.daten).forEach(a => liste.push({
+      sort: a.datum || heute, wann: '<span class="frist-bald">fällig</span>', a,
+      titel: 'CHF ' + M.chf(M.mitarbeiterAnteil(a, e)) + ' an ' + ((e.mitarbeiter.find(m => m.id === a.mitarbeiterId) || {}).name || 'Mitarbeiterin') + ' überweisen', info: app.kunde(a).name + ', ' + a.nummer,
+      knopf: ['ueberwiesen', 'Überwiesen', 'haupt'] }));
+    app.daten.auftraege.filter(a => a.status === 'anfrage' && !a.offerte).forEach(a => liste.push({
+      sort: a.erstellt || heute, wann: '<span class="frist-bald">neu</span>', a,
+      titel: 'Neue Anfrage, Offerte erstellen', info: app.kunde(a).name + ', ' + app.artName(a.art) + (a.datum ? ' am ' + M.datumCH(a.datum) : '') }));
+    // Zahlungsfristen nur, solange es noch keine Rechnung dazu gibt (die Rechnung hat ihre eigene Frist)
+    alleFristen().filter(f => M.tageZwischen(heute, f.datum) <= 30)
+      .filter(f => !((f.art === 'anzahlung' || f.art === 'rest') && (f.a.rechnungen || []).some(r => r.art === f.art)))
+      .forEach(f => liste.push({ sort: f.datum, wann: '<span class="' + app.fristKlasse(f.datum) + '">' + esc(app.wann(f.datum)) + '</span>', a: f.a, titel: f.text, info: app.kunde(f.a).name + ', ' + f.a.nummer }));
+    return liste.sort((x, y) => String(x.sort).localeCompare(String(y.sort)));
+  }
+
   A.start = () => {
     const heute = M.heute(), jahr = +heute.slice(0, 4);
     const aktiv = app.daten.auftraege.filter(a => !['abgesagt', 'archiv'].includes(a.status));
     const offen = aktiv.reduce((s, a) => s + app.offen(a), 0);
     const kommende = aktiv.filter(a => a.datum && a.datum >= heute && !['anfrage', 'offerte'].includes(a.status)).sort((x, y) => x.datum.localeCompare(y.datum));
-    const anfragen = aktiv.filter(a => a.status === 'anfrage' || a.status === 'offerte');
-    const er = M.erfolgsrechnung(app.daten, jahr);
-    const fristen = alleFristen().filter(f => M.tageZwischen(heute, f.datum) <= 45).slice(0, 8);
+    const ahv = M.ahvBerechnung(app.daten, jahr);
+    const todo = zuErledigen();
 
     return '<div class="kopfzeile"><h1>Übersicht<small>' + new Date().toLocaleDateString('de-CH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) + '</small></h1>' +
       '<div class="aktionen"><button class="knopf" data-aktion="anfrage">Anfrage einfügen</button><button class="knopf haupt" data-aktion="neu">Neuer Auftrag</button></div></div>' +
       (!app.sync.konfig && !B.istMac ? '<div class="hinweis warn"><div><strong>Noch nicht mit dem Mac verbunden</strong><p>Unter Mehr, Abgleich gibst du einmal deinen GitHub-Schlüssel ein. Danach siehst du hier dieselben Daten wie am Mac.</p></div></div>' : '') +
       (app.sync.status === 'fehler' ? '<div class="hinweis krit"><div><strong>Abgleich mit GitHub fehlgeschlagen</strong><p>' + esc(app.sync.fehler) + '</p></div></div>' : '') +
-      '<div class="raster drei" style="margin-bottom:16px">' +
-        '<div class="karte kennzahl"><div class="label">Offene Beträge</div><div class="wert zahl">CHF ' + M.chf(offen) + '</div><div class="info">aus unterschriebenen Verträgen</div></div>' +
-        '<div class="karte kennzahl"><div class="label">Gebuchte Anlässe</div><div class="wert">' + kommende.length + '</div><div class="info">' + (kommende[0] ? 'nächster am ' + M.datumCH(kommende[0].datum) : 'keine geplant') + '</div></div>' +
-        (() => { const ahv = M.ahvBerechnung(app.daten, jahr);
-          return '<div class="karte kennzahl"><div class="label">Gewinn ' + jahr + ' nach Sozialversicherung</div><div class="wert zahl">CHF ' + M.chf(ahv.gewinnNach) + '</div><div class="info">' +
-            (ahv.offen > 0 ? 'CHF ' + M.chf(ahv.offen) + ' für AHV/IV/EO zurücklegen' : 'Ertrag ' + M.chf(er.totalErtrag) + ', Aufwand ' + M.chf(er.totalAufwand)) + '</div></div>'; })() +
+      '<div class="kennzahlen">' +
+        '<div><span>Offen</span><b class="zahl">CHF ' + M.chf(offen) + '</b></div>' +
+        '<div><span>Gebucht</span><b>' + kommende.length + (kommende.length === 1 ? ' Anlass' : ' Anlässe') + '</b></div>' +
+        '<div><span>Gewinn ' + jahr + '</span><b class="zahl">CHF ' + M.chf(ahv.gewinnNach) + '</b></div>' +
       '</div>' +
       '<div class="raster zwei">' +
-        '<div class="raster" style="align-content:start">' + offeneRechnungenKarte() +
-        '<div class="karte"><h2>Als Nächstes</h2>' + (fristen.length ? '<div class="zeilen">' + fristen.map(f =>
-          '<div class="zeile" data-aktion="auftrag" data-wert="' + f.a.id + '"><div class="datum ' + app.fristKlasse(f.datum) + '">' + esc(app.wann(f.datum)) + '</div>' +
-          '<div class="haupt"><b>' + esc(f.text) + '</b><span>' + esc(app.kunde(f.a).name) + ', Auftrag ' + esc(f.a.nummer) + '</span></div></div>').join('') + '</div>'
-          : '<div class="leer"><strong>Nichts fällig</strong>In den nächsten 45 Tagen steht keine Frist an.</div>') + '</div></div>' +
-        '<div class="raster" style="align-content:start">' +
-          '<div class="karte"><h2>Offene Anfragen und Offerten</h2>' + (anfragen.length ? '<div class="zeilen">' + anfragen.map(a =>
-            '<div class="zeile" data-aktion="auftrag" data-wert="' + a.id + '"><div class="datum">' + (a.datum ? M.datumCH(a.datum) : 'ohne Datum') + '</div>' +
-            '<div class="haupt"><b>' + esc(app.kunde(a).name) + '</b><span>' + esc(app.artName(a.art)) + (a.location ? ', ' + esc(a.location) : '') + '</span></div>' + app.chip(a.status) + '</div>').join('') + '</div>'
-            : '<div class="leer"><strong>Keine offenen Anfragen</strong>Neue Anfragen von der Website erscheinen hier.</div>') + '</div>' +
-          (E().mitarbeiter.length ? (() => {
-            const offen = M.mitarbeiterOffen(app.daten), summe = offen.reduce((t, a) => t + M.mitarbeiterAnteil(a, E()), 0);
-            return '<div class="karte"><h2>An Mitarbeiterin zu überweisen' + (summe ? ' · CHF ' + M.chf(summe) : '') + '</h2>' + (offen.length ? '<div class="zeilen">' + offen.map(a =>
-              '<div class="zeile" data-aktion="auftrag" data-wert="' + a.id + '"><div class="datum">' + (a.datum ? M.datumCH(a.datum) : '') + '</div>' +
-              '<div class="haupt"><b>CHF ' + M.chf(M.mitarbeiterAnteil(a, E())) + '</b><span>' + esc((E().mitarbeiter.find(m => m.id === a.mitarbeiterId) || {}).name || '') + ', ' + esc(app.kunde(a).name) + ', ' + esc(a.nummer) + '</span></div>' +
-              '<button class="knopf klein haupt" data-aktion="ueberwiesen" data-wert="' + a.id + '">Überwiesen</button></div>').join('') + '</div>'
-              : '<div class="leer" style="padding:16px"><strong>Alles überwiesen</strong>Nach jedem durchgeführten Anlass erscheint ihr Anteil hier.</div>') + '</div>';
-          })() : '') +
-          '<div class="karte"><h2>Nächste Anlässe</h2>' + (kommende.length ? '<div class="zeilen">' + kommende.slice(0, 5).map(a =>
-            '<div class="zeile" data-aktion="auftrag" data-wert="' + a.id + '"><div class="datum">' + M.datumCH(a.datum) + '</div>' +
-            '<div class="haupt"><b>' + esc(app.kunde(a).name) + '</b><span>' + esc(app.artName(a.art)) + (a.location ? ', ' + esc(a.location) : '') + '</span></div>' + app.chip(a.status) + '</div>').join('') + '</div>'
-            : '<div class="leer"><strong>Noch keine Anlässe</strong>Sobald ein Vertrag unterschrieben ist, steht der Anlass hier.</div>') + '</div>' +
-        '</div>' +
+        '<div class="karte"><h2>Zu erledigen</h2>' + (todo.length ? '<div class="zeilen">' + todo.map(t =>
+          '<div class="zeile" data-aktion="auftrag" data-wert="' + t.a.id + '"><div class="datum">' + t.wann + '</div>' +
+          '<div class="haupt"><b>' + esc(t.titel) + '</b><span>' + esc(t.info) + '</span></div>' +
+          (t.knopf ? '<button class="knopf klein ' + t.knopf[2] + '" data-aktion="' + t.knopf[0] + '" data-wert="' + t.a.id + '">' + t.knopf[1] + '</button>' : '') + '</div>').join('') + '</div>'
+          : '<div class="leer"><strong>Alles erledigt</strong>Neue Anfragen, fällige Zahlungen und Fristen erscheinen hier.</div>') + '</div>' +
+        '<div class="karte"><h2>Nächste Anlässe</h2>' + (kommende.length ? '<div class="zeilen">' + kommende.slice(0, 5).map(a =>
+          '<div class="zeile" data-aktion="auftrag" data-wert="' + a.id + '"><div class="datum">' + M.datumCH(a.datum) + '</div>' +
+          '<div class="haupt"><b>' + esc(app.kunde(a).name) + '</b><span>' + esc(app.artName(a.art)) + (a.location ? ', ' + esc(a.location) : '') + '</span></div></div>').join('') + '</div>'
+          : '<div class="leer"><strong>Noch keine Anlässe</strong>Sobald ein Vertrag unterschrieben ist, steht der Anlass hier.</div>') + '</div>' +
       '</div>';
   };
-  function offeneRechnungenKarte() {
-    const liste = M.offeneRechnungen(app.daten);
-    const summe = liste.reduce((t, x) => t + x.r.rappen, 0), ueber = liste.filter(x => x.ueberfaellig);
-    return '<div class="karte"><div class="kopfzeile" style="margin-bottom:8px"><h2 style="margin:0">Offene Rechnungen' + (summe ? ' · CHF ' + M.chf(summe) : '') + '</h2>' +
-      (ueber.length ? '<span class="chip abgesagt">' + ueber.length + ' überfällig</span>' : '') + '</div>' +
-      (liste.length ? '<div class="zeilen">' + liste.map(x =>
-        '<div class="zeile" data-aktion="auftrag-rechnungen" data-wert="' + x.a.id + '"><div class="datum ' + (x.ueberfaellig ? 'frist-ueber' : app.fristKlasse(x.frist)) + '">' + (x.ueberfaellig ? 'seit ' + x.tageUeber + ' T.' : esc(app.wann(x.frist))) + '</div>' +
-        '<div class="haupt"><b>CHF ' + M.chf(x.r.rappen) + ' · ' + esc(app.kunde(x.a).name) + '</b><span>' + esc(x.r.titel) + ', ' + esc(x.r.nummer) + (x.stufe ? ', ' + esc(M.MAHNSTUFEN[x.stufe - 1]) + ' verschickt' : '') + '</span></div>' +
-        (x.ueberfaellig ? '<button class="knopf klein gefahr" data-aktion="auftrag-mahnungen" data-wert="' + x.a.id + '">Mahnen</button>' : '') + '</div>').join('') + '</div>'
-        : '<div class="leer" style="padding:16px"><strong>Keine offenen Rechnungen</strong>Erstellte, noch nicht bezahlte Rechnungen erscheinen hier.</div>') + '</div>';
-  }
-
   A.start.danach = main => klick(main, {
     'auftrag-rechnungen': id => app.oeffnen('auftrag', id, 'rechnungen'),
     'auftrag-mahnungen': id => app.oeffnen('auftrag', id, 'mahnungen'),
@@ -164,10 +156,8 @@
 
   A.auftraege = () => {
     const f = app.filter, s = f.suche.toLowerCase(), heute = M.heute();
-    const jahre = [...new Set(app.daten.auftraege.map(a => (a.datum || a.erstellt || '').slice(0, 4)).filter(Boolean))].sort().reverse();
     const ueberfaellig = new Set(M.offeneRechnungen(app.daten).filter(x => x.ueberfaellig).map(x => x.a.id));
     const sichtbar = app.daten.auftraege
-      .filter(a => f.jahr === 'alle' || (a.datum || a.erstellt || '').startsWith(f.jahr))
       .filter(a => !s || [a.nummer, app.kunde(a).name, app.kunde(a).email, a.location].join(' ').toLowerCase().includes(s))
       .filter(a => f.abgesagte || a.status !== 'abgesagt');
 
@@ -197,15 +187,15 @@
       if (p.id === 'fertig' && !s && liste.length > 8) { mehr = liste.length - 8; liste = liste.slice(0, 8); }
       return '<section class="spalte"><h2>' + p.name + ' <span class="anz">' + (liste.length + mehr) + '</span></h2>' +
         (liste.length ? liste.map(karte).join('') : '<p class="spalte-leer">Keine</p>') +
-        (mehr ? '<p class="spalte-leer">und ' + mehr + ' ältere, über die Suche oder das Jahr finden</p>' : '') + '</section>';
+        (mehr ? '<p class="spalte-leer">und ' + mehr + ' ältere, über die Suche finden</p>' : '') + '</section>';
     }).join('');
 
     return '<div class="kopfzeile"><h1>Aufträge<small>Der Status läuft automatisch mit. Klick auf einen Auftrag öffnet ihn.</small></h1>' +
       '<div class="aktionen"><button class="knopf" data-aktion="anfrage">Anfrage einfügen</button><button class="knopf haupt" data-aktion="neu">Neuer Auftrag</button></div></div>' +
       '<div class="filter"><input type="search" placeholder="Suchen" value="' + esc(f.suche) + '" data-aktion-input="suche" aria-label="Suchen">' +
-        '<select data-aktion-change="jahr" aria-label="Jahr"><option value="alle">Alle Jahre</option>' + jahre.map(j => '<option' + (f.jahr === j ? ' selected' : '') + '>' + j + '</option>').join('') + '</select>' +
         '<label class="check"><input type="checkbox" data-aktion-change="abgesagte"' + (f.abgesagte ? ' checked' : '') + '> Abgesagte zeigen</label></div>' +
-      '<div class="board">' + spalten + '</div>';
+      '<div class="board">' + spalten + '</div>' +
+      '<p style="margin:18px 0 0"><button class="knopf text" data-aktion="kunden">Alle Kunden anzeigen</button></p>';
   };
   const kurz = t => t.replace('Rechnung für die Anzahlung erstellen', 'Rechnung Anzahlung').replace('Rechnung für die Restzahlung erstellen', 'Rechnung Rest')
     .replace('Zahlung der Anzahlung erfassen', 'Anzahlung erfassen').replace('Zahlung der Restzahlung erfassen', 'Restzahlung erfassen')
@@ -217,6 +207,7 @@
       anfrage: () => app.anfrageEinfuegen(),
       neu: () => neuerAuftrag(),
       auftrag: id => app.oeffnen('auftrag', id, 'auftrag'),
+      kunden: () => app.oeffnen('kunden'),
       schritt: w => {
         const [id, aktion] = w.split(':');
         app.oeffnen('auftrag', id, aktion === 'tab-rechnungen' ? 'rechnungen' : 'auftrag');
@@ -226,7 +217,6 @@
       }
     });
     main.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.classList.contains('bkarte')) app.oeffnen('auftrag', e.target.dataset.wert, 'auftrag'); });
-    main.querySelector('[data-aktion-change="jahr"]').addEventListener('change', e => { app.filter.jahr = e.target.value; app.zeichnen(); });
     main.querySelector('[data-aktion-change="abgesagte"]').addEventListener('change', e => { app.filter.abgesagte = e.target.checked; app.zeichnen(); });
     const suche = main.querySelector('[data-aktion-input="suche"]');
     suche.addEventListener('input', e => {
@@ -296,22 +286,21 @@
     const k = app.kunde(a), schritt = naechsterSchritt(a);
     const ueber = M.offeneRechnungen(app.daten).filter(x => x.a.id === a.id && x.ueberfaellig).length;
     const kl = (l, k) => '<span class="lang">' + l + '</span><span class="kurz">' + k + '</span>';
-    const tabs = [['auftrag', 'Auftrag'], ['offerte', 'Offerte'], ['vertrag', 'Vertrag'], ['rechnungen', kl('Rechnungen', 'Rechnung')], ['mahnungen', kl('Mahnungen', 'Mahnung') + (ueber ? ' <span class="tz krit">' + ueber + '</span>' : '')], ['notizen', 'Notizen']];
+    const mahnRelevant = ueber || (a.rechnungen || []).some(r => (r.mahnungen || []).length) || app.tab === 'mahnungen';
+    if (app.tab === 'notizen') app.tab = 'auftrag';
+    const tabs = [['auftrag', 'Auftrag'], ['offerte', 'Offerte'], ['vertrag', 'Vertrag'], ['rechnungen', kl('Rechnungen', 'Rechnung')]]
+      .concat(mahnRelevant ? [['mahnungen', kl('Mahnungen', 'Mahnung') + (ueber ? ' <span class="tz krit">' + ueber + '</span>' : '')]] : []);
     let inhalt = '';
     if (app.tab === 'auftrag') inhalt = tabAuftrag(a, k);
     if (app.tab === 'offerte') inhalt = tabOfferte(a);
     if (app.tab === 'vertrag') inhalt = tabVertrag(a);
     if (app.tab === 'rechnungen') inhalt = tabRechnungen(a);
-    if (app.tab === 'notizen') inhalt = tabNotizen(a);
     if (app.tab === 'mahnungen') inhalt = tabMahnungen(a);
-    const fristen = M.fristen(a, E());
+    const fristen = M.fristen(a, E()).filter(f => !f.erledigt);
     return '<div class="kopfzeile"><h1>' + esc(k.name) + '<small>Auftrag ' + esc(a.nummer) + ' · ' + esc(app.artName(a.art)) + (a.datum ? ' am ' + M.datumCH(a.datum) : '') + '</small></h1>' +
-      '<div class="aktionen">' + app.chip(a.status) +
-        '<select class="eingabe" style="width:auto" data-status aria-label="Status von Hand ändern" title="Der Status läuft automatisch mit. Hier nur für Ausnahmen ändern.">' +
-          '<option value="auto"' + (!a.statusManuell && !['abgesagt', 'archiv'].includes(a.status) ? ' selected' : '') + '>Automatisch: ' + esc(app.statusName(M.statusErmitteln(a))) + '</option>' +
-          M.STATUS.map(s => '<option value="' + s.id + '"' + ((a.statusManuell || ['abgesagt', 'archiv'].includes(a.status)) && s.id === a.status ? ' selected' : '') + '>Von Hand: ' + s.name + '</option>').join('') + '</select>' +
-        (a.status !== 'abgesagt' && a.status !== 'archiv' ? '<button class="knopf gefahr" data-aktion="absagen">Absagen</button>' : '') +
-        (schritt ? '<button class="knopf haupt" data-aktion="' + schritt[0] + '">' + schritt[1] + '</button>' : '') + '</div></div>' +
+      '<div class="aktionen">' + app.chip(a.status) + (a.statusManuell ? '<span class="leise" title="Status von Hand gesetzt">✎</span>' : '') +
+        (schritt ? '<button class="knopf haupt" data-aktion="' + schritt[0] + '">' + schritt[1] + '</button>' : '') +
+        '<button class="knopf mehr-knopf" data-aktion="mehr" aria-label="Weitere Aktionen" title="Status, Absagen, Archivieren">•••</button></div></div>' +
       '<div class="tabs" role="tablist">' + tabs.map(([t, n]) => '<button role="tab" data-aktion="tab" data-wert="' + t + '" aria-selected="' + (app.tab === t) + '">' + n +
         (t === 'rechnungen' && (a.rechnungen || []).length ? ' <span class="tz">' + a.rechnungen.length + '</span>' : '') + '</button>').join('') + '</div>' +
       '<div class="raster haupt-seite tab-' + app.tab + '"><div style="min-width:0">' + inhalt + '</div>' +
@@ -319,7 +308,7 @@
         '<div class="karte"><h2>Fristen</h2>' + (fristen.length ? fristen.map(f => {
           const ueber = !f.erledigt && f.datum < M.heute();
           return '<div class="frist' + (f.erledigt ? ' erledigt' : '') + (ueber ? ' ueber' : '') + '"><span class="punkt"></span><div><div>' + esc(f.text) + '</div><div class="wann">' + M.datumCH(f.datum) + (f.erledigt ? ', erledigt' : (f.datum < M.heute() || M.tageZwischen(M.heute(), f.datum) < 14 ? ', ' + esc(app.wann(f.datum)) : '')) + '</div></div></div>';
-        }).join('') : '<p class="leise" style="margin:0;color:var(--muted)">Fristen erscheinen, sobald Offerte, Vertrag und Datum erfasst sind.</p>') + '</div>' +
+        }).join('') : '<p class="leise" style="margin:0;color:var(--muted)">Keine offenen Fristen.</p>') + '</div>' +
         '<div class="karte"><h2>Beträge</h2><table class="er" style="width:100%"><tbody>' +
           '<tr><td>Total</td><td>CHF ' + M.chf(app.total(a)) + '</td></tr>' +
           '<tr><td>Bezahlt</td><td>CHF ' + M.chf((a.rechnungen || []).filter(r => r.bezahlt).reduce((s, r) => s + r.rappen, 0)) + '</td></tr>' +
@@ -369,14 +358,14 @@
       '</div>' +
       (a.wunschPosten && a.wunschPosten.length && !a.offerte ? '<p style="margin:12px 0 0;color:var(--muted)">Gewünscht laut Anfrage: ' + a.wunschPosten.map(p => esc(p.name)).join(', ') + '</p>' : '') +
       (a.nachricht ? '<p style="margin:12px 0 0"><b>Nachricht:</b> ' + esc(a.nachricht) + '</p>' : '') +
-      '</div>';
+      '</div>' + tabNotizen(a);
   }
 
   function tabOfferte(a) {
     if (!a.offerte) return '<div class="karte leer"><strong>Noch keine Offerte</strong>Die Offerte übernimmt die gewünschten Pakete aus der Anfrage. Du kannst alles anpassen.<div style="margin-top:14px"><button class="knopf haupt" data-aktion="offerte-erstellen">Offerte erstellen</button></div></div>';
     const o = a.offerte;
     return '<div class="karte"><div class="kopfzeile" style="margin-bottom:12px"><h2 style="margin:0">Offerte ' + esc(a.nummer) + '</h2>' +
-      '<div class="aktionen"><button class="knopf" data-aktion="offerte-zeigen">Vorschau</button><button class="knopf" data-aktion="offerte-pdf">PDF speichern</button><button class="knopf haupt" data-aktion="offerte-mail">Per Mail senden</button></div></div>' +
+      '<div class="aktionen"><button class="knopf" data-aktion="offerte-zeigen">Ansehen und PDF</button><button class="knopf haupt" data-aktion="offerte-mail">Per Mail senden</button></div></div>' +
       (o.verschickt ? '<p class="leise" style="margin:-4px 0 12px;color:var(--muted)">Verschickt am ' + M.datumCH(o.verschickt) + '</p>' : '') +
       '<div class="felder" style="margin-bottom:14px">' + feld('Offertdatum', 'offerte.datum', o.datum, { art: 'date', hilfe: 'gültig bis ' + M.datumCH(M.plusTage(o.datum, E().offerteGueltigTage)) }) + '</div>' +
       postenEditor(o, 'offerte') +
@@ -388,7 +377,7 @@
       (a.offerte ? '<div style="margin-top:14px"><button class="knopf haupt" data-aktion="vertrag-erstellen">Vertrag aus Offerte erstellen</button></div>' : '') + '</div>';
     const v = a.vertrag;
     return '<div class="karte"><div class="kopfzeile" style="margin-bottom:12px"><h2 style="margin:0">Vertrag ' + esc(a.nummer) + '</h2>' +
-      '<div class="aktionen"><button class="knopf" data-aktion="vertrag-zeigen">Vorschau</button><button class="knopf" data-aktion="vertrag-pdf">PDF speichern</button><button class="knopf haupt" data-aktion="vertrag-mail">Per Mail senden</button></div></div>' +
+      '<div class="aktionen"><button class="knopf" data-aktion="vertrag-zeigen">Ansehen und PDF</button><button class="knopf haupt" data-aktion="vertrag-mail">Per Mail senden</button></div></div>' +
       (a.vertrag.verschickt ? '<p class="leise" style="margin:-4px 0 12px;color:var(--muted)">Verschickt am ' + M.datumCH(a.vertrag.verschickt) + '</p>' : '') +
       '<div class="felder drei" style="margin-bottom:14px">' + feld('Vertragsdatum', 'vertrag.datum', v.datum, { art: 'date' }) +
         feld('Unterschrieben am', 'vertrag.unterschrieben', v.unterschrieben || '', { art: 'date', hilfe: v.unterschrieben ? '' : 'leer, solange nicht unterschrieben' }) +
@@ -437,14 +426,10 @@
 
   function tabNotizen(a) {
     const n = (a.notizen || []).slice().reverse();
-    const loeschbar = !app.daten.buchungen.some(x => x.auftragId === a.id);
-    return '<div class="karte" style="margin-bottom:16px"><h2>Notizen</h2><form data-notiz class="aktionen" style="margin-bottom:12px;flex-wrap:nowrap"><input class="eingabe" name="text" placeholder="Telefonat, Wunsch, wichtige Gäste" aria-label="Neue Notiz"><button class="knopf haupt">Hinzufügen</button></form>' +
+    return '<div class="karte" style="margin-top:16px"><h2>Notizen</h2><form data-notiz class="aktionen" style="margin-bottom:12px;flex-wrap:nowrap"><input class="eingabe" name="text" placeholder="Telefonat, Wunsch, wichtige Gäste" aria-label="Neue Notiz"><button class="knopf haupt">Hinzufügen</button></form>' +
       (n.length ? '<div class="zeilen">' + n.map((x, i) => '<div class="zeile" style="cursor:default"><div class="datum">' + M.datumCH(x.datum) + '</div><div class="haupt" style="white-space:pre-wrap">' + esc(x.text) + '</div>' +
         '<button class="entfernen" data-aktion="notiz-weg" data-wert="' + (a.notizen.length - 1 - i) + '" aria-label="Notiz löschen">×</button></div>').join('') + '</div>'
-        : '<div class="leer">Noch keine Notizen.</div>') + '</div>' +
-      '<div class="karte"><h2>Auftrag löschen</h2><p style="margin:0 0 10px;color:var(--muted)">' + (loeschbar ? 'Für Testaufträge oder Doppelerfassungen. Echte Aufträge besser absagen oder archivieren, damit die Nummern lückenlos bleiben.'
-        : 'Zu diesem Auftrag gibt es Buchungen im Kassenbuch. Er kann deshalb nicht gelöscht werden, nur abgesagt oder archiviert.') + '</p>' +
-      (loeschbar ? '<button class="knopf gefahr" data-aktion="auftrag-loeschen">Auftrag löschen</button>' : '') + '</div>';
+        : '<p style="margin:0;color:var(--muted)">Noch keine Notizen.</p>') + '</div>';
   }
 
   // Rechnung anlegen
@@ -469,19 +454,36 @@
       if (b === 'auftrag.mitarbeiterId' && !w) M.mitarbeiterAuszahlungZuruecknehmen(app.daten, a);
     });
     postenBinden(main, a);
-    main.querySelector('[data-status]').addEventListener('change', e => {
-      const w = e.target.value;
-      if (w === 'auto') { delete a.statusManuell; a.status = M.statusErmitteln(a); }
-      else { a.status = w; a.statusManuell = !['abgesagt', 'archiv'].includes(w); }
-      app.aendern();
-    });
     const nf = main.querySelector('[data-notiz]');
     if (nf) nf.addEventListener('submit', e => {
       e.preventDefault(); const t = nf.text.value.trim(); if (!t) return;
       (a.notizen = a.notizen || []).push({ datum: M.heute(), text: t }); app.aendern();
     });
     const e = E(), total = () => app.total(a);
-    klick(main, {
+    const aktionen = {
+      mehr: async () => {
+        const loeschbar = !app.daten.buchungen.some(x => x.auftragId === a.id);
+        const offen = !['abgesagt', 'archiv'].includes(a.status);
+        const r = await app.dialog({
+          titel: 'Auftrag ' + a.nummer,
+          inhalt: '<label class="feld"><span>Status</span><select name="status">' +
+            '<option value="auto"' + (!a.statusManuell && offen ? ' selected' : '') + '>Automatisch (' + esc(app.statusName(M.statusErmitteln(a))) + ')</option>' +
+            M.STATUS.map(x => '<option value="' + x.id + '"' + ((a.statusManuell || !offen) && x.id === a.status ? ' selected' : '') + '>Von Hand: ' + x.name + '</option>').join('') + '</select>' +
+            '<small>Der Status läuft normalerweise von selbst mit. Von Hand nur für Ausnahmen.</small></label>' +
+            (!loeschbar ? '<p style="margin:12px 0 0;color:var(--muted)">Löschen geht nicht, weil es Buchungen im Kassenbuch gibt. Absagen oder archivieren geht immer.</p>' : ''),
+          knoepfe: [{ text: 'Schliessen', wert: null }]
+            .concat(offen ? [{ text: 'Absagen', art: 'gefahr', wert: 'absagen' }, { text: 'Archivieren', wert: 'archivieren' }] : [])
+            .concat(loeschbar ? [{ text: 'Löschen', art: 'gefahr', wert: 'auftrag-loeschen' }] : [])
+            .concat([{ text: 'Status übernehmen', art: 'haupt', wert: 'status' }])
+        });
+        if (r.wert === 'status') {
+          const w = r.werte.status;
+          if (w === 'auto') { delete a.statusManuell; a.status = M.statusErmitteln(a); }
+          else { a.status = w; a.statusManuell = !['abgesagt', 'archiv'].includes(w); }
+          return app.aendern();
+        }
+        if (r.wert && aktionen[r.wert]) aktionen[r.wert]();
+      },
       tab: t => { app.tab = t; app.zeichnen(); },
       'tab-rechnungen': () => { app.tab = 'rechnungen'; app.zeichnen(); },
       'offerte-erstellen': () => {
@@ -608,6 +610,7 @@
         app.melden('Auftrag gelöscht');
         app.ansicht = { name: 'auftraege' }; app.aendern();
       }
-    });
+    };
+    klick(main, aktionen);
   };
 })();
