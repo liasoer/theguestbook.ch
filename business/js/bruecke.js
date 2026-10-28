@@ -57,6 +57,7 @@
     mail: (o) => senden('mail', o),
     mitteilung: (titel, text) => senden('mitteilung', { titel, text }),
     eingangSortieren: (basis) => senden('eingangSortieren', { basis }),
+    inPapierkorb: (basis, pfad) => senden('inPapierkorb', { basis, pfad }),
     lokalLesen: (schluessel) => senden('lokalLesen', { schluessel }),
     lokalSchreiben: (schluessel, inhalt) => senden('lokalSchreiben', inhalt == null ? { schluessel } : { schluessel, inhalt }),
     exportieren: (inhalt, dateiname) => senden('exportieren', { inhalt, dateiname }),

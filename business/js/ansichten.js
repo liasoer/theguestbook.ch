@@ -448,7 +448,7 @@
       (r.length ? '<div style="overflow-x:auto"><table class="tabelle"><thead><tr><th>Nr.</th><th>Rechnung</th><th>Zahlbar bis</th><th class="r">CHF</th><th>Status</th><th></th></tr></thead><tbody>' + r.map(x =>
         '<tr><td class="zahl">' + esc(x.nummer) + '</td><td>' + esc(x.titel) + '<br><span class="leise">' + esc(Q.inVierern(x.referenz || '')) + '</span></td>' +
         '<td><span class="' + (!x.bezahlt ? app.fristKlasse(x.faellig) : '') + '">' + M.datumCH(x.faellig) + '</span></td><td class="r zahl">' + M.chf(x.rappen) + '</td>' +
-        '<td class="zahlstatus">' + (x.bezahlt ? '<span class="chip anzahlung">bezahlt ' + M.datumCH(x.bezahlt) + '</span>' : '<span class="chip anfrage">offen</span>') + '</td>' +
+        '<td>' + (x.bezahlt ? '<span class="chip anzahlung">bezahlt ' + M.datumCH(x.bezahlt) + '</span>' : '<span class="chip anfrage">offen</span>') + '</td>' +
         '<td class="r"><div class="aktionen" style="justify-content:flex-end"><button class="knopf klein" data-aktion="rechnung-zeigen" data-wert="' + x.id + '">PDF / Mail</button>' +
           (x.bezahlt ? '<button class="knopf klein text" data-aktion="rechnung-offen" data-wert="' + x.id + '">Zurücknehmen</button>'
             : '<button class="knopf klein haupt" data-aktion="rechnung-bezahlt" data-wert="' + x.id + '">Bezahlt</button><button class="entfernen" data-aktion="rechnung-weg" data-wert="' + x.id + '" title="Rechnung löschen" aria-label="Rechnung löschen">×</button>') +
@@ -659,12 +659,14 @@
       'notiz-weg': i => { a.notizen.splice(+i, 1); app.aendern(); },
       'auftrag-loeschen': async () => {
         if (app.daten.buchungen.some(x => x.auftragId === a.id)) return;
-        if (!await app.bestaetigen('Auftrag ' + a.nummer + ' löschen?', 'Auftrag, Offerte, Vertrag und Rechnungen werden entfernt. Das lässt sich nicht rückgängig machen, ausser über die automatischen Sicherungen.', 'Löschen', true)) return;
+        if (!await app.bestaetigen('Auftrag ' + a.nummer + ' löschen?', 'Auftrag, Offerte, Vertrag und Rechnungen werden entfernt. Der Ordner mit den PDFs kommt in den Papierkorb des Mac (vom iPhone aus, sobald die App auf dem Mac läuft).', 'Löschen', true)) return;
+        app.ordnerVormerken(a);
         app.daten.auftraege = app.daten.auftraege.filter(x => x.id !== a.id);
         // Kunde mitlöschen, wenn er keine anderen Aufträge hat
         if (!app.daten.auftraege.some(x => x.kundeId === a.kundeId)) app.daten.kunden = app.daten.kunden.filter(k => k.id !== a.kundeId);
         app.melden('Auftrag gelöscht');
         app.ansicht = { name: 'auftraege' }; app.aendern();
+        app.ordnerAufraeumen();
       }
     };
     klick(main, aktionen);

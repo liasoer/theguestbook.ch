@@ -465,8 +465,28 @@
       if (n) app.melden(n === 1 ? '1 PDF vom iPhone in den Auftragsordner verschoben' : n + ' PDFs vom iPhone in die Auftragsordner verschoben');
     } catch (e) { /* nächster Versuch in einer Minute */ }
   };
+  // Gelöschte Aufträge: Ordner vormerken (auch vom iPhone aus), der Mac legt ihn in den Papierkorb.
+  // Gemerkt wird der genaue Ordnername, damit ein neuer Auftrag mit derselben Nummer nie betroffen ist.
+  app.ordnerVormerken = a => {
+    const m = String(a.nummer || '').match(/^(\d{4})-\d{3}$/);
+    if (!m) return;
+    const e = app.daten.einstellungen;
+    e.ordnerPapierkorb = (e.ordnerPapierkorb || []).concat(m[1] + '/' + dateiName(a.nummer + ' ' + app.kunde(a).name).trim());
+  };
+  app.ordnerAufraeumen = async () => {
+    if (!B.istMac || !app.daten) return;
+    const e = app.daten.einstellungen, liste = e.ordnerPapierkorb || [];
+    if (!liste.length || !e.ablageDateien) return;
+    const erledigt = [];
+    for (const rel of liste) {
+      try { if (await B.inPapierkorb(e.ablageDateien, rel)) erledigt.push(rel); } catch (err) { /* nächster Versuch */ }
+    }
+    if (!erledigt.length) return;
+    e.ordnerPapierkorb = liste.filter(x => !erledigt.includes(x));
+    app.aendern(false);
+  };
   // Regelmässig und beim Zurückkehren in die App nachsehen
-  setInterval(() => { if (document.visibilityState === 'visible') app.syncJetzt(true); app.eingangSortieren(); }, 60000);
+  setInterval(() => { if (document.visibilityState === 'visible') app.syncJetzt(true); app.eingangSortieren(); app.ordnerAufraeumen(); }, 60000);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') app.syncJetzt(true); });
   window.addEventListener('online', () => app.syncJetzt(true));
 
@@ -544,7 +564,7 @@
     if (v.danach) v.danach(main);
   };
   app.ansichten = {};
-  app.version = '27.10.2026, 23:50';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
+  app.version = '28.10.2026, 18:50';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
 
   // ---------- Start ----------
   async function start() {
@@ -568,7 +588,7 @@
     if (pushMoeglich()) { navigator.serviceWorker.register('sw.js').catch(() => {}); await app.mitteilungenPruefen(); }
     app.zeichnen();
     app.syncJetzt(true);
-    app.eingangSortieren();
+    app.eingangSortieren(); app.ordnerAufraeumen();
     try { (await B.ausstehendeLinks() || []).forEach(u => app.anfrageVerarbeiten(u)); } catch (e) { /* ohne Mac-Hülle */ }
     if (app.daten.einstellungen.kalenderAbgleich && B.istMac) app.kalenderAbgleichen(true);
   }
