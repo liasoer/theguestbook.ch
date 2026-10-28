@@ -340,6 +340,7 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--
   .tabelle td{display:block;padding:0;border:0!important;min-width:0}
   .tabelle td:empty{display:none}
   .tabelle td.r{margin-left:auto;text-align:right}
+  .tabelle td.zahlstatus{flex-basis:100%}
   .karte:not(.flach) .tabelle tr{padding-left:0;padding-right:0}
   .haupt-seite.tab-auftrag>:last-child{order:-1}
   table.er td:last-child{white-space:nowrap}
