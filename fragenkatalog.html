@@ -192,5 +192,12 @@ details .inhalt{padding-bottom:32px}
 
 <p class="fuss"><a href="/">Zur Startseite</a></p>
 </main>
+<script>
+document.querySelectorAll('details[name="kat"]').forEach(function(d){
+  d.addEventListener('toggle', function(){
+    if(d.open){ d.scrollIntoView({block:'start', behavior:'smooth'}); }
+  });
+});
+</script>
 </body>
 </html>
