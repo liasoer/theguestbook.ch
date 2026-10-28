@@ -23,14 +23,21 @@ main{max-width:720px;margin:0 auto}
 .zurueck img{width:100%;height:auto;display:block}
 h1{font-family:"Cinzel","Trajan Pro",Georgia,serif;font-weight:600;font-size:clamp(28px,6vw,44px);line-height:1.1;margin:0 0 8px}
 .stand{font-style:italic;color:var(--muted);margin:0 0 40px}
-h2{font-family:"Cinzel","Trajan Pro",Georgia,serif;font-weight:600;font-size:22px;letter-spacing:.02em;margin:48px 0 4px;padding-top:28px;border-top:1px solid var(--hairline)}
-h2:first-of-type{margin-top:0}
 h3{font-family:"Cinzel","Trajan Pro",Georgia,serif;font-weight:600;font-size:16px;letter-spacing:.02em;color:var(--wein);margin:28px 0 8px}
+h3:first-of-type{margin-top:4px}
 p,li{margin:0 0 10px}
 ol{padding-left:22px;margin:0 0 4px}
 a{color:var(--wein)}
 .fuss{margin-top:56px;text-align:center;font-style:italic;color:var(--muted)}
 .spick{background:rgba(74,15,20,.05);border:1px solid var(--hairline);border-radius:8px;padding:8px 20px 4px 42px}
+
+details{border-top:1px solid var(--hairline)}
+details:last-of-type{border-bottom:1px solid var(--hairline)}
+summary{cursor:pointer;list-style:none;font-family:"Cinzel","Trajan Pro",Georgia,serif;font-weight:600;font-size:22px;letter-spacing:.02em;padding:24px 40px 24px 0;position:relative;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'';position:absolute;right:4px;top:50%;width:10px;height:10px;margin-top:-6px;border-right:2px solid var(--wein);border-bottom:2px solid var(--wein);transform:rotate(-45deg);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg);margin-top:-8px}
+details .inhalt{padding-bottom:32px}
 </style>
 </head>
 <body>
@@ -39,7 +46,9 @@ a{color:var(--wein)}
 <h1>Fragenkatalog</h1>
 <p class="stand">Frage-Ideen fürs Gästeinterview, nach Themen sortiert. Nur fürs Team, nicht öffentlich verlinkt.</p>
 
-<h2>Grundstock</h2>
+<details name="kat">
+<summary>Grundstock</summary>
+<div class="inhalt">
 
 <h3>1. Einstieg und Aufwärmen</h3>
 <ol>
@@ -107,7 +116,12 @@ a{color:var(--wein)}
 <li>Mit was für eme Satz wotsch du i dem Film in Erinnerig bliibe?</li>
 </ol>
 
-<h2>Spezialblöcke</h2>
+</div>
+</details>
+
+<details name="kat">
+<summary>Spezialblöcke</summary>
+<div class="inhalt">
 
 <h3>Trauzeugen und Trauzeuginnen</h3>
 <ol>
@@ -154,8 +168,13 @@ a{color:var(--wein)}
 <li>Was wünsched ihr eune Gäscht für dä Obig?</li>
 </ol>
 
-<h2>Spickzettel</h2>
-<p class="stand" style="margin-bottom:16px">Zehn Fragen, falls es schnell gehen muss.</p>
+</div>
+</details>
+
+<details name="kat">
+<summary>Spickzettel</summary>
+<div class="inhalt">
+<p class="stand" style="margin:0 0 16px">Zehn Fragen, falls es schnell gehen muss.</p>
 <ol class="spick">
 <li>Wer bisch du, und wie bisch du hüt do glandet?</li>
 <li>Wohär kennsch du die zwei?</li>
@@ -168,6 +187,8 @@ a{color:var(--wein)}
 <li>Was isch din beschte Tipp für e glücklichi Ehe?</li>
 <li>Was wotsch du de zwei jetzt no grad direkt id Kamera säge?</li>
 </ol>
+</div>
+</details>
 
 <p class="fuss"><a href="/">Zur Startseite</a></p>
 </main>
