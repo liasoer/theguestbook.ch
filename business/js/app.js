@@ -457,8 +457,16 @@
     await B.lokalSchreiben('sync', null); await B.lokalSchreiben('sync-basis', null);
     app.zeichnen();
   };
+  // Mac: PDFs, die das iPhone in «Dateien/Eingang» gesichert hat, in die Auftragsordner einsortieren
+  app.eingangSortieren = async () => {
+    if (!B.istMac || !app.daten) return;
+    try {
+      const n = await B.eingangSortieren(app.daten.einstellungen.ablageDateien || '');
+      if (n) app.melden(n === 1 ? '1 PDF vom iPhone in den Auftragsordner verschoben' : n + ' PDFs vom iPhone in die Auftragsordner verschoben');
+    } catch (e) { /* nächster Versuch in einer Minute */ }
+  };
   // Regelmässig und beim Zurückkehren in die App nachsehen
-  setInterval(() => { if (document.visibilityState === 'visible') app.syncJetzt(true); }, 60000);
+  setInterval(() => { if (document.visibilityState === 'visible') app.syncJetzt(true); app.eingangSortieren(); }, 60000);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') app.syncJetzt(true); });
   window.addEventListener('online', () => app.syncJetzt(true));
 
@@ -536,7 +544,7 @@
     if (v.danach) v.danach(main);
   };
   app.ansichten = {};
-  app.version = '27.10.2026, 23:30';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
+  app.version = '27.10.2026, 23:50';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
 
   // ---------- Start ----------
   async function start() {
@@ -560,6 +568,7 @@
     if (pushMoeglich()) { navigator.serviceWorker.register('sw.js').catch(() => {}); await app.mitteilungenPruefen(); }
     app.zeichnen();
     app.syncJetzt(true);
+    app.eingangSortieren();
     try { (await B.ausstehendeLinks() || []).forEach(u => app.anfrageVerarbeiten(u)); } catch (e) { /* ohne Mac-Hülle */ }
     if (app.daten.einstellungen.kalenderAbgleich && B.istMac) app.kalenderAbgleichen(true);
   }
