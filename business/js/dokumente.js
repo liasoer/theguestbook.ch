@@ -192,8 +192,11 @@ body.vertrag,html:has(body.vertrag){background:#fff}
       '<section><h2>6. Nutzungsrechte, Veröffentlichung und Datenschutz</h2><ol>' +
         '<li>Die Urheberrechte am Film bleiben bei ' + esc(e.firma) + '. Die Auftraggeber dürfen den Film zeitlich unbeschränkt privat nutzen und mit Familie und Freunden teilen.</li>' +
         (a.art === 'firma' ? '<li>Bei Firmen Events dürfen die Auftraggeber Film und Clips zusätzlich auf eigenen Kanälen veröffentlichen, mit Nennung von ' + esc(e.firma) + '.</li>' : '') +
-        '<li>' + esc(e.firma) + ' darf Ausschnitte für Website und Social Media nur verwenden, wenn die Auftraggeber zustimmen:<ul class="wahl">' +
-          '<li>' + box('ja') + 'Ja, Ausschnitte dürfen veröffentlicht werden.</li><li>' + box('ruecksprache') + 'Ja, aber nur nach Rücksprache.</li><li>' + box('nein') + 'Nein, keine Veröffentlichung.</li></ul></li>' +
+        (a.gruenderpaar
+          ? '<li>Als Gründungspaar 2027 erhalten die Auftraggeber das Paket kostenlos. Im Gegenzug darf ' + esc(e.firma) + ' Ausschnitte aus dem Film, Aufnahmen hinter den Kulissen sowie die gefilmte Reaktion der Auftraggeber auf den fertigen Film zeitlich unbeschränkt auf der eigenen Website, auf Social Media und in bezahlter Werbung verwenden.</li>' +
+            '<li>Gäste werden in Werbung nur gezeigt, wenn sie ihr Einverständnis gegeben haben. Die Auftraggeber können jederzeit verlangen, dass einzelne Ausschnitte nicht mehr neu veröffentlicht werden.</li>'
+          : '<li>' + esc(e.firma) + ' darf Ausschnitte für Website und Social Media nur verwenden, wenn die Auftraggeber zustimmen:<ul class="wahl">' +
+          '<li>' + box('ja') + 'Ja, Ausschnitte dürfen veröffentlicht werden.</li><li>' + box('ruecksprache') + 'Ja, aber nur nach Rücksprache.</li><li>' + box('nein') + 'Nein, keine Veröffentlichung.</li></ul></li>') +
         '<li>Personendaten und Aufnahmen werden nur für diesen Auftrag bearbeitet und nicht an Dritte weitergegeben, ausser an Dienstleister für Speicherung und Lieferung. Es gilt die Datenschutzerklärung auf ' + esc(e.web) + '.</li></ol></section>' +
       '<section><h2>7. Absage, Verschiebung, Ausfall und Haftung</h2><ol>' +
         '<li>Bei einer Absage bis ' + e.stornoGrenzeTage + ' Tage vor dem Anlass werden ' + e.stornoFruehProzent + ' % des Totals geschuldet, bei einer späteren Absage ' + e.stornoSpaetProzent + ' %. Eine Absage muss schriftlich erfolgen, E-Mail genügt.</li>' +
@@ -279,6 +282,10 @@ body.vertrag,html:has(body.vertrag){background:#fff}
       text: '{anrede}\n\nWie schön, dass ihr euch für uns entschieden habt! Im Anhang findet ihr den Vertrag für {ihr_anlass}{am_datum}. Bitte unterschreibt ihn und schickt ihn mir zurück, ein Foto oder ein Scan reicht völlig. Danach erhaltet ihr die Rechnung für die Anzahlung, und euer Datum ist fix für euch reserviert.\n\nFalls beim Durchlesen Fragen auftauchen, telefonieren wir gerne kurz. Ihr erreicht mich unter {telefon}.\n\nWir freuen uns schon sehr auf {ihr_anlass}!\n\nHerzliche Grüsse\n{absender}\n{firma}' },
     rechnung: { name: 'Rechnung', betreff: 'Rechnung {nummer}, {titel}',
       text: '{anrede}\n\nIm Anhang findet ihr die Rechnung {nummer} ({titel}) über CHF {betrag}. Am einfachsten bezahlt ihr sie bis am {faellig} mit dem QR-Code in eurer Banking-App.\n\nHabt ihr Fragen dazu? Dann ruft mich gerne an unter {telefon}, wir klären das kurz am Telefon.\n\nHerzlichen Dank und liebe Grüsse\n{absender}\n{firma}' },
+    gruender_zusage: { name: 'Gründungspaar: Zusage', betreff: 'Ihr seid Gründungspaar 2027!',
+      text: '{anrede}\n\nWir haben uns sehr über eure Bewerbung gefreut und dürfen euch heute sagen: Ihr seid eines unserer drei Gründungspaare 2027! Wir sind sehr gerne an eurer Hochzeit{am_datum} dabei.\n\nAls Nächstes schicke ich euch die Offerte und den Vertrag, in dem wir auch festhalten, welche Ausschnitte wir zeigen dürfen. Gerne lernen wir euch vorher noch kurz kennen, am Telefon oder bei einem Kaffee. Wann passt es euch? Ihr erreicht mich unter {telefon}.\n\nWir freuen uns riesig!\n\nHerzliche Grüsse\n{absender}\n{firma}' },
+    gruender_absage: { name: 'Gründungspaar: Absage', betreff: 'Eure Bewerbung als Gründungspaar',
+      text: '{anrede}\n\nHerzlichen Dank für eure Bewerbung als Gründungspaar und die schönen Zeilen über euch und eure Gäste. Wir haben uns über das grosse Interesse sehr gefreut und es uns nicht leicht gemacht. Leider können wir euch dieses Mal keinen der drei Plätze anbieten.\n\nFalls ihr trotzdem Gästeinterviews an eurer Hochzeit{am_datum} möchtet, machen wir euch gerne eine Offerte. Antwortet einfach auf diese Mail.\n\nWir wünschen euch eine wunderschöne Hochzeit!\n\nHerzliche Grüsse\n{absender}\n{firma}' },
     mahnung: { name: 'Mahnung', betreff: '{mahnstufe} zu Rechnung {nummer}',
       text: '{anrede}\n\nVielleicht ist es im Alltag untergegangen: Für die Rechnung {nummer} über CHF {betrag} haben wir noch keine Zahlung erhalten. Im Anhang findet ihr die {mahnstufe}. Wir wären froh, wenn ihr den Betrag bis am {faellig} überweist.\n\nFalls ihr in der Zwischenzeit schon bezahlt habt, ist alles gut und ihr könnt diese Mail einfach ignorieren. Und wenn etwas nicht passt, ruft mich gerne an unter {telefon}. Wir finden bestimmt eine Lösung.\n\nHerzliche Grüsse\n{absender}\n{firma}' }
   };
@@ -303,5 +310,18 @@ body.vertrag,html:has(body.vertrag){background:#fff}
     return { an: k.email || '', betreff: fuellen(eigene.betreff || std.betreff), text: fuellen(eigene.text || std.text) };
   }
 
-  global.Dokumente = { offerteHTML, vertragHTML, rechnungHTML, mahnungHTML, qrDaten, mail, MAIL_VORLAGEN, PLATZHALTER };
+  // Antwort an ein Gründungspaar (ohne Anhang). art: 'gruender_zusage' oder 'gruender_absage'
+  function mailBewerbung(daten, b, art) {
+    const e = daten.einstellungen, eigene = (e.mailVorlagen || {})[art] || {}, std = MAIL_VORLAGEN[art];
+    const werte = {
+      anrede: 'Hallo ' + [b.vorname, b.partner].filter(Boolean).join(' und ') + ',',
+      ihr_anlass: 'eure Hochzeit', am_datum: b.datum ? ' am ' + M.datumCH(b.datum) : '',
+      nummer: '', gueltig: '', titel: '', betrag: '', faellig: '', mahnstufe: '',
+      absender: e.inhaber || '', firma: e.firma || '', telefon: e.telefon || ''
+    };
+    const fuellen = t => String(t || '').replace(/\{(\w+)\}/g, (x, n) => n in werte ? werte[n] : x);
+    return { an: b.email || '', betreff: fuellen(eigene.betreff || std.betreff), text: fuellen(eigene.text || std.text) };
+  }
+
+  global.Dokumente = { offerteHTML, vertragHTML, rechnungHTML, mahnungHTML, qrDaten, mail, mailBewerbung, MAIL_VORLAGEN, PLATZHALTER };
 })(typeof window !== 'undefined' ? window : globalThis);

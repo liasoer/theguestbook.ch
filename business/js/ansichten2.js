@@ -274,7 +274,7 @@
         f('Rest fällig nach Anlass (Tage)', 'restFaelligTage', { zahl: true }) + f('km inklusive', 'kmInklusive', { zahl: true }) + f('CHF pro km', 'kmRappen', { rappen: true }) + f('Offerte gültig (Tage)', 'offerteGueltigTage', { zahl: true }) +
         f('Ablauf vorher (Tage)', 'ablaufVorherTage', { zahl: true }) + f('Lieferung (Wochen)', 'lieferungWochen', { zahl: true }) + f('Aufbewahrung (Monate)', 'archivMonate', { zahl: true }) +
         f('Mahnfrist (Tage)', 'mahnFristTage', { zahl: true }) + f('Mahngebühr ab 2. Mahnung', 'mahnGebuehrRappen', { rappen: true, hilfe: 'Nur verlangen, wenn im Vertrag vereinbart' }) + f('Storno früh %', 'stornoFruehProzent', { zahl: true }) + f('Storno spät %', 'stornoSpaetProzent', { zahl: true }) + f('Grenze (Tage vorher)', 'stornoGrenzeTage', { zahl: true }) + '</div>') +
-      abschnitt('mail', 'Mailvorlagen', 'Texte für Offerte, Vertrag, Rechnung und Mahnung', mailKarte()) +
+      abschnitt('mail', 'Mailvorlagen', 'Texte für Offerte, Vertrag, Rechnung, Mahnung und Gründungspaare', mailKarte()) +
       abschnitt('mitarbeiterin', 'Mitarbeiterin', ma ? esc(ma.name) + ', ' + e.mitarbeiterProzent + ' %, Fremdleistung' : 'Keine erfasst',
         (e.mitarbeiter.length ? e.mitarbeiter.map((m, i) => {
           const j = M.mitarbeiterJahr(app.daten, m.id, new Date().getFullYear());
@@ -331,7 +331,7 @@
         [['outlook365', 'Outlook im Browser (Microsoft 365)'], ['outlookcom', 'Outlook im Browser (outlook.com)'], ['apple', 'Standard-Mailprogramm (Apple Mail oder Outlook-App)']]
           .map(([w, t]) => '<option value="' + w + '"' + ((e.mailProgramm || 'outlook365') === w ? ' selected' : '') + '>' + t + '</option>').join('') + '</select>' +
         '<small>Im Browser öffnet sich die fertige Mail, das PDF liegt im Finder bereit zum Hineinziehen.</small></label>' +
-      '<p style="margin:0 0 12px;color:var(--muted)">Die Vorlagen werden beim Senden von Offerte, Vertrag, Rechnung und Mahnung automatisch ausgefüllt. Platzhalter: ' +
+      '<p style="margin:0 0 12px;color:var(--muted)">Die Vorlagen werden beim Senden von Offerte, Vertrag, Rechnung, Mahnung und den Antworten an Gründungspaare automatisch ausgefüllt. Platzhalter: ' +
         D.PLATZHALTER.map(p => '<code>{' + p + '}</code>').join(' ') + '</p>' +
       Object.keys(D.MAIL_VORLAGEN).map(art => {
         const std = D.MAIL_VORLAGEN[art], ei = eigene[art] || {};

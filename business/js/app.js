@@ -6,7 +6,8 @@
   // ---------- Zustand ----------
   const app = window.App = {
     daten: M.leereDaten(),
-    ansicht: { name: 'start' },     // start | auftraege | auftrag | kunden | kalender | kassenbuch | einstellungen
+    ansicht: { name: 'start' },     // start | auftraege | auftrag | kunden | gruenderpaare | kalender | kassenbuch | einstellungen
+    gp: { filter: 'offen' },        // Tab Gründungspaare: offen | alle | favorit | ausgewaehlt | abgesagt
     filter: { status: 'aktiv', jahr: 'alle', suche: '', abgesagte: false },
     tab: 'auftrag',
     kb: { jahr: new Date().getFullYear(), typ: 'ein', bearbeiten: null, tab: 'liste', filter: 'alle' },
@@ -229,6 +230,17 @@
     return ergebnis;
   };
 
+  // Mail ohne Anhang (z.B. Antwort an ein Gründungspaar): am Mac Outlook im Browser oder das Mailprogramm, sonst mailto
+  app.mailOhneAnhang = async (mail) => {
+    const enc = encodeURIComponent;
+    const mailto = 'mailto:' + enc(mail.an || '') + '?subject=' + enc(mail.betreff) + '&body=' + enc(mail.text);
+    if (!B.istMac) { location.href = mailto; return true; }
+    const prog = app.daten.einstellungen.mailProgramm || 'outlook365';
+    const basis = { outlook365: 'https://outlook.office.com/mail/deeplink/compose', outlookcom: 'https://outlook.live.com/mail/0/deeplink/compose' }[prog];
+    try { await B.linkOeffnen(basis ? basis + '?to=' + enc(mail.an || '') + '&subject=' + enc(mail.betreff) + '&body=' + enc(mail.text) : mailto); return true; }
+    catch (e) { app.melden('Mail konnte nicht geöffnet werden: ' + e.message + '. Bitte die App mit ./build.sh neu bauen.', true); return false; }
+  };
+
   // ---------- Speichern und Kalender ----------
   let speicherTimer, kalenderTimer, speichertGerade = false, nochmal = false;
   app.aendern = (neuZeichnen = true) => {
@@ -342,6 +354,7 @@
       }
       s.status = 'ok'; s.zuletzt = new Date(); s.fehler = '';
       await anfragenAbholen(gh);
+      await bewerbungenAbholen(gh);
     } catch (e) {
       s.status = e.offline ? 'offline' : 'fehler'; s.fehler = e.message;
       if (!still) app.melden(e.offline ? 'Keine Verbindung zu GitHub' : 'Abgleich fehlgeschlagen: ' + e.message, true);
@@ -369,6 +382,26 @@
     const text = neu.map(r => app.kunde(r.auftrag).name + (r.auftrag.datum ? ', ' + M.datumCH(r.auftrag.datum) : '')).join('; ');
     app.melden((neu.length === 1 ? 'Neue Anfrage: ' : neu.length + ' neue Anfragen: ') + text);
     if (B.istMac) B.mitteilung(neu.length === 1 ? 'Neue Anfrage' : neu.length + ' neue Anfragen', text).catch(() => {});
+  }
+
+  // Bewerbungen als Gründungspaar (Seite gruenderpaare.html), gleiches Vorgehen wie bei den Anfragen
+  async function bewerbungenAbholen(gh) {
+    let liste;
+    try { liste = await gh.liste('bewerbungen'); } catch (e) { return; }
+    const neu = [];
+    for (const f of liste) {
+      try {
+        const d = await gh.datei('bewerbungen/' + f.name); if (!d) continue;
+        await gh.loeschen('bewerbungen/' + f.name, d.sha, 'Bewerbung übernommen von ' + geraet);
+        const r = M.bewerbungAufnehmen(app.daten, JSON.parse(d.text));
+        if (r.neu) neu.push(r.bewerbung);
+      } catch (e) { /* anderes Gerät war schneller oder die Datei ist kaputt */ }
+    }
+    if (!neu.length) return;
+    app.aendern();
+    const text = neu.map(b => M.paarKurz(b) + (b.datum ? ', ' + M.datumCH(b.datum) : '')).join('; ');
+    app.melden((neu.length === 1 ? 'Neue Bewerbung: ' : neu.length + ' neue Bewerbungen: ') + text);
+    if (B.istMac) B.mitteilung(neu.length === 1 ? 'Neue Bewerbung als Gründungspaar' : neu.length + ' neue Bewerbungen als Gründungspaar', text).catch(() => {});
   }
 
   // ---------- Mitteilungen aufs iPhone (Web Push) ----------
@@ -540,7 +573,9 @@
   function leisteZeichnen() {
     const n = ['auftrag', 'kunden'].includes(app.ansicht.name) ? 'auftraege' : app.ansicht.name;
     const anfragen = app.daten.auftraege.filter(a => a.status === 'anfrage').length;
+    const bewerbungen = (app.daten.bewerbungen || []).filter(b => b.status === 'neu').length;
     $$('.nav button').forEach(b => {
+      if (b.dataset.ziel === 'gruenderpaare') { const z = $('.anzahl', b); z.textContent = bewerbungen; z.hidden = !bewerbungen; }
       b.setAttribute('aria-current', b.dataset.ziel === n ? 'page' : 'false');
       if (b.dataset.ziel === 'auftraege') {
         const z = $('.anzahl', b); z.textContent = anfragen; z.hidden = !anfragen;
@@ -564,7 +599,7 @@
     if (v.danach) v.danach(main);
   };
   app.ansichten = {};
-  app.version = '28.10.2026, 18:50';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
+  app.version = '09.11.2026, 23:30';  // bei jeder Auslieferung anpassen, damit man sieht, ob die neue Version da ist
 
   // ---------- Start ----------
   async function start() {
@@ -585,6 +620,7 @@
     await syncKonfigLaden();
     // Aus einer Mitteilung geöffnet: direkt zu den Aufträgen
     if (location.hash === '#anfragen') { app.ansicht = { name: 'auftraege' }; history.replaceState(null, '', location.pathname); }
+    if (location.hash === '#gruenderpaare') { app.ansicht = { name: 'gruenderpaare' }; history.replaceState(null, '', location.pathname); }
     if (pushMoeglich()) { navigator.serviceWorker.register('sw.js').catch(() => {}); await app.mitteilungenPruefen(); }
     app.zeichnen();
     app.syncJetzt(true);

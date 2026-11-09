@@ -79,7 +79,7 @@
   }
 
   function leereDaten() {
-    return { version: VERSION, einstellungen: standardEinstellungen(), kunden: [], auftraege: [], buchungen: [] };
+    return { version: VERSION, einstellungen: standardEinstellungen(), kunden: [], auftraege: [], buchungen: [], bewerbungen: [] };
   }
 
   // Ältere oder unvollständige Dateien auf den aktuellen Stand bringen, ohne Daten zu verlieren.
@@ -92,7 +92,8 @@
       einstellungen: e,
       kunden: Array.isArray(d.kunden) ? d.kunden : [],
       auftraege: Array.isArray(d.auftraege) ? d.auftraege : [],
-      buchungen: Array.isArray(d.buchungen) ? d.buchungen : []
+      buchungen: Array.isArray(d.buchungen) ? d.buchungen : [],
+      bewerbungen: Array.isArray(d.bewerbungen) ? d.bewerbungen : []
     };
   }
 
@@ -639,6 +640,74 @@
     return liste.sort((x, y) => x.datum.localeCompare(y.datum));
   }
 
+
+  // ---------- Gründungspaare (Bewerbungen von theguestbook.ch/gruenderpaare.html) ----------
+
+  const BEWERBUNG_STATUS = [
+    { id: 'neu', name: 'Neu' },
+    { id: 'favorit', name: 'Favorit' },
+    { id: 'ausgewaehlt', name: 'Ausgewählt' },
+    { id: 'abgesagt', name: 'Abgesagt' }
+  ];
+  const GRUENDER_PLAETZE = 3;
+  const GRUENDER_SCHLUSS = '2027-03-31';
+
+  const paarName = b => [[b.vorname, b.nachname].filter(Boolean).join(' '), b.partner].filter(Boolean).join(' und ');
+  const paarKurz = b => [b.vorname, b.partner].filter(Boolean).join(' und ');
+
+  // Legt eine Bewerbung an. Dieselbe Bewerbung (E-Mail und Datum) zweimal ergibt keinen zweiten Eintrag.
+  function bewerbungAufnehmen(daten, roh) {
+    const t = k => String(roh && roh[k] != null ? roh[k] : '').trim().slice(0, 2000);
+    const email = t('email'), datum = /^\d{4}-\d{2}-\d{2}$/.test(t('datum')) ? t('datum') : '';
+    if (!email || !(t('vorname') || t('nachname'))) throw new Error('Bewerbung ohne Name oder E-Mail');
+    const vorhanden = daten.bewerbungen.find(b => String(b.email).toLowerCase() === email.toLowerCase() && b.datum === datum);
+    if (vorhanden) return { bewerbung: vorhanden, neu: false };
+    const b = {
+      id: id(), eingegangen: t('eingegangen') || new Date().toISOString(),
+      vorname: t('vorname'), nachname: t('nachname'), partner: t('partner'), email, telefon: t('telefon'), social: t('social'),
+      datum, ort: t('ort'), gaeste: Number(t('gaeste')) || t('gaeste'), gaeste_satz: t('gaeste_satz'), warum: t('warum'),
+      einwilligung: t('einwilligung') === 'ja' || roh.einwilligung === true,
+      status: 'neu', notiz: '', auftragId: '', zusageGesendet: '', absageGesendet: ''
+    };
+    daten.bewerbungen.push(b);
+    return { bewerbung: b, neu: true };
+  }
+
+  // Übernimmt ein ausgewähltes Paar als normalen Auftrag (Paket «Die Interviews», als Geschenk auf CHF 0).
+  // Ein zweiter Aufruf liefert den bestehenden Auftrag.
+  function bewerbungUebernehmen(daten, b, stichtag) {
+    const bestehend = b.auftragId && daten.auftraege.find(a => a.id === b.auftragId && a.status !== 'abgesagt');
+    if (bestehend) return { auftrag: bestehend, kunde: daten.kunden.find(k => k.id === bestehend.kundeId), neu: false, konflikte: [] };
+    const r = anfrageUebernehmen(daten, {
+      anlass: 'Hochzeit', vorname: b.vorname, nachname: b.nachname, email: b.email, telefon: b.telefon,
+      datum: b.datum, ort: b.ort, gaeste: b.gaeste, paket: 'Die Interviews'
+    }, stichtag);
+    const a = r.auftrag, k = r.kunde;
+    if (r.neu) {
+      a.gruenderpaar = true;
+      const haupt = a.wunschPosten.find(p => p.paketId === 'interviews') || a.wunschPosten[0];
+      if (haupt) a.wunschPosten.push({ id: id(), paketId: '', name: 'Gründungspaar 2027',
+        beschreibung: haupt.name + ' geschenkt, im Tausch gegen Nutzungsrechte, Aufnahmen hinter den Kulissen und eure Reaktion', rappen: -haupt.rappen });
+      a.nachricht = ['Gäste in einem Satz: ' + (b.gaeste_satz || ''), 'Warum wir: ' + (b.warum || ''), b.social ? 'Social Media: ' + b.social : ''].filter(Boolean).join('\n\n');
+      a.notizen = [{ datum: stichtag || heute(), text: 'Als Gründungspaar 2027 aus den Bewerbungen übernommen' }];
+      if (b.partner && !k.partner) {
+        k.partner = b.partner;
+        if (k.name === [b.vorname, b.nachname].filter(Boolean).join(' ')) k.name = paarName(b);
+        if (!k.anrede) k.anrede = 'Hallo ' + paarKurz(b);
+      }
+    }
+    b.status = 'ausgewaehlt'; b.auftragId = a.id;
+    return r;
+  }
+
+  // Für den Tab: Plätze und Zähler
+  function gruenderUebersicht(daten) {
+    const l = daten.bewerbungen || [];
+    const n = st => l.filter(b => b.status === st).length;
+    return { total: l.length, neu: n('neu'), favorit: n('favorit'), ausgewaehlt: n('ausgewaehlt'), abgesagt: n('abgesagt'),
+      frei: Math.max(0, GRUENDER_PLAETZE - n('ausgewaehlt')), plaetze: GRUENDER_PLAETZE, schluss: GRUENDER_SCHLUSS };
+  }
+
   global.Modell = {
     statusErmitteln, statusAktualisieren, PHASEN, phase,
     aktuelleFrist, offeneRechnungen, MAHNSTUFEN, mahnungNeu, mahnTotal,
@@ -646,6 +715,7 @@
     postenSumme, mitarbeiterStatus, mitarbeiterOffen, mitarbeiterVorgabe, mitarbeiterAnteil, mitarbeiterAuszahlen, mitarbeiterAuszahlungZuruecknehmen, mitarbeiterJahr,
     zeitfensterLesen, kalenderEintraege,
     anfrageLesen, anfrageUebernehmen,
+    BEWERBUNG_STATUS, GRUENDER_PLAETZE, GRUENDER_SCHLUSS, paarName, paarKurz, bewerbungAufnehmen, bewerbungUebernehmen, gruenderUebersicht,
     VERSION, STATUS, ARTEN, QUELLEN, KATEGORIEN,
     standardEinstellungen, leereDaten, normalisieren,
     id, chf, rappenAusText, auf5, heute, plusTage, plusMonate, tageZwischen, datumCH,

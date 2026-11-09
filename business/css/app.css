@@ -401,3 +401,22 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--
 .monatsliste button.ueber i{background:var(--krit)}
 .mehr-knopf{letter-spacing:1px;padding-left:11px;padding-right:11px;color:var(--muted)}
 @media (max-width:720px){.kopfzeile .aktionen .mehr-knopf{flex:0 0 auto}}
+
+/* Gründungspaare */
+.kennzahlen.vier{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:720px){.kennzahlen.vier{grid-template-columns:repeat(2,minmax(0,1fr))}.kennzahlen.vier>div:nth-child(3){border-left:0}.kennzahlen.vier>div:nth-child(n+3){border-top:1px solid var(--linie)}}
+.gp-liste{display:grid;gap:14px}
+.gp-karte.favorit{border-color:var(--wein)}
+.gp-karte.abgesagt{opacity:.75}
+.gp-kopf{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.gp-kopf h3{margin:0;font-family:var(--f-titel);font-weight:500;font-size:17px;line-height:1.3}
+.gp-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.gp-satz{margin:14px 0 8px;padding-left:12px;border-left:2px solid var(--blush);font-style:italic}
+.gp-warum{margin:0 0 10px;white-space:pre-wrap}
+.gp-kontakt{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted);margin-bottom:12px;word-break:break-word}
+.gp-versand{margin:10px 0 0;font-size:12.5px;color:var(--gut)}
+.gp-aktionen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip.gp-neu{background:var(--warn-bg);color:var(--warn)}
+.chip.gp-favorit{background:var(--akzent-bg);color:var(--akzent)}
+.chip.gp-ausgewaehlt{background:var(--gut-bg);color:var(--gut)}
+.chip.gp-abgesagt{background:var(--krit-bg);color:var(--krit)}

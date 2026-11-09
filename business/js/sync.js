@@ -1,11 +1,11 @@
 // Abgleich über ein privates GitHub-Repository (daten.json), damit Mac und iPhone dieselben Daten haben.
 // Jedes Gerät merkt sich den zuletzt abgeglichenen Stand («Basis»). Haben beide Seiten etwas geändert,
-// werden die Änderungen pro Kunde, Auftrag und Buchung zusammengeführt (Dreiwege-Abgleich).
+// werden die Änderungen pro Kunde, Auftrag, Buchung und Bewerbung zusammengeführt (Dreiwege-Abgleich).
 (function (global) {
   'use strict';
   const API = global.__SYNC_API || 'https://api.github.com';  // __SYNC_API nur für Tests
   const PFAD = 'daten.json';
-  const LISTEN = ['kunden', 'auftraege', 'buchungen'];
+  const LISTEN = ['kunden', 'auftraege', 'buchungen', 'bewerbungen'];
 
   // ---------- Zusammenführen (ohne Netz, getestet in tests/sync.test.js) ----------
 

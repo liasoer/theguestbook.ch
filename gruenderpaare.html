@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gründungspaare 2027 | The Guestbook</title>
+<meta name="description" content="The Guestbook sucht drei Paare, die 2027 heiraten und als Erste dabei sein wollen. Die Gästeinterviews an eurer Hochzeit schenken wir euch.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#4A0F14">
+<link rel="canonical" href="https://theguestbook.ch/gruenderpaare.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://theguestbook.ch/gruenderpaare.html">
+<meta property="og:title" content="Gründungspaare 2027 | The Guestbook">
+<meta property="og:description" content="Wir suchen drei Paare, die 2027 heiraten. Die Gästeinterviews an eurer Hochzeit schenken wir euch.">
+<meta property="og:image" content="https://theguestbook.ch/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+@font-face{font-family:"Cinzel";src:url("/fonts/cinzel.woff2") format("woff2");font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Corinthia";src:url("/fonts/corinthia-bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Newsreader";src:url("/fonts/newsreader.woff2") format("woff2");font-weight:300 700;font-style:normal;font-display:swap}
+@font-face{font-family:"Newsreader";src:url("/fonts/newsreader-italic.woff2") format("woff2");font-weight:300 700;font-style:italic;font-display:swap}
+:root{
+  --bordeaux:#4A0F14;--wein:#7A1F28;--papier:#EEE6D6;--papier-tief:#E2D6C0;
+  --tinte:#26140F;--muted:#6B5A50;--blush:#E6CFC4;
+  --hairline:rgba(38,20,15,.22);--hairline-hell:rgba(238,230,214,.28);--abspann:#1C0F0B;
+  --f-display:"Cinzel","Trajan Pro",Georgia,serif;--f-script:"Corinthia","Snell Roundhand",cursive;--f-text:"Newsreader",Georgia,serif;
+  --s1:8px;--s2:16px;--s3:32px;--s4:64px;--s5:128px;--rand:clamp(24px,5vw,64px)
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--papier:#E8DFCD;--papier-tief:#DACDB5}}
+:root[data-theme="dark"]{--papier:#E8DFCD;--papier-tief:#DACDB5}
+*,*::before,*::after{box-sizing:border-box}
+html{background:linear-gradient(to bottom,var(--papier) 0 50%,var(--abspann) 50% 100%)}
+body{margin:0;background:var(--papier);color:var(--tinte);font-family:var(--f-text);font-size:18px;line-height:1.65;
+  font-optical-sizing:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit}
+p{margin:0 0 var(--s2)}
+:focus-visible{outline:2px solid var(--wein);outline-offset:3px}
+.dunkel :focus-visible{outline-color:var(--blush)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--rand)}
+.schmal{max-width:62ch}
+.kapitel{padding:clamp(72px,11vw,var(--s5)) 0}
+
+/* Kopf */
+.kopf{padding:calc(env(safe-area-inset-top,0px) + 28px) 0 0}
+.kopf .wrap{display:flex;justify-content:center}
+.kopf a{display:block;width:min(64vw,240px)}
+.kopf img{width:100%;height:auto;display:block}
+.held{text-align:center;padding:clamp(48px,8vw,96px) 0 clamp(56px,9vw,112px)}
+.label{display:inline-block;font-family:var(--f-display);font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--wein);margin-bottom:var(--s2)}
+.dunkel .label{color:var(--blush)}
+.titel{margin:0 0 var(--s3);font-weight:inherit}
+.titel .caps{display:block;font-family:var(--f-display);font-weight:500;text-transform:uppercase;font-size:clamp(32px,6.4vw,72px);line-height:1;letter-spacing:-.005em}
+.titel .skript{display:block;font-family:var(--f-script);font-weight:700;color:var(--wein);font-size:clamp(52px,8.6vw,104px);line-height:1;margin-top:-.08em}
+.dunkel .titel .skript{color:var(--blush)}
+.held .einleitung{max-width:40ch;margin:0 auto var(--s3);font-size:clamp(19px,2.2vw,22px);line-height:1.55}
+.plaetze{display:inline-flex;align-items:center;gap:14px;font-style:italic;color:var(--muted);font-size:16px}
+.plaetze .punkte{display:inline-flex;gap:8px}
+.plaetze .punkte i{width:12px;height:12px;border-radius:50%;border:1px solid var(--wein);display:block}
+.plaetze .punkte i.frei{background:var(--wein)}
+.btn{display:inline-flex;align-items:center;gap:var(--s1);min-height:48px;padding:12px 26px;border-radius:2px;font-family:var(--f-text);font-size:16px;letter-spacing:.01em;
+  text-decoration:none;cursor:pointer;border:1px solid currentColor;background:transparent;color:var(--wein);transition:background .25s,color .25s}
+.btn:hover{background:var(--wein);color:var(--papier);border-color:var(--wein)}
+.btn.voll{background:var(--papier);color:var(--bordeaux);border-color:var(--papier)}
+.btn.voll:hover{background:var(--blush);border-color:var(--blush)}
+.btn:disabled{opacity:.6;cursor:default}
+.held .btn{margin-top:var(--s3)}
+
+/* Tausch */
+.tausch{border-top:1px solid var(--hairline)}
+.tausch-raster{display:grid;grid-template-columns:1fr;gap:var(--s4)}
+@media (min-width:860px){.tausch-raster{grid-template-columns:1fr 1fr;gap:clamp(48px,7vw,112px)}}
+.tausch h2{font-family:var(--f-display);font-weight:500;font-size:clamp(20px,2.4vw,26px);letter-spacing:.02em;text-transform:uppercase;margin:0 0 var(--s2)}
+.liste{list-style:none;margin:0;padding:0}
+.liste li{padding:14px 0;border-top:1px solid var(--hairline);display:grid;grid-template-columns:28px 1fr;gap:10px}
+.liste li:last-child{border-bottom:1px solid var(--hairline)}
+.liste li::before{content:"";width:9px;height:9px;margin-top:.62em;border-radius:50%;background:var(--wein)}
+.liste.leer li::before{background:none;border:1px solid var(--wein)}
+.liste strong{display:block;font-weight:600}
+.liste span{color:var(--muted);font-size:16px}
+.wert{margin-top:var(--s3);font-style:italic;color:var(--muted)}
+.wert b{font-style:normal;font-family:var(--f-display);font-weight:500;color:var(--tinte);letter-spacing:.02em}
+
+/* Ablauf */
+.ablauf-kap{background:var(--papier-tief)}
+.ablauf-kap h2{font-family:var(--f-display);font-weight:500;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(22px,2.8vw,30px);margin:0 0 var(--s4);text-align:center}
+.schritte{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:var(--s3)}
+@media (min-width:760px){.schritte{grid-template-columns:repeat(4,1fr);gap:var(--s3)}}
+.schritte li{border-top:1px solid var(--hairline);padding-top:var(--s2)}
+.schritte .nr{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--wein);color:var(--wein);border-radius:50%;font-family:var(--f-display);font-size:14px;margin-bottom:12px}
+.schritte strong{display:block;font-weight:600;margin-bottom:4px}
+.schritte span{display:block;color:var(--muted);font-size:16px;line-height:1.5}
+.schritte em{display:block;font-style:italic;color:var(--wein);font-size:15px;margin-bottom:4px}
+
+/* Formular */
+.bordeaux{background:var(--bordeaux)}
+.dunkel{color:var(--papier)}
+.form-kopf{max-width:62ch;margin-bottom:var(--s4)}
+.form-kopf p{color:rgba(238,230,214,.88)}
+.formular{display:grid;gap:var(--s2) var(--s3);grid-template-columns:1fr;max-width:860px}
+@media (min-width:700px){.formular{grid-template-columns:1fr 1fr}.formular .breit{grid-column:1/-1}}
+.feld label{display:block;font-style:italic;font-size:15px;color:var(--blush);margin-bottom:6px}
+.feld label small{font-size:14px;opacity:.75}
+.feld input,.feld textarea{width:100%;font:inherit;font-size:17px;color:var(--papier);background:rgba(238,230,214,.06);
+  border:1px solid var(--hairline-hell);border-radius:2px;padding:12px 14px;min-height:48px;-webkit-appearance:none;appearance:none}
+.feld textarea{min-height:120px;resize:vertical}
+.feld input:focus,.feld textarea:focus{outline:2px solid var(--blush);outline-offset:1px;border-color:transparent}
+.feld input[type=date]{color-scheme:dark}
+.feld .hilfe{display:block;font-size:14px;font-style:italic;opacity:.7;margin-top:6px}
+.zustimmung{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:start;cursor:pointer;font-size:16px;line-height:1.5;color:rgba(238,230,214,.9)}
+.zustimmung input{width:20px;height:20px;margin:3px 0 0;accent-color:var(--blush)}
+.senden{margin-top:var(--s1)}
+.form-hinweis{margin:0;font-size:14px;font-style:italic;opacity:.8}.form-hinweis a{color:inherit}
+#fehler{margin:0;color:var(--blush);font-style:italic;font-size:15px}
+.danke{display:none;max-width:860px;padding:var(--s3) 0;border-top:1px solid var(--hairline-hell);border-bottom:1px solid var(--hairline-hell)}
+.danke p.gross{font-family:var(--f-script);font-weight:700;font-size:clamp(42px,6vw,64px);line-height:1.1;color:var(--blush);margin:0 0 var(--s2)}
+.danke p{color:rgba(238,230,214,.9)}
+.gesendet .formular{display:none}.gesendet .danke{display:block}
+.geschlossen{display:none;max-width:62ch}
+.zu .formular,.zu .form-kopf{display:none}.zu .geschlossen{display:block}
+.geschlossen p.gross{font-family:var(--f-script);font-weight:700;font-size:clamp(42px,6vw,64px);line-height:1.1;color:var(--blush);margin:0 0 var(--s2)}
+
+/* Fuss */
+.abspann{background:var(--abspann);color:rgba(238,230,214,.75);text-align:center;padding:var(--s4) 0 calc(env(safe-area-inset-bottom,0px) + var(--s4));font-size:15px;font-style:italic}
+.abspann a{color:inherit}
+.abspann p{margin:0 0 6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap"><a href="/" aria-label="Zur Startseite von The Guestbook"><img src="/logo-filmstreifen.svg" alt="The Guestbook"></a></div>
+</header>
+
+<main>
+<section class="held" aria-labelledby="t-held">
+  <div class="wrap">
+    <span class="label">Saison 2027</span>
+    <h1 class="titel" id="t-held"><span class="caps">Gründungspaare</span><span class="skript">gesucht.</span></h1>
+    <p class="einleitung">Wir starten The Guestbook in der Ostschweiz und suchen drei Paare, die 2027 heiraten und als Erste dabei sein wollen. Die Gästeinterviews an eurer Hochzeit schenken wir euch.</p>
+    <span class="plaetze"><span class="punkte" aria-hidden="true"><i class="frei"></i><i class="frei"></i><i class="frei"></i></span>3 Plätze, Bewerbung bis 31. März 2027</span>
+    <div><a class="btn" href="#bewerbung">Jetzt bewerben</a></div>
+  </div>
+</section>
+
+<section class="kapitel tausch" aria-label="Was ihr erhaltet und was wir uns wünschen">
+  <div class="wrap">
+    <div class="tausch-raster">
+      <div>
+        <h2>Was ihr erhaltet</h2>
+        <ul class="liste">
+          <li><span><strong>Die Interviews, geschenkt</strong>Bis zu vier Stunden ab Ankunft der Gäste, mit unserem Zweierteam vor Ort.</span></li>
+          <li><span><strong>Euer fertiger Film</strong>Geschnitten von Hand, genau wie für jedes andere Paar.</span></li>
+          <li><span><strong>Persönliche Begleitung</strong>Als eines der ersten Paare plant ihr den Ablauf direkt mit uns.</span></li>
+        </ul>
+        <p class="wert">Wert des Pakets: <b>CHF 1'900</b></p>
+      </div>
+      <div>
+        <h2>Was wir uns wünschen</h2>
+        <ul class="liste leer">
+          <li><span><strong>Ausschnitte zeigen dürfen</strong>Wir dürfen Clips aus eurem Film auf Website, Instagram, TikTok und in Werbung verwenden. Gäste zeigen wir nur mit deren Einverständnis.</span></li>
+          <li><span><strong>Ein Blick hinter die Kulissen</strong>Wir filmen am Tag auch unseren Aufbau und die Stimmung rund um den Interviewplatz.</span></li>
+          <li><span><strong>Eure Reaktion</strong>Wir filmen, wie ihr euren Film zum ersten Mal seht, und ihr erzählt kurz, wie ihr es erlebt habt.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="kapitel ablauf-kap" aria-labelledby="t-ablauf">
+  <div class="wrap">
+    <h2 id="t-ablauf">So geht es weiter</h2>
+    <ol class="schritte">
+      <li><span class="nr">1</span><em>bis 31. März 2027</em><strong>Bewerben</strong><span>Erzählt uns kurz von euch und euren Gästen.</span></li>
+      <li><span class="nr">2</span><em>bis Mitte April</em><strong>Kennenlernen</strong><span>Mit den Paaren, die gut passen, telefonieren oder treffen wir uns.</span></li>
+      <li><span class="nr">3</span><em>bis Ende April</em><strong>Zusage</strong><span>Die drei Gründungspaare erhalten Bescheid und einen kurzen Vertrag.</span></li>
+      <li><span class="nr">4</span><em>an eurem Tag</em><strong>Eure Hochzeit</strong><span>Wir sind vor Ort und sammeln die Stimmen eurer Liebsten.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="kapitel bordeaux dunkel" id="bewerbung" aria-labelledby="t-bewerbung">
+  <div class="wrap" id="bewerbung-box">
+    <div class="form-kopf">
+      <span class="label">Bewerbung</span>
+      <h2 class="titel" id="t-bewerbung"><span class="caps">Erzählt uns</span><span class="skript">von euch.</span></h2>
+      <p>Es gibt keine richtigen oder falschen Antworten. Wir suchen Paare mit Freude an ihren Gästen, ganz egal, ob ihr gross oder klein feiert.</p>
+    </div>
+    <form class="formular" id="bewerbungsformular" novalidate>
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+      <div class="feld"><label for="vorname">Euer Vorname</label><input id="vorname" name="vorname" autocomplete="given-name" required></div>
+      <div class="feld"><label for="nachname">Euer Nachname</label><input id="nachname" name="nachname" autocomplete="family-name" required></div>
+      <div class="feld"><label for="partner">Vorname eurer Partnerin oder eures Partners</label><input id="partner" name="partner" required></div>
+      <div class="feld"><label for="email">E-Mail</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+      <div class="feld"><label for="telefon">Telefon <small>(freiwillig)</small></label><input id="telefon" name="telefon" type="tel" autocomplete="tel"></div>
+      <div class="feld"><label for="social">Instagram oder TikTok <small>(freiwillig)</small></label><input id="social" name="social" placeholder="@euername"></div>
+      <div class="feld"><label for="datum">Hochzeitsdatum</label><input id="datum" name="datum" type="date" min="2027-01-01" max="2027-12-31" required></div>
+      <div class="feld"><label for="ort">Ort oder Location</label><input id="ort" name="ort" required></div>
+      <div class="feld"><label for="gaeste">Anzahl Gäste, ungefähr</label><input id="gaeste" name="gaeste" type="number" inputmode="numeric" min="1" step="1" required></div>
+      <div class="feld breit"><label for="gaeste_satz">Beschreibt eure Gäste in einem Satz</label><input id="gaeste_satz" name="gaeste_satz" maxlength="300" required placeholder="Zum Beispiel: Laut, herzlich und tanzen bis zum Schluss"></div>
+      <div class="feld breit"><label for="warum">Warum möchtet ihr Gründungspaar werden?</label><textarea id="warum" name="warum" maxlength="1500" required></textarea></div>
+      <label class="zustimmung breit"><input type="checkbox" id="einwilligung" name="einwilligung" value="ja" required><span>Wir sind einverstanden, dass Ausschnitte aus unserem Film, Aufnahmen hinter den Kulissen und unsere Reaktion auf Website, Social Media und in Werbung von The Guestbook gezeigt werden. Die Details halten wir im Vertrag fest.</span></label>
+      <p class="breit" id="fehler" role="alert"></p>
+      <div class="breit senden"><button class="btn voll" type="submit">Bewerbung senden</button></div>
+      <p class="breit form-hinweis">Mit dem Absenden nehmt ihr unsere <a href="/datenschutz.html">Datenschutzerklärung</a> zur Kenntnis.</p>
+    </form>
+    <div class="danke" role="status">
+      <p class="gross">Danke für eure Bewerbung!</p>
+      <p>Wir haben sie erhalten und schauen uns alle Bewerbungen in Ruhe an. Bis spätestens Ende April 2027 hört ihr von uns, egal wie es ausgeht.</p>
+    </div>
+    <div class="geschlossen">
+      <span class="label">Bewerbung</span>
+      <p class="gross">Die Bewerbung ist geschlossen.</p>
+      <p>Danke für das grosse Interesse! Ihr möchtet trotzdem Gästeinterviews an eurer Hochzeit? Dann schreibt uns über das <a href="/#kontakt">Kontaktformular</a>.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="abspann">
+  <div class="wrap">
+    <p><a href="/">The Guestbook</a>, Gästeinterviews an Hochzeiten und Events</p>
+    <p><a href="mailto:info@liasoertig.ch">info@liasoertig.ch</a></p>
+    <p><a href="/impressum.html">Impressum</a>&emsp;<a href="/datenschutz.html">Datenschutz</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var box=document.getElementById('bewerbung-box'),form=document.getElementById('bewerbungsformular'),fehler=document.getElementById('fehler');
+  /* Bewerbungsschluss: 31. März 2027, 23:59 Uhr Schweizer Zeit */
+  var SCHLUSS=Date.parse('2027-04-01T00:00:00+02:00');
+  if(Date.now()>=SCHLUSS||/[?&]geschlossen\b/.test(location.search)){box.classList.add('zu');return;}
+  var pflicht=[['vorname','Bitte euren Vornamen angeben.'],['nachname','Bitte euren Nachnamen angeben.'],['partner','Bitte den Vornamen eurer Partnerin oder eures Partners angeben.'],
+    ['email','Bitte eine gültige E-Mail-Adresse angeben.'],['datum','Bitte euer Hochzeitsdatum 2027 angeben.'],['ort','Bitte Ort oder Location angeben.'],
+    ['gaeste','Bitte die ungefähre Anzahl Gäste angeben.'],['gaeste_satz','Bitte eure Gäste in einem Satz beschreiben.'],['warum','Bitte erzählt uns kurz, warum ihr Gründungspaar werden möchtet.']];
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    for(var i=0;i<pflicht.length;i++){
+      var f=document.getElementById(pflicht[i][0]),v=f.value.trim();
+      var falsch=!v||(f.type==='email'&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v))||(f.id==='datum'&&!/^2027-\d{2}-\d{2}$/.test(v))||(f.id==='gaeste'&&!(+v>0));
+      if(falsch){fehler.textContent=pflicht[i][1];f.focus();return;}
+    }
+    var ok=document.getElementById('einwilligung');
+    if(!ok.checked){fehler.textContent='Bitte bestätigt, dass wir Ausschnitte zeigen dürfen. Ohne dieses Einverständnis ist eine Teilnahme leider nicht möglich.';ok.focus();return;}
+    fehler.textContent='';
+    var d=new FormData(form),daten={};
+    d.forEach(function(v,k){daten[k]=typeof v==='string'?v.trim():v;});
+    if(daten._honey){box.classList.add('gesendet');return;}
+    delete daten._honey;
+    var knopf=form.querySelector('button[type="submit"]'),alt=knopf.textContent;
+    knopf.disabled=true;knopf.textContent='Wird gesendet';
+    var name=daten.vorname+' '+daten.nachname+' und '+daten.partner;
+    var datumCH=daten.datum.split('-').reverse().join('.');
+    /* 1. Direkt in die App «theguestbook business» (Tab Gründungspaare) */
+    var app=fetch('https://theguestbook-anfragen.lias-oertig.workers.dev/bewerbung',{method:'POST',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify(daten)})
+      .then(function(r){return r.ok;}).catch(function(){return false;});
+    /* 2. Per Mail (FormSubmit), mit Bestätigung an das Paar */
+    var mail={_subject:'Neue Bewerbung Gründungspaar 2027: '+name,_replyto:daten.email,_template:'table',
+      Paar:name,'E-Mail':daten.email,Telefon:daten.telefon||'',Social:daten.social||'',Hochzeitsdatum:datumCH,Ort:daten.ort,'Anzahl Gäste':daten.gaeste,
+      'Gäste in einem Satz':daten.gaeste_satz,'Warum wir':daten.warum,Einverständnis:'Ja, Ausschnitte dürfen gezeigt werden',
+      _autoresponse:'Danke für eure Bewerbung als Gründungspaar bei The Guestbook!\n\nWir haben sie erhalten und schauen uns alle Bewerbungen in Ruhe an. Bis spätestens Ende April 2027 hört ihr von uns, egal wie es ausgeht.\n\nHerzliche Grüsse\nLias Oertig\nThe Guestbook'};
+    var post=fetch('https://formsubmit.co/ajax/info@liasoertig.ch',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(mail)})
+      .then(function(r){return r.json().then(function(j){return r.ok&&String(j.success)==='true';});}).catch(function(){return false;});
+    /* Die Mail dauert oft mehrere Sekunden: Bestätigung zeigen, sobald einer der beiden Wege geklappt hat */
+    var fertig=false;
+    function erfolg(){if(fertig)return;fertig=true;box.classList.add('gesendet');box.scrollIntoView({block:'start',behavior:'smooth'});}
+    app.then(function(x){if(x)erfolg();});
+    post.then(function(x){if(x)erfolg();});
+    Promise.all([app,post]).then(function(r){
+      if(!r[0]&&!r[1]){
+        fehler.textContent='Die Bewerbung konnte nicht gesendet werden. Bitte versucht es nochmals oder schreibt uns an info@liasoertig.ch.';
+        knopf.disabled=false;knopf.textContent=alt;
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
